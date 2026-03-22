@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acor.dev | Workflow Tools Portfolio</title>
+  <meta
+    name="description"
+    content="Acor.dev is a portfolio site for practical workflow tools, desktop utilities, and manufacturing-facing software including Rover."
+  >
+  <meta name="theme-color" content="#080d1f">
+  <meta property="og:title" content="Acor.dev | Workflow Tools Portfolio">
+  <meta
+    property="og:description"
+    content="Practical software tools for operations, manufacturing, and workflow optimization."
+  >
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="rsc/img/acor_social_1200x630.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="rsc/img/acor_favicon_32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-header" data-header>
+      <div class="container nav-row">
+        <a class="brand-mark" href="#top" aria-label="Acor.dev home">
+          <img src="rsc/img/acor_transparent.png" alt="Acor.dev logo">
+          <span>Acor.dev</span>
+        </a>
+
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <nav class="site-nav" id="site-nav" data-nav>
+          <a href="#work">Work</a>
+          <a href="#rover">Rover</a>
+          <a href="#case-study">Case Study</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero section">
+        <div class="container hero-grid">
+          <div class="hero-copy reveal">
+            <p class="eyebrow">Workflow tools, shown clearly</p>
+            <h1>I build software that fixes real-world workflow problems.</h1>
+            <p class="hero-lead">
+              From cabinet production to internal tooling, I design and build applications that reduce manual work,
+              cut down errors, and improve throughput.
+            </p>
+            <p class="hero-lead">
+              My background is in production environments where inefficiency has a real cost: wasted material,
+              lost time, and bottlenecks between departments. The tools here were built to deal with those problems directly.
+            </p>
+
+            <div class="hero-actions">
+              <a class="button button-primary" href="#rover">Explore Rover</a>
+              <a class="button button-secondary" href="#case-study">See Deeper Case Study</a>
+            </div>
+
+            <div class="hero-metrics">
+              <article class="metric-card">
+                <span class="metric-label">Focus</span>
+                <strong>Manufacturing and operations</strong>
+              </article>
+              <article class="metric-card">
+                <span class="metric-label">Delivery style</span>
+                <strong>Built for real use, not just demos</strong>
+              </article>
+              <article class="metric-card">
+                <span class="metric-label">Format</span>
+                <strong>Tools, demos, and case studies</strong>
+              </article>
+            </div>
+          </div>
+
+          <div class="hero-visual reveal">
+            <div class="hero-stage">
+              <div class="hero-stage-glow"></div>
+              <video
+                class="brand-video"
+                src="rsc/media/Acor_Logo_Reveal_0BgADd1u.mp4"
+                poster="rsc/img/acor_social_1200x630.png"
+                autoplay
+                muted
+                playsinline
+                preload="metadata"
+                data-delayed-loop="2500"
+              ></video>
+            </div>
+
+            <div class="signal-card">
+              <p class="signal-label">Site direction</p>
+              <p class="signal-title">Portfolio first</p>
+              <p class="signal-text">
+                This site is here to show the work clearly: what the tools do, who they help, and why they were built the way they were.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-band" id="work">
+        <div class="container">
+          <div class="section-heading reveal">
+            <p class="eyebrow">What this site is for</p>
+            <h2>A portfolio of practical software, not a startup pitch.</h2>
+            <p>
+              The point of this site is simple: instead of trying to explain these tools from memory in an interview,
+              I can show the problem, the solution, the demo, and the reasoning behind it.
+            </p>
+          </div>
+
+          <div class="capability-grid">
+            <article class="capability-card reveal">
+              <h3>Tool Pages</h3>
+              <p>Each tool gets a straight explanation of the problem it solves, how it works, and where it fits.</p>
+            </article>
+            <article class="capability-card reveal">
+              <h3>Demo Media</h3>
+              <p>Short videos and screenshots can sit next to the write-up without needing backend infrastructure.</p>
+            </article>
+            <article class="capability-card reveal">
+              <h3>Case Studies</h3>
+              <p>Longer write-ups can dig into constraints, adoption, UI tradeoffs, and implementation decisions.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="rover">
+        <div class="container project-layout">
+          <div class="project-copy reveal">
+            <p class="eyebrow">Featured tool</p>
+            <h2>Rover</h2>
+            <p class="project-summary">
+              A Windows desktop utility for moving CAM and CNC jobs between machines when tool names do not line up cleanly.
+            </p>
+            <p>
+              Rover scans supported files, pulls out unique tool identifiers, and lets the user map old names to new ones in a simple table.
+              Those mappings can be saved as JSON and reused across similar jobs.
+            </p>
+            <p>
+              Instead of editing files one by one, the operator can review the mapping once and apply it across the whole file set.
+              It is a small tool, but it removes a lot of repetitive cleanup.
+            </p>
+
+            <div class="project-tags">
+              <span>Windows desktop</span>
+              <span>C# / .NET 8</span>
+              <span>WinForms</span>
+              <span>Bulk remapping</span>
+            </div>
+
+            <div class="project-actions">
+              <a class="link-pill" href="https://github.com/DustinBobbitt/Rover/releases/download/v1.0.0/Rover.exe" target="_blank" rel="noreferrer">Download Rover.exe</a>
+              <a class="link-pill" href="https://github.com/DustinBobbitt/Rover" target="_blank" rel="noreferrer">View Rover on GitHub</a>
+              <span class="link-pill">Demo video coming soon</span>
+            </div>
+
+            <div class="project-points">
+              <article>
+                <h3>Who it is for</h3>
+                <p>Shops that need to move jobs between machines without manually fixing every mismatched tool reference.</p>
+              </article>
+              <article>
+                <h3>Safe workflow</h3>
+                <p>Dry run mode previews changes, optional <code>.bak</code> backups protect the originals, and mappings can be saved and reused.</p>
+              </article>
+              <article>
+                <h3>Supported formats</h3>
+                <p><code>.cid</code>, <code>.bpp</code>, and common G-code style formats including <code>.tap</code>, <code>.nc</code>, <code>.cnc</code>, and <code>.gcode</code>.</p>
+              </article>
+            </div>
+          </div>
+
+          <aside class="project-panel reveal">
+            <div class="panel-card media-placeholder-card">
+              <p class="panel-label">Demo area</p>
+              <h3>Rover walkthrough</h3>
+              <div class="video-placeholder" aria-hidden="true">
+                <div class="video-placeholder-screen">
+                  <span class="play-badge"></span>
+                </div>
+              </div>
+              <p>
+                This short demo walks through the basic Rover workflow: scanning a folder, reviewing detected tool names,
+                loading or defining a mapping, previewing the result with dry run, and applying the changes across the file set.
+              </p>
+              <p>
+                The point is not to show a flashy interface. It is to show a small utility taking a repetitive production task
+                and turning it into something faster, more repeatable, and easier to run safely.
+              </p>
+            </div>
+
+            <div class="panel-card">
+              <p class="panel-label">Current status</p>
+              <h3>Desktop utility today</h3>
+              <p>
+                Rover is currently a Windows application, not a browser app. The website presents it as a downloadable tool and portfolio piece. A web version would be a separate product decision later.
+              </p>
+            </div>
+
+            <div class="panel-card">
+              <p class="panel-label">Distribution</p>
+              <h3>Download from GitHub</h3>
+              <p>
+                Rover now has a public GitHub release with a packaged Windows build. The source, release history, and project details all live in the same place.
+              </p>
+              <a class="text-link" href="https://github.com/DustinBobbitt/Rover/releases/tag/v1.0.0" target="_blank" rel="noreferrer">Open the Rover release</a>
+            </div>
+          </aside>
+        </div>
+
+        <div class="container workflow-strip reveal">
+          <article class="workflow-card">
+            <span>1</span>
+            <h3>Select a folder</h3>
+            <p>Point Rover at a job folder and optionally include subfolders.</p>
+          </article>
+          <article class="workflow-card">
+            <span>2</span>
+            <h3>Review detected tools</h3>
+            <p>The app gathers unique identifiers and shows them in an old name to new name mapping table.</p>
+          </article>
+          <article class="workflow-card">
+            <span>3</span>
+            <h3>Preview safely</h3>
+            <p>Use dry run and backups before writing any changes across the file set.</p>
+          </article>
+          <article class="workflow-card">
+            <span>4</span>
+            <h3>Apply in bulk</h3>
+            <p>Reuse saved JSON mappings whenever similar conversions come back again.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section section-band" id="case-study">
+        <div class="container case-study-grid">
+          <div class="case-study-copy reveal">
+            <p class="eyebrow">Deeper case study</p>
+            <h2>Sanitized workflow suite</h2>
+            <p>
+              Beyond individual tools, I am building a broader workflow suite meant to connect multiple parts of the production pipeline.
+              That is the project on this site that deserves the deeper breakdown.
+            </p>
+            <p>
+              It includes things like cut optimization tools, cabinet dimension calculators, file conversion utilities, and internal dashboards or tracking systems.
+              The long-term goal is a cleaner flow of data between departments, with less friction and less wasted effort.
+            </p>
+            <p>
+              One of the more important design choices was visual familiarity. Parts of the interface were intentionally kept close to the ERP users already knew,
+              which reduced cognitive switching and made adoption easier.
+            </p>
+          </div>
+
+          <div class="case-study-points reveal">
+            <article class="detail-card case-study-media-card">
+              <p class="panel-label">Suite overview</p>
+              <h3>Internal application demo</h3>
+              <video
+                class="case-study-video"
+                src="rsc/media/03182.mp4"
+                poster="rsc/img/03182_mid.jpg"
+                controls
+                preload="metadata"
+                playsinline
+              ></video>
+              <p>
+                This video shows a sanitized copy of the internal application. Customer data and company branding were removed before it was added to the portfolio.
+              </p>
+            </article>
+            <article class="detail-card">
+              <h3>Show the system, not just the screens</h3>
+              <p>This is the place to explain how the tools relate to each other and where they fit in the production workflow.</p>
+            </article>
+            <article class="detail-card">
+              <h3>Show the before and after</h3>
+              <p>Highlight where the old workflow was slow, repetitive, or error-prone, then show what changed after the tools were introduced.</p>
+            </article>
+            <article class="detail-card">
+              <h3>Explain the UI choice directly</h3>
+              <p>Do not frame the ERP-style UI as a flaw. Frame it as a deliberate decision made to reduce training time and lower transition cost.</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="container module-showcase reveal">
+          <div class="module-showcase-copy">
+            <p class="eyebrow">Module spotlight</p>
+            <h3>Cut department full walkthrough</h3>
+            <p>
+              This narrated cut module video goes deeper than the suite overview. It shows how the department landing page is used,
+              what gets generated from Quick Generate, and how the paperwork supports the day-to-day cut workflow.
+            </p>
+            <p>
+              The walkthrough covers the MDB export path for machine-driven components, the workbook views used on the floor,
+              grouped hand-cut reporting, end-of-day material reporting, label printing, restock handling, PO filtering, and department-specific diagnostics.
+            </p>
+
+            <div class="module-tags">
+              <span>Quick Generate</span>
+              <span>MDB + workbook output</span>
+              <span>Hand cuts</span>
+              <span>Restock logic</span>
+              <span>Labels and reports</span>
+            </div>
+
+            <div class="module-feature-list">
+              <article class="detail-card">
+                <h3>What it shows</h3>
+                <p>The actual flow from the landing page into generated files and department paperwork, not just a screen tour.</p>
+              </article>
+              <article class="detail-card">
+                <h3>Why it matters</h3>
+                <p>The module ties together CNC-bound outputs, hand-cut paperwork, reporting, and inventory-aware decisions in one operator workflow.</p>
+              </article>
+            </div>
+          </div>
+
+          <article class="detail-card case-study-media-card module-video-card">
+            <p class="panel-label">Full walkthrough</p>
+            <h3>Cut module narrated demo</h3>
+            <video
+              class="case-study-video"
+              src="rsc/media/cut_module_narrated.mp4"
+              poster="rsc/img/cut_module_narrated_poster.jpg"
+              controls
+              preload="metadata"
+              playsinline
+            ></video>
+            <p>
+              This is the longer version for anyone who wants the details. It is better as a second click after the suite overview, not the first thing a viewer has to commit to.
+            </p>
+          </article>
+        </div>
+
+        <div class="container module-library reveal">
+          <div class="section-heading module-library-heading">
+            <p class="eyebrow">Short module demos</p>
+            <h2>Additional department modules can stay short and specific.</h2>
+            <p>
+              Not every module needs a long walkthrough. Shorter clips work well when the goal is to show what the module is for,
+              what the operator sees, and what output the department gets from it.
+            </p>
+          </div>
+
+          <div class="module-library-grid">
+            <article class="detail-card case-study-media-card">
+              <p class="panel-label">Short module demo</p>
+              <h3>Custom module</h3>
+              <video
+                class="case-study-video"
+                src="rsc/media/custom_1_min.mp4"
+                poster="rsc/img/custom_1_min_poster.jpg"
+                controls
+                preload="metadata"
+                playsinline
+              ></video>
+              <p>
+                The custom module is built to take a large amount of data and make it easier to work with. It gives the floor operator
+                quick filters for frames, doors, drawers, headers, and other components, along with grouping and firm-date tracking.
+              </p>
+              <p>
+                It also includes style and color management, department-specific label printing, and a report manager that helps calculate panel sizes,
+                styles, and rail cuts before outputting the paperwork used by the department.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="about">
+        <div class="container about-grid">
+          <div class="about-copy reveal">
+            <p class="eyebrow">About the work</p>
+            <h2>Most of my work sits at the intersection of manufacturing and software.</h2>
+            <p>
+              I tend to work on problems where inefficiency shows up in very practical ways: slower output, repetitive manual work, unnecessary mistakes, or handoff issues between departments.
+            </p>
+            <p>
+              That usually means building tools that are clear, useful, and easy to adopt inside environments that already have established systems and habits.
+            </p>
+          </div>
+
+          <div class="about-panels reveal">
+            <article class="about-card">
+              <h3>What to expect here</h3>
+              <p>Real tools, real constraints, and case studies that explain why the implementation looks the way it does.</p>
+            </article>
+            <article class="about-card">
+              <h3>What comes next</h3>
+              <p>More tool pages, short demo videos, and deeper project breakdowns as the portfolio grows.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer section" id="contact">
+      <div class="container footer-grid">
+        <div class="footer-copy reveal">
+          <p class="eyebrow">Contact and publishing</p>
+          <h2>Interested in practical automation or internal tooling?</h2>
+          <p>
+            This draft is set up for static hosting on GitHub Pages. The next step is to replace the remaining placeholders,
+            add the final demo media, and connect the rest of the public project links.
+          </p>
+        </div>
+
+        <div class="footer-actions reveal">
+          <a class="link-pill" href="https://github.com/DustinBobbitt" target="_blank" rel="noreferrer">GitHub profile</a>
+          <span class="link-pill">Add YouTube channel</span>
+          <span class="link-pill">Add resume link</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
