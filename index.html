@@ -23,7 +23,7 @@
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
     rel="stylesheet"
   >
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=20260323b">
 </head>
 <body>
   <div class="page-shell">
@@ -167,7 +167,7 @@
             <div class="project-actions">
               <a class="link-pill" href="https://github.com/DustinBobbitt/Rover/releases/download/v1.0.0/Rover.exe" target="_blank" rel="noreferrer">Download Rover.exe</a>
               <a class="link-pill" href="https://github.com/DustinBobbitt/Rover" target="_blank" rel="noreferrer">View Rover on GitHub</a>
-              <span class="link-pill">Demo video coming soon</span>
+              <span class="link-pill">Short visual demo</span>
             </div>
 
             <div class="project-points">
@@ -189,19 +189,17 @@
           <aside class="project-panel reveal">
             <div class="panel-card media-placeholder-card">
               <p class="panel-label">Demo area</p>
-              <h3>Rover walkthrough</h3>
-              <div class="video-placeholder" aria-hidden="true">
-                <div class="video-placeholder-screen">
-                  <span class="play-badge"></span>
-                </div>
-              </div>
+              <h3>Rover visual demo</h3>
+              <video class="case-study-video" controls preload="metadata" poster="rsc/img/rover_visual_demo_cover.jpg">
+                <source src="rsc/media/rover_visual_demo.mp4" type="video/mp4">
+              </video>
               <p>
-                This short demo walks through the basic Rover workflow: scanning a folder, reviewing detected tool names,
-                loading or defining a mapping, previewing the result with dry run, and applying the changes across the file set.
+                This short visual demo shows the basic Rover flow: scan a folder, review detected tool names,
+                load or define a mapping, preview the result with dry run, and apply the changes across the file set.
               </p>
               <p>
-                The point is not to show a flashy interface. It is to show a small utility taking a repetitive production task
-                and turning it into something faster, more repeatable, and easier to run safely.
+                It is not narrated, and it does not need to be. The point is to show the utility in motion while the surrounding
+                copy explains why the workflow matters: less manual cleanup, safer edits, and a repeatable way to handle tool-name mismatches.
               </p>
             </div>
 
@@ -284,16 +282,16 @@
               </p>
             </article>
             <article class="detail-card">
-              <h3>Show the system, not just the screens</h3>
-              <p>This is the place to explain how the tools relate to each other and where they fit in the production workflow.</p>
+              <h3>Workflow continuity across tools</h3>
+              <p>The suite connects department tools into one operational flow, so handoffs stay clear and data remains consistent.</p>
             </article>
             <article class="detail-card">
-              <h3>Show the before and after</h3>
-              <p>Highlight where the old workflow was slow, repetitive, or error-prone, then show what changed after the tools were introduced.</p>
+              <h3>Measured process improvement</h3>
+              <p>The implementation targets slower, repetitive, and error-prone steps by standardizing outputs and reducing manual rework.</p>
             </article>
             <article class="detail-card">
-              <h3>Explain the UI choice directly</h3>
-              <p>Do not frame the ERP-style UI as a flaw. Frame it as a deliberate decision made to reduce training time and lower transition cost.</p>
+              <h3>ERP-aligned interface strategy</h3>
+              <p>The ERP-style visual language was intentional to reduce training time, lower transition cost, and improve adoption on the floor.</p>
             </article>
           </div>
         </div>
@@ -321,11 +319,11 @@
 
             <div class="module-feature-list">
               <article class="detail-card">
-                <h3>What it shows</h3>
-                <p>The actual flow from the landing page into generated files and department paperwork, not just a screen tour.</p>
+                <h3>Operational flow coverage</h3>
+                <p>The walkthrough covers the flow from landing page inputs to generated files and department paperwork.</p>
               </article>
               <article class="detail-card">
-                <h3>Why it matters</h3>
+                <h3>Production impact</h3>
                 <p>The module ties together CNC-bound outputs, hand-cut paperwork, reporting, and inventory-aware decisions in one operator workflow.</p>
               </article>
             </div>
@@ -351,10 +349,9 @@
         <div class="container module-library reveal">
           <div class="section-heading module-library-heading">
             <p class="eyebrow">Short module demos</p>
-            <h2>Additional department modules can stay short and specific.</h2>
+            <h2>Additional modules and utilities in short, focused demos.</h2>
             <p>
-              Not every module needs a long walkthrough. Shorter clips work well when the goal is to show what the module is for,
-              what the operator sees, and what output the department gets from it.
+              Each clip highlights scope, operator interaction, and output so the workflow can be evaluated quickly without a long walkthrough.
             </p>
           </div>
 
@@ -379,6 +376,140 @@
                 styles, and rail cuts before outputting the paperwork used by the department.
               </p>
             </article>
+
+            <article class="detail-card case-study-media-card">
+              <p class="panel-label">Suite utility demo</p>
+              <h3>Wood usage calculator</h3>
+              <video
+                class="case-study-video"
+                src="rsc/media/wood_calc_narrated.mp4"
+                controls
+                preload="metadata"
+                playsinline
+              ></video>
+              <p>
+                This utility is part of the same suite, but it is not tied to a single department screen.
+                It accepts direct user input or CSV order-list uploads and uses a quick-reference catalog of known products.
+              </p>
+              <p>
+                The generated report includes dimensions, material usage, optional material pricing and operator cost estimates,
+                expected machine runtime, and daily capacity estimates driven by administrator-defined variables.
+              </p>
+              <p>
+                Reports can be exported to PDF or CSV. If an order includes an unknown product, that miss is logged and forwarded
+                to the administrator application for follow-up.
+              </p>
+            </article>
+
+            <article class="detail-card case-study-media-card">
+              <p class="panel-label">Suite prototype demo</p>
+              <h3>Warehouse mapper and inventory verification</h3>
+              <video
+                class="case-study-video"
+                src="rsc/media/warehouse_mapper_narrated.mp4"
+                controls
+                preload="metadata"
+                playsinline
+              ></video>
+              <p>
+                This prototype models warehouse structure first: areas, aisles, racks, and storage locations.
+                From that structure, the system generates a visual layout and assigns standardized location IDs so inventory can be mapped consistently.
+              </p>
+              <p>
+                It is intentionally shown as a prototype: functional in its current state, with a basic UI that is still unrefined.
+              </p>
+              <p>
+                Setup supports manual entry and CSV import, and each bay can store either a single product or mixed products with independent quantities.
+                The bay-level view and aggregated overview make it easier to see where products are stored and how inventory is distributed.
+              </p>
+              <p>
+                Search returns all matching locations and quantities. During picking, users can confirm expected counts or run blind counts
+                where expected values are hidden, which improves unbiased verification and catches discrepancies in normal workflow.
+              </p>
+            </article>
+
+            <article class="detail-card case-study-media-card">
+              <p class="panel-label">Suite control center</p>
+              <h3>Administrator application</h3>
+              <video
+                class="case-study-video"
+                src="rsc/media/admin_narrated.mp4"
+                controls
+                preload="metadata"
+                playsinline
+              ></video>
+              <p>
+                This application is the central control layer for the department tools. It lets management define rules for
+                both the Cut and Custom workflows, including logic used by the wood usage calculator.
+              </p>
+              <p>
+                Instead of hardcoding behavior in each tool, SQL queries and processing rules can be updated centrally,
+                so workflow changes can be deployed without modifying every core program.
+              </p>
+              <p>
+                Administrators can launch department tools, review databases, and manage backups, updates, and rollbacks with
+                password encryption built in. Bug reports and feature requests flow into a work queue that highlights missing items
+                and construction issues for production follow-up.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-band" id="secondary-tools">
+        <div class="container">
+          <div class="section-heading reveal">
+            <p class="eyebrow">Secondary projects</p>
+            <h2>Some tools are better shown through structure than visuals.</h2>
+            <p>
+              Not everything here is a video-first project. Some of the more useful work is developer tooling:
+              utilities that make handoff, planning, and repeatable AI-assisted workflows easier to manage.
+            </p>
+          </div>
+
+          <div class="secondary-project-grid">
+            <article class="detail-card secondary-project-card reveal">
+              <p class="panel-label">Developer tooling</p>
+              <h3>AI Prime</h3>
+              <p>
+                AI Prime is a repo-local CLI for structured AI collaboration in software projects. It scaffolds a repeatable
+                working surface for durable project truth, session handoff state, append-only logs, and contract-style planning.
+              </p>
+              <p>
+                It also includes a local contract wizard and validation flow, but it does not depend on external AI APIs.
+                The value is in making multi-session AI work more consistent, inspectable, and easier to hand off between agents.
+              </p>
+              <div class="project-tags">
+                <span>Node CLI</span>
+                <span>Repo-local tooling</span>
+                <span>Local contract wizard</span>
+                <span>No external API dependency</span>
+              </div>
+              <a class="text-link" href="https://github.com/DustinBobbitt/AI-Prime" target="_blank" rel="noreferrer">View AI Prime repository</a>
+              <p class="secondary-project-note">
+                Public secondary project showing developer-tooling range, not a primary showcase piece.
+              </p>
+            </article>
+
+            <article class="detail-card secondary-project-card reveal">
+              <p class="panel-label">Experimental R&D</p>
+              <h3>AI Gamer</h3>
+              <p>
+                AI Gamer is an early experimental system focused on multi-domain meta-learning and transferable reasoning patterns.
+                It was built as a research-style project to test how learned inference behavior might transfer across domains.
+              </p>
+              <p>
+                This is intentionally presented as an early app: functionally interesting, but not positioned as a polished production product.
+                It belongs in the portfolio as exploratory engineering work and technical range.
+              </p>
+              <div class="project-tags">
+                <span>Python</span>
+                <span>Meta-learning</span>
+                <span>Experimental</span>
+                <span>GUI + CLI</span>
+              </div>
+              <a class="text-link" href="https://github.com/DustinBobbitt/AI-gamer" target="_blank" rel="noreferrer">View AI Gamer repository</a>
+            </article>
           </div>
         </div>
       </section>
@@ -402,8 +533,8 @@
               <p>Real tools, real constraints, and case studies that explain why the implementation looks the way it does.</p>
             </article>
             <article class="about-card">
-              <h3>What comes next</h3>
-              <p>More tool pages, short demo videos, and deeper project breakdowns as the portfolio grows.</p>
+              <h3>Portfolio structure</h3>
+              <p>Tools are organized as concise demos with deeper case-study coverage where the workflow and implementation details matter most.</p>
             </article>
           </div>
         </div>
@@ -413,18 +544,15 @@
     <footer class="site-footer section" id="contact">
       <div class="container footer-grid">
         <div class="footer-copy reveal">
-          <p class="eyebrow">Contact and publishing</p>
+          <p class="eyebrow">Contact</p>
           <h2>Interested in practical automation or internal tooling?</h2>
           <p>
-            This draft is set up for static hosting on GitHub Pages. The next step is to replace the remaining placeholders,
-            add the final demo media, and connect the rest of the public project links.
+            For collaboration, technical discussion, or interview follow-up, use the profile link below.
           </p>
         </div>
 
         <div class="footer-actions reveal">
           <a class="link-pill" href="https://github.com/DustinBobbitt" target="_blank" rel="noreferrer">GitHub profile</a>
-          <span class="link-pill">Add YouTube channel</span>
-          <span class="link-pill">Add resume link</span>
         </div>
       </div>
     </footer>

@@ -119,6 +119,10 @@ code {
   transition: background-color 200ms ease, border-color 200ms ease, backdrop-filter 200ms ease;
 }
 
+.site-header .container {
+  width: var(--container);
+}
+
 .site-header.is-scrolled {
   background: rgba(5, 8, 16, 0.75);
   backdrop-filter: blur(18px);
@@ -130,34 +134,35 @@ code {
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
-  min-height: 5.25rem;
+  min-height: 7.2rem;
 }
 
 .brand-mark {
   display: inline-flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: 1.05rem;
   font-family: "Space Grotesk", sans-serif;
-  font-size: 1.1rem;
+  font-size: 2.05rem;
+  font-weight: 700;
   letter-spacing: 0.02em;
 }
 
 .brand-mark img {
-  width: 3rem;
-  height: 3rem;
+  width: 5.8rem;
+  height: 5.8rem;
   object-fit: contain;
 }
 
 .site-nav {
   display: flex;
   align-items: center;
-  gap: 1.3rem;
+  gap: 1.55rem;
   color: var(--muted);
 }
 
 .site-nav a {
   position: relative;
-  font-size: 0.96rem;
+  font-size: 1.06rem;
 }
 
 .site-nav a::after {
@@ -557,6 +562,7 @@ code {
 .case-study-grid,
 .module-showcase,
 .module-library-grid,
+.secondary-project-grid,
 .about-grid,
 .footer-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -580,6 +586,11 @@ code {
   margin-top: 2rem;
 }
 
+.secondary-project-grid {
+  display: grid;
+  gap: 1.25rem;
+}
+
 .module-library-heading {
   margin-bottom: 1.5rem;
 }
@@ -587,6 +598,24 @@ code {
 .module-library-grid {
   display: grid;
   gap: 1.25rem;
+}
+
+.module-library-grid .detail-card {
+  padding: 1.55rem;
+}
+
+.module-library-grid .detail-card h3 {
+  font-size: 1.22rem;
+}
+
+.module-library-grid .detail-card p {
+  font-size: 1.04rem;
+  line-height: 1.74;
+}
+
+.module-library-grid .case-study-video {
+  margin: 1.1rem 0 1.25rem;
+  border-radius: 20px;
 }
 
 .module-showcase-copy h3 {
@@ -635,6 +664,16 @@ code {
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.3);
 }
 
+.secondary-project-card {
+  max-width: 48rem;
+}
+
+.secondary-project-note {
+  margin-top: 1rem;
+  color: #d7e2ff;
+  font-size: 0.95rem;
+}
+
 .site-footer {
   padding-top: 4.75rem;
   border-top: 1px solid var(--line);
@@ -660,6 +699,7 @@ code {
   .case-study-grid,
   .module-showcase,
   .module-library-grid,
+  .secondary-project-grid,
   .about-grid,
   .footer-grid {
     grid-template-columns: 1fr;
@@ -685,6 +725,24 @@ code {
 @media (max-width: 760px) {
   .section {
     padding: 4.25rem 0;
+  }
+
+  .site-header .container {
+    width: min(1180px, calc(100vw - 2rem));
+  }
+
+  .nav-row {
+    min-height: 5.2rem;
+  }
+
+  .brand-mark {
+    gap: 0.7rem;
+    font-size: 1.12rem;
+  }
+
+  .brand-mark img {
+    width: 2.85rem;
+    height: 2.85rem;
   }
 
   .nav-toggle {
