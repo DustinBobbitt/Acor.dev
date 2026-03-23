@@ -657,6 +657,7 @@ code {
 
 .case-study-video {
   width: 100%;
+  aspect-ratio: 16 / 9;
   margin: 1rem 0;
   border-radius: 18px;
   border: 1px solid rgba(126, 223, 251, 0.16);
