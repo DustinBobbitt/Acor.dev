@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cut Operations Health Demo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-block">
+        <div class="brand-mark" aria-hidden="true">CO</div>
+        <div>
+          <p class="eyebrow">Sanitized Portfolio Demo</p>
+          <h1>Cut Operations Health</h1>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <button class="button secondary" id="openPalletLabelsTop" type="button">Pallet Labels Ready</button>
+        <button class="button" id="openPacketTop" type="button">Review &amp; Generate</button>
+      </div>
+    </header>
+
+    <section class="hero-band">
+      <div class="hero-copy">
+        <p class="section-label">Today So Far</p>
+        <h2>Live queue, output, labels, and operator packets in one workflow.</h2>
+      </div>
+      <div class="metric-band" id="heroMetrics"></div>
+      <div class="meta-row">
+        <span id="sourceState">Source: --</span>
+        <span id="refreshState">Latest refresh: --</span>
+      </div>
+    </section>
+
+    <main>
+      <section class="section-band">
+        <div class="section-header">
+          <div>
+            <p class="section-label">Recent Performance</p>
+            <h2>Output trend</h2>
+          </div>
+          <div class="summary-pill" id="sevenDayAverage">--</div>
+        </div>
+        <div class="performance-layout">
+          <div class="trend-chart" id="trendChart"></div>
+          <div class="workload-map" aria-label="Workload distribution" id="workloadMap"></div>
+        </div>
+      </section>
+
+      <section class="section-band">
+        <div class="section-header">
+          <div>
+            <p class="section-label">Backlog / Ahead Goal</p>
+            <h2>Firm-date target</h2>
+          </div>
+          <label class="compact-control">
+            <span>Days ahead</span>
+            <input id="daysAhead" type="number" min="1" max="30" value="8">
+          </label>
+        </div>
+        <div class="metric-band" id="backlogMetrics"></div>
+      </section>
+
+      <section class="section-band">
+        <div class="section-header">
+          <div>
+            <p class="section-label">Production Queue</p>
+            <h2>Prepare production packets</h2>
+          </div>
+          <div class="toolbar-row">
+            <label>
+              <span>Sort by</span>
+              <select id="dateBasis">
+                <option value="firm">Firm Date</option>
+                <option value="departure">Scheduled Departure Date</option>
+              </select>
+            </label>
+            <button class="button secondary" id="toggleCompleted" type="button" aria-pressed="false">Show Completed</button>
+            <button class="button" id="reviewGenerate" type="button">Review &amp; Generate</button>
+          </div>
+        </div>
+        <div class="operator-legend">
+          <span><span class="bulb bulb-gray"></span> not generated</span>
+          <span><span class="bulb bulb-yellow"></span> packet printed / in progress</span>
+          <span><span class="bulb bulb-green"></span> cutting complete</span>
+          <span><span class="bulb bulb-zombie"></span> returned after completion</span>
+        </div>
+        <div class="queue-list" id="queueList"></div>
+      </section>
+
+      <section class="section-band two-column">
+        <div>
+          <div class="section-header">
+            <div>
+              <p class="section-label">Morning Checklist</p>
+              <h2>Daily area task</h2>
+            </div>
+            <button class="button secondary compact" id="toggleChecklist" type="button" aria-expanded="false">Expand</button>
+          </div>
+          <div class="checklist-body" id="checklistBody" hidden></div>
+        </div>
+        <div>
+          <div class="section-header">
+            <div>
+              <p class="section-label">Walk-Up Requests</p>
+              <h2>Manual work bucket</h2>
+            </div>
+          </div>
+          <div class="request-list" id="requestList"></div>
+        </div>
+      </section>
+
+      <section class="section-band">
+        <div class="section-header">
+          <div>
+            <p class="section-label">Recent Reports</p>
+            <h2>End-of-day papers</h2>
+          </div>
+          <button class="button secondary" type="button">Share Selected</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>Day</th>
+                <th>Report</th>
+                <th>Finalized</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="reportsTable"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="palletLabelsModal" hidden>
+    <section class="modal-card wide-modal" role="dialog" aria-modal="true" aria-labelledby="palletLabelsTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Pallet Labels</p>
+          <h2 id="palletLabelsTitle">Pallet labels ready</h2>
+        </div>
+        <button class="button secondary" id="closePalletLabels" type="button">Close</button>
+      </div>
+      <p class="modal-summary" id="palletLabelsSummary"></p>
+      <div class="modal-toolbar">
+        <div class="segmented-control" role="tablist">
+          <button class="segment active" id="readyLabelsTab" type="button">Ready to Print</button>
+          <button class="segment" id="printedLabelsTab" type="button">Recently Printed</button>
+        </div>
+        <div class="inline-actions">
+          <button class="button secondary" id="selectAllLabels" type="button">Select All</button>
+          <button class="button" id="printLabels" type="button">Print Selected</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Job</th>
+              <th>Firm Date</th>
+              <th>Status</th>
+              <th>Queued</th>
+              <th>Printed</th>
+              <th>Print Count</th>
+            </tr>
+          </thead>
+          <tbody id="palletLabelsTable"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="packetModal" hidden>
+    <section class="modal-card wide-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="packetTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Production Packet</p>
+          <h2 id="packetTitle">Review &amp; generate</h2>
+        </div>
+        <button class="button secondary" id="closePacket" type="button">Close</button>
+      </div>
+      <p class="modal-summary" id="packetSummary"></p>
+      <div class="modal-toolbar">
+        <label class="compact-control">
+          <span>Machine profile</span>
+          <select id="packetProfile">
+            <option value="northwood">Northwood / New operator</option>
+            <option value="omni">Omni / Hand-cut companion</option>
+          </select>
+        </label>
+        <div class="inline-actions">
+          <button class="button secondary" id="selectAllJobs" type="button">Select All</button>
+          <button class="button secondary" id="clearAllJobs" type="button">Clear All</button>
+          <button class="button" id="generatePacket" type="button">Generate Packet</button>
+        </div>
+      </div>
+      <div class="modal-scroll-region">
+        <div id="packetBody"></div>
+      </div>
+      <div class="result-strip" id="packetResult" hidden></div>
+    </section>
+  </div>
+
+  <script src="demo-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

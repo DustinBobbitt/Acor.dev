@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wood Usage &amp; Forecast Demo · Sanitized</title>
+  <meta name="description" content="Sanitized interactive demo of wood usage and capacity forecasting. Mock data only.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-block">
+        <div class="brand-mark" aria-hidden="true">WU</div>
+        <div>
+          <p class="eyebrow">Sanitized Portfolio Demo</p>
+          <h1>Wood Usage &amp; Forecast</h1>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <button class="button secondary" id="resetSampleBtn" type="button">Load sample SKUs</button>
+        <button class="button" id="exportCsvBtn" type="button">Export CSV</button>
+      </div>
+    </header>
+
+    <p class="demo-banner">
+      Mock catalog and pricing only — no customer jobs, company rates, or live databases.
+      Enter SKUs (with optional qty syntax like <code>B30[2]</code>), calculate sheet usage and machine time, and browse a sanitized forecast list.
+    </p>
+
+    <section class="metric-band" id="heroMetrics"></section>
+
+    <main class="content-grid">
+      <section class="panel wide">
+        <div class="panel-header">
+          <div>
+            <p class="section-label">Jobs</p>
+            <h2>Pricing forecast</h2>
+          </div>
+          <div class="toolbar-row" id="jobViewFilters">
+            <button class="button" data-view="all" type="button">All</button>
+            <button class="button secondary" data-view="Upcoming" type="button">Upcoming</button>
+            <button class="button secondary" data-view="In cut" type="button">In cut</button>
+            <button class="button secondary" data-view="Cut complete" type="button">Cut complete</button>
+          </div>
+        </div>
+        <label class="field">
+          <span>Find a job</span>
+          <input id="jobSearch" type="search" placeholder="JOB-2140">
+        </label>
+        <div id="jobPricingTable"></div>
+      </section>
+
+      <section class="panel wide">
+        <div class="panel-header">
+          <div>
+            <p class="section-label">Calculate</p>
+            <h2>Batch wood usage</h2>
+          </div>
+        </div>
+        <form id="calculateForm" class="calc-form">
+          <label class="field">
+            <span>SKUs (one per line, commas, or qty like CB33[2])</span>
+            <textarea id="skuInput" rows="7" spellcheck="false"></textarea>
+          </label>
+          <div class="form-actions">
+            <button class="button" type="submit">Calculate</button>
+          </div>
+        </form>
+        <p class="task-note" id="actionStatus"></p>
+        <div id="calculateResults"></div>
+        <div id="calculatePricing"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <p class="section-label">Find similar</p>
+            <h2>SKU lookup</h2>
+          </div>
+        </div>
+        <form id="similarForm" class="calc-form">
+          <label class="field">
+            <span>SKU prefix</span>
+            <input id="similarInput" placeholder="B3">
+          </label>
+          <div class="form-actions">
+            <button class="button secondary" type="submit">Find</button>
+          </div>
+        </form>
+        <div id="similarResults"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <p class="section-label">Gaps</p>
+            <h2>Top missing SKUs</h2>
+          </div>
+        </div>
+        <div id="missingTable"></div>
+      </section>
+
+      <section class="panel wide">
+        <div class="panel-header">
+          <div>
+            <p class="section-label">Recent</p>
+            <h2>Calculations</h2>
+          </div>
+        </div>
+        <div id="historyTable"></div>
+      </section>
+    </main>
+  </div>
+  <script src="demo-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

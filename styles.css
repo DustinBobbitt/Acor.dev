@@ -665,6 +665,14 @@ code {
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.3);
 }
 
+.ui-shot {
+  width: 100%;
+  margin: 1rem 0 1.1rem;
+  border-radius: 16px;
+  border: 1px solid rgba(126, 223, 251, 0.16);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+}
+
 .secondary-project-card {
   max-width: 48rem;
 }

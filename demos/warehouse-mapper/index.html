@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Warehouse Mapper Demo · Sanitized</title>
+  <meta name="description" content="Sanitized interactive demo of a warehouse rack map with bay-level inventory counts. Mock data only.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-block">
+        <div class="brand-mark" aria-hidden="true">WM</div>
+        <div>
+          <p class="eyebrow">Sanitized Portfolio Demo</p>
+          <h1>Warehouse Mapper</h1>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <span class="meta-chip" id="mapMeta">Loading…</span>
+        <button class="button secondary" id="resetCountsBtn" type="button">Reset counts</button>
+      </div>
+    </header>
+
+    <p class="demo-banner">
+      Mock map only — no customer data, purchase orders, or company branding.
+      Click a rack to open its bay grid, enter DEMO-* counts, or search a SKU to highlight hits on the map.
+    </p>
+
+    <main class="app-layout">
+      <aside class="side-panel">
+        <label class="field-label" for="skuSearchInput">Search SKU</label>
+        <input id="skuSearchInput" type="search" placeholder="e.g. DEMO-022" autocomplete="off">
+        <p class="panel-summary" id="searchSummary">Type a DEMO-* SKU</p>
+        <div class="hit-list" id="hitList"></div>
+        <div class="sku-catalog">
+          <p class="field-label">Demo catalog</p>
+          <div class="sku-chips" id="skuChips"></div>
+        </div>
+      </aside>
+
+      <section class="map-panel">
+        <div class="map-toolbar">
+          <span class="map-title" id="mapTitle">Floor overview</span>
+          <span class="map-legend">
+            <span class="swatch rack"></span> Rack
+            <span class="swatch occupied"></span> Has stock
+            <span class="swatch hit"></span> Search hit
+            <span class="swatch selected"></span> Selected
+          </span>
+        </div>
+        <div class="map-scroll">
+          <canvas id="mapCanvas" width="1100" height="520" aria-label="Warehouse map overview"></canvas>
+        </div>
+        <div class="map-status" id="mapStatus">Loading map…</div>
+      </section>
+
+      <aside class="detail-panel" id="detailPanel">
+        <p class="eyebrow" id="detailEyebrow">Selection</p>
+        <h2 id="detailTitle">Pick a rack</h2>
+        <p class="detail-hint" id="detailHint">
+          Click any rack on the overview to open its levels × bays grid and enter mock counts.
+        </p>
+        <div class="bay-grid-wrap" id="bayGridWrap" hidden>
+          <div class="bay-grid-meta" id="bayGridMeta"></div>
+          <div class="bay-grid" id="bayGrid"></div>
+        </div>
+        <div class="count-form" id="countForm" hidden>
+          <p class="field-label">Bay count entry</p>
+          <div class="count-row">
+            <label>
+              <span>SKU</span>
+              <select id="countSkuSelect"></select>
+            </label>
+            <label>
+              <span>Qty</span>
+              <input id="countQtyInput" type="number" min="0" step="1" value="0">
+            </label>
+          </div>
+          <div class="detail-actions">
+            <button class="button" id="applyCountBtn" type="button">Apply count</button>
+            <button class="button secondary" id="clearBayBtn" type="button">Clear bay</button>
+          </div>
+          <p class="count-feedback" id="countFeedback"></p>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

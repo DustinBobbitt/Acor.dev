@@ -1,44 +1,20 @@
-# Acor.dev
+# Sanitized portfolio demos
 
-Static portfolio site for workflow tools and case studies.
+Interactive, offline demos for acor.dev. Mock data only — no customer names, company logos, live databases, or shop file paths.
 
-## Files
+| Demo | Path | What you can do |
+|------|------|-----------------|
+| Cut operations | `demos/cut-health/` | Queue, packets, labels, backlog |
+| Pallet locator | `demos/pallet-locator/` | Search jobs, click map, place / undo |
+| Wood usage | `demos/wood-usage/` | SKU calculate, forecast list, CSV export |
 
-- `index.html` contains the page structure and portfolio copy.
-- `styles.css` contains the visual system and responsive layout.
-- `script.js` handles the mobile nav and scroll reveals.
-- `rsc/` holds the existing logo, social images, and media assets.
+## Media
 
-## Local preview
-
-Open `index.html` directly in a browser for a quick check.
-
-If you want a simple local server and already have Python installed:
+Regenerate the demo reel (GIF + MP4) after updating screenshots:
 
 ```powershell
-python -m http.server 8000
+$env:Path = [System.Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [System.Environment]::GetEnvironmentVariable('Path','User')
+python .\tools\make_demo_reel.py
 ```
 
-Then visit `http://localhost:8000`.
-
-If Python is not available, use the included PowerShell server:
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\serve.ps1
-```
-
-Then visit `http://localhost:8000`.
-
-## Publish on GitHub Pages
-
-1. Push this repository to GitHub.
-2. In the repository settings, open `Pages`.
-3. Set the source to deploy from the `main` branch.
-4. Use the repository root as the publish folder.
-5. Save and wait for GitHub Pages to build the site.
-
-## Before publishing
-
-- Replace the placeholder contact pills with your actual links.
-- Add the sanitized Rover demo and the deeper workflow-suite case study media.
-- Update copy anywhere you want stronger project-specific outcomes or metrics.
+Requires `ffmpeg` on PATH (install with `winget install Gyan.FFmpeg`).
