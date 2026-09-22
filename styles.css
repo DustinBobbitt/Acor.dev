@@ -465,6 +465,67 @@ code {
   margin-bottom: 0.45rem;
 }
 
+.nest-split-spotlight {
+  margin-top: 1.75rem;
+}
+
+.nest-split-spotlight h3 {
+  max-width: 38rem;
+}
+
+.nest-split-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+  margin: 0 0 1.15rem;
+  padding: 0;
+  list-style: none;
+  counter-reset: nest-step;
+}
+
+.nest-split-steps li {
+  position: relative;
+  padding: 1rem 1rem 1rem 1.1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(126, 223, 251, 0.18);
+  background: rgba(255, 255, 255, 0.03);
+  counter-increment: nest-step;
+}
+
+.nest-split-steps li::before {
+  content: counter(nest-step);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.55rem;
+  height: 1.55rem;
+  margin-bottom: 0.55rem;
+  border-radius: 999px;
+  background: rgba(57, 208, 255, 0.16);
+  color: #d7f6ff;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.85rem;
+}
+
+.nest-split-steps strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.98rem;
+}
+
+.nest-split-steps span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.nest-split-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.98rem;
+}
+
 .project-layout {
   grid-template-columns: 1.15fr 0.85fr;
   align-items: start;
@@ -777,7 +838,8 @@ code {
 
   .hero-metrics,
   .capability-grid,
-  .workflow-strip {
+  .workflow-strip,
+  .nest-split-steps {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -841,7 +903,8 @@ code {
 
   .hero-metrics,
   .capability-grid,
-  .workflow-strip {
+  .workflow-strip,
+  .nest-split-steps {
     grid-template-columns: 1fr;
   }
 
