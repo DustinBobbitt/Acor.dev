@@ -7,7 +7,7 @@ Static browser demo of the warehouse rack map and bay-level count entry. Mock fi
 | File | Role |
 |------|------|
 | `index.html` | Shell: header, banner, canvas, search + detail panels |
-| `styles.css` | Dark green industrial theme (matches pallet-locator / cut-health demos) |
+| `styles.css` | Acor ink-navy / cyan–violet theme (matches portfolio chrome) |
 | `app.js` | Loads fixtures, draws overview, bay grid + DEMO-* counts |
 | `demo-map.json` | Sanitized map (rows, zones, slotted pallets, rack locations) |
 | `demo-items.json` | Movable pallet / stack fixtures |

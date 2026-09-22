@@ -1,15 +1,15 @@
 :root {
   color-scheme: dark;
-  --bg: #111512;
-  --band: #161d19;
-  --band-2: #1d2823;
-  --tile: #23312b;
-  --tile-2: #26382f;
-  --border: #385042;
-  --text: #f3f7f2;
-  --muted: #aebcad;
-  --accent: #43b67f;
-  --accent-2: #60c6ba;
+  --bg: #070b16;
+  --band: #0c1222;
+  --band-2: #121a30;
+  --tile: #162038;
+  --tile-2: #1a2744;
+  --border: #3a4a72;
+  --text: #edf1ff;
+  --muted: #9eacd4;
+  --accent: #3ad0ff;
+  --accent-2: #b85fff;
   --warn: #e7b95b;
   --danger: #d76f65;
   --zombie: #b889ff;
@@ -67,8 +67,8 @@ body {
   place-items: center;
   border: 1px solid var(--border);
   border-radius: 8px;
-  background: #203b2d;
-  color: #c7f6d7;
+  background: linear-gradient(135deg, #1a3a55, #3a2460);
+  color: #c8f4ff;
   font-weight: 800;
 }
 
@@ -99,7 +99,7 @@ h2 {
 
 .button {
   border: 1px solid var(--border);
-  background: #254633;
+  background: #1a2a48;
   color: var(--text);
   border-radius: 6px;
   padding: 10px 14px;
@@ -108,7 +108,7 @@ h2 {
 }
 
 .button:hover {
-  background: #2f5840;
+  background: #243868;
 }
 
 .button.secondary {
@@ -219,7 +219,7 @@ h2 {
   height: 16px;
   border: 1px solid var(--border);
   border-radius: 8px;
-  background: #121a15;
+  background: #0a1020;
   overflow: hidden;
 }
 
@@ -259,7 +259,7 @@ h2 {
 }
 
 .workload-cell.today {
-  border-color: rgba(96, 198, 186, 0.72);
+  border-color: rgba(58, 208, 255, 0.72);
 }
 
 .summary-pill,
@@ -268,8 +268,8 @@ h2 {
   align-items: center;
   border: 1px solid var(--border);
   border-radius: 6px;
-  background: rgba(67, 182, 127, 0.12);
-  color: #b8f2d0;
+  background: rgba(58, 208, 255, 0.12);
+  color: #c8f4ff;
   padding: 5px 9px;
   font-size: 12px;
 }
@@ -292,7 +292,7 @@ select {
   min-width: 150px;
   border: 1px solid var(--border);
   border-radius: 6px;
-  background: #111813;
+  background: #0a1020;
   color: var(--text);
   padding: 9px 10px;
   font: inherit;
@@ -319,7 +319,7 @@ select {
   vertical-align: middle;
 }
 
-.bulb-gray { background: #7f8b83; }
+.bulb-gray { background: #7a8499; }
 .bulb-yellow { background: var(--warn); }
 .bulb-green { background: var(--accent); }
 .bulb-zombie { background: var(--zombie); }
@@ -353,7 +353,7 @@ select {
 
 .job-row {
   padding: 10px 14px 10px 36px;
-  border-top: 1px solid rgba(56, 80, 66, 0.55);
+  border-top: 1px solid rgba(58, 74, 114, 0.55);
 }
 
 .job-row.is-hidden {
@@ -437,7 +437,7 @@ th {
 }
 
 tr:hover td {
-  background: rgba(96, 198, 186, 0.05);
+  background: rgba(58, 208, 255, 0.06);
 }
 
 .modal-backdrop {
@@ -447,7 +447,7 @@ tr:hover td {
   align-items: flex-start;
   justify-content: center;
   padding: 24px;
-  background: rgba(8, 12, 9, 0.76);
+  background: rgba(7, 11, 22, 0.82);
   z-index: 50;
 }
 
@@ -513,7 +513,7 @@ body.modal-open {
 }
 
 .segment.active {
-  background: #254633;
+  background: #1a2a48;
   color: var(--text);
 }
 
@@ -530,7 +530,7 @@ body.modal-open {
   align-items: center;
   gap: 10px;
   padding: 12px;
-  background: #1a241f;
+  background: #121a30;
 }
 
 .cabinet-grid {
@@ -541,7 +541,7 @@ body.modal-open {
 }
 
 .cabinet-item {
-  border: 1px solid rgba(56, 80, 66, 0.7);
+  border: 1px solid rgba(58, 74, 114, 0.7);
   border-radius: 8px;
   padding: 12px;
 }
@@ -556,9 +556,9 @@ body.modal-open {
 
 .result-strip {
   margin-top: 12px;
-  border: 1px solid rgba(67, 182, 127, 0.55);
+  border: 1px solid rgba(58, 208, 255, 0.45);
   border-radius: 8px;
-  background: rgba(67, 182, 127, 0.12);
+  background: rgba(58, 208, 255, 0.12);
   padding: 12px;
 }
 

@@ -1,16 +1,16 @@
 :root {
   color-scheme: dark;
-  --bg: #111512;
-  --band: #161d19;
-  --tile: #23312b;
-  --border: #385042;
-  --text: #f3f7f2;
-  --muted: #aebcad;
-  --accent: #43b67f;
-  --paint: #3d9e6a;
+  --bg: #070b16;
+  --band: #0c1222;
+  --tile: #162038;
+  --border: #3a4a72;
+  --text: #edf1ff;
+  --muted: #9eacd4;
+  --accent: #3ad0ff;
+  --paint: #5b8cff;
   --wip: #e7b95b;
   --danger: #d76f65;
-  --selected: #60c6ba;
+  --selected: #3ad0ff;
 }
 
 * { box-sizing: border-box; }
@@ -53,8 +53,8 @@ body {
   place-items: center;
   border: 1px solid var(--border);
   border-radius: 8px;
-  background: #203b2d;
-  color: #c7f6d7;
+  background: linear-gradient(135deg, #1a3a55, #3a2460);
+  color: #c8f4ff;
   font-weight: 800;
 }
 
@@ -186,7 +186,7 @@ input[type="text"] {
   font-size: 11px;
 }
 
-.pill.ok { color: #c7f6d7; border-color: #2f6b4d; }
+.pill.ok { color: #c8f4ff; border-color: #3a6a9a; }
 .pill.warn { color: #ffe3a3; border-color: #8a6a2a; }
 .pill.muted { color: var(--muted); }
 
@@ -208,7 +208,7 @@ input[type="text"] {
   vertical-align: middle;
   border: 1px solid #0006;
 }
-.swatch.placed { background: #3a6b52; }
+.swatch.placed { background: #4a6aaf; }
 .swatch.paint { background: var(--paint); }
 .swatch.wip { background: var(--wip); }
 .swatch.selected { background: var(--selected); }
@@ -216,7 +216,7 @@ input[type="text"] {
 .map-scroll {
   overflow: auto;
   border-radius: 8px;
-  background: #0c100e;
+  background: #050812;
   border: 1px solid var(--border);
 }
 

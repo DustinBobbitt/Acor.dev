@@ -146,18 +146,18 @@ function drawNullSpace(space) {
   const h = scaleLen(space.height);
   const kind = space.kind || "space";
   const fills = {
-    machine: "#24352c",
-    wall: "#1a2220",
-    aisle: "#141a17",
-    door: "#2a3a48",
+    machine: "#1a2744",
+    wall: "#101828",
+    aisle: "#0c1220",
+    door: "#2a3a58",
   };
-  ctx.fillStyle = fills[kind] || "#1e2a24";
+  ctx.fillStyle = fills[kind] || "#162038";
   ctx.fillRect(p.x, p.y, w, h);
-  ctx.strokeStyle = "#385042";
+  ctx.strokeStyle = "#3a4a72";
   ctx.lineWidth = 1;
   ctx.strokeRect(p.x, p.y, w, h);
   if (space.label && h > 10 && w > 40) {
-    ctx.fillStyle = "#aebcad";
+    ctx.fillStyle = "#9eacd4";
     ctx.font = "600 11px Segoe UI, sans-serif";
     ctx.fillText(space.label, p.x + 6, p.y + Math.min(16, h - 4));
   }
@@ -174,14 +174,14 @@ function drawZone(zone) {
   const p = worldToCanvas(zone.x, zone.y);
   const cw = scaleLen(w);
   const ch = scaleLen(h);
-  ctx.fillStyle = "#1a2820";
-  ctx.strokeStyle = "#4a6a55";
+  ctx.fillStyle = "#152038";
+  ctx.strokeStyle = "#4a6aaf";
   ctx.lineWidth = 1.5;
   ctx.setLineDash([4, 3]);
   ctx.fillRect(p.x, p.y, cw, ch);
   ctx.strokeRect(p.x, p.y, cw, ch);
   ctx.setLineDash([]);
-  ctx.fillStyle = "#aebcad";
+  ctx.fillStyle = "#9eacd4";
   ctx.font = "600 11px Segoe UI, sans-serif";
   ctx.fillText(zone.zone_id || "ZONE", p.x + 6, p.y + 14);
 }
@@ -190,12 +190,12 @@ function drawSlotted(sp) {
   const p = worldToCanvas(sp.x, sp.y);
   const w = scaleLen(sp.width || 280);
   const h = scaleLen(sp.height || 160);
-  ctx.fillStyle = "#1f2e27";
-  ctx.strokeStyle = "#508060";
+  ctx.fillStyle = "#1a2744";
+  ctx.strokeStyle = "#5080c0";
   ctx.lineWidth = 1.5;
   ctx.fillRect(p.x, p.y, w, h);
   ctx.strokeRect(p.x, p.y, w, h);
-  ctx.fillStyle = "#c7f6d7";
+  ctx.fillStyle = "#c8f4ff";
   ctx.font = "600 11px Segoe UI, sans-serif";
   ctx.fillText(sp.label || sp.group_id || "Slots", p.x + 6, p.y + 14);
 }
@@ -205,12 +205,12 @@ function drawMovable(item) {
   const w = scaleLen(item.width || 48);
   const h = scaleLen(item.height || 36);
   const empty = item.is_empty;
-  ctx.fillStyle = empty ? "#1a2420" : "#2a4a38";
-  ctx.strokeStyle = empty ? "#385042" : "#43b67f";
+  ctx.fillStyle = empty ? "#121a30" : "#1a3a5a";
+  ctx.strokeStyle = empty ? "#3a4a72" : "#3ad0ff";
   ctx.lineWidth = 1;
   ctx.fillRect(p.x, p.y, w, h);
   ctx.strokeRect(p.x, p.y, w, h);
-  ctx.fillStyle = "#aebcad";
+  ctx.fillStyle = "#9eacd4";
   ctx.font = "10px Segoe UI, sans-serif";
   ctx.fillText(item.label || item.id, p.x + 3, p.y + 12);
 }
@@ -224,15 +224,15 @@ function drawRack(row) {
   const hits = hitRows().has(row.name);
   const occupied = occupiedCount(row.name) > 0;
 
-  ctx.fillStyle = selected ? "#2a4f3d" : occupied ? "#1e3a2c" : "#1a2a22";
-  ctx.strokeStyle = selected ? "#60c6ba" : hits ? "#e7b95b" : "#3a6b52";
+  ctx.fillStyle = selected ? "#1a3a68" : occupied ? "#152848" : "#121a30";
+  ctx.strokeStyle = selected ? "#3ad0ff" : hits ? "#e7b95b" : "#4a6aaf";
   ctx.lineWidth = selected || hits ? 2.5 : 1.5;
   ctx.fillRect(p.x, p.y, w, h);
   ctx.strokeRect(p.x, p.y, w, h);
 
   const bayCount = Math.max(1, Number(row.bay_count) || 1);
   const horizontal = row.orientation !== "vertical";
-  ctx.strokeStyle = "#2f4a3c";
+  ctx.strokeStyle = "#2f4a7c";
   ctx.lineWidth = 1;
   for (let i = 1; i < bayCount; i++) {
     if (horizontal) {
@@ -269,10 +269,10 @@ function drawRack(row) {
     }
   }
 
-  ctx.fillStyle = "#c7f6d7";
+  ctx.fillStyle = "#c8f4ff";
   ctx.font = "700 12px Segoe UI, sans-serif";
   ctx.fillText(row.name, p.x + 6, p.y + 14);
-  ctx.fillStyle = "#aebcad";
+  ctx.fillStyle = "#9eacd4";
   ctx.font = "10px Segoe UI, sans-serif";
   ctx.fillText(
     `${bayCount} bay · L${row.levels_default || 1}`,
@@ -286,7 +286,7 @@ function drawRack(row) {
 function drawMap() {
   if (!state.map) return;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "#0c100e";
+  ctx.fillStyle = "#050812";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // Area backdrop
@@ -295,12 +295,12 @@ function drawMap() {
     const p = worldToCanvas(overview.x, overview.y);
     const w = scaleLen(overview.width);
     const h = scaleLen(overview.height);
-    ctx.fillStyle = "#17221c";
-    ctx.strokeStyle = "#385042";
+    ctx.fillStyle = "#0e1628";
+    ctx.strokeStyle = "#3a4a72";
     ctx.lineWidth = 2;
     ctx.fillRect(p.x, p.y, w, h);
     ctx.strokeRect(p.x, p.y, w, h);
-    ctx.fillStyle = "#aebcad";
+    ctx.fillStyle = "#9eacd4";
     ctx.font = "600 13px Segoe UI, sans-serif";
     ctx.fillText("Bulk Demo", p.x + 10, p.y + 18);
   }

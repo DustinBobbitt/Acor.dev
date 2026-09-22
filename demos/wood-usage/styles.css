@@ -1,12 +1,12 @@
 :root {
   color-scheme: dark;
-  --bg: #111512;
-  --band: #161d19;
-  --tile: #23312b;
-  --border: #385042;
-  --text: #f3f7f2;
-  --muted: #aebcad;
-  --accent: #43b67f;
+  --bg: #070b16;
+  --band: #0c1222;
+  --tile: #162038;
+  --border: #3a4a72;
+  --text: #edf1ff;
+  --muted: #9eacd4;
+  --accent: #3ad0ff;
   --warn: #e7b95b;
 }
 
@@ -55,8 +55,8 @@ body {
   place-items: center;
   border: 1px solid var(--border);
   border-radius: 8px;
-  background: #203b2d;
-  color: #c7f6d7;
+  background: linear-gradient(135deg, #1a3a55, #3a2460);
+  color: #c8f4ff;
   font-weight: 800;
 }
 
@@ -85,7 +85,7 @@ h2 { font-size: 20px; }
 }
 
 .demo-banner code {
-  color: #c7f6d7;
+  color: #c8f4ff;
   font-family: Consolas, monospace;
 }
 
@@ -186,7 +186,7 @@ th { color: var(--muted); font-weight: 600; }
   font-size: 11px;
 }
 
-.pill.ok { color: #c7f6d7; border-color: #2f6b4d; }
+.pill.ok { color: #c8f4ff; border-color: #3a6a9a; }
 .pill.warn { color: #ffe3a3; border-color: #8a6a2a; }
 
 .pricing-card {
@@ -194,7 +194,7 @@ th { color: var(--muted); font-weight: 600; }
   padding: 12px;
   border-radius: 10px;
   border: 1px solid var(--border);
-  background: #1a241e;
+  background: #121a30;
 }
 
 @media (max-width: 900px) {

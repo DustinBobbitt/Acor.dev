@@ -132,35 +132,35 @@ function slotRect(rack, slot) {
 function drawMap() {
   const { width, height, areas, racks, landmarks } = state.map;
   ctx.clearRect(0, 0, width, height);
-  ctx.fillStyle = "#0c100e";
+  ctx.fillStyle = "#050812";
   ctx.fillRect(0, 0, width, height);
 
   for (const area of areas) {
-    ctx.fillStyle = "#17221c";
-    ctx.strokeStyle = "#385042";
+    ctx.fillStyle = "#0e1628";
+    ctx.strokeStyle = "#3a4a72";
     ctx.lineWidth = 2;
     ctx.fillRect(area.x, area.y, area.width, area.height);
     ctx.strokeRect(area.x, area.y, area.width, area.height);
-    ctx.fillStyle = "#aebcad";
+    ctx.fillStyle = "#9eacd4";
     ctx.font = "600 13px Segoe UI, sans-serif";
     ctx.fillText(area.label, area.x + 10, area.y + 18);
   }
 
   for (const mark of landmarks) {
-    ctx.fillStyle = "#24352c";
+    ctx.fillStyle = "#1a2744";
     ctx.fillRect(mark.x, mark.y, mark.width, mark.height);
-    ctx.fillStyle = "#8ea392";
+    ctx.fillStyle = "#8ea0c8";
     ctx.font = "11px Segoe UI, sans-serif";
     ctx.fillText(mark.label, mark.x + 6, mark.y + 13);
   }
 
   for (const rack of racks) {
-    ctx.fillStyle = "#1c2a23";
-    ctx.strokeStyle = "#456352";
+    ctx.fillStyle = "#152038";
+    ctx.strokeStyle = "#4a5f9a";
     ctx.lineWidth = 1.5;
     ctx.fillRect(rack.x, rack.y, rack.width, rack.height);
     ctx.strokeRect(rack.x, rack.y, rack.width, rack.height);
-    ctx.fillStyle = "#c7d6c8";
+    ctx.fillStyle = "#c8d4ff";
     ctx.font = "600 12px Segoe UI, sans-serif";
     ctx.fillText(rack.label, rack.x + 8, rack.y + 16);
 
@@ -170,23 +170,23 @@ function drawMap() {
       const job = occ ? jobFor(occ.jobId) : null;
       const selected = job && job.id === state.selectedJobId;
       if (occ && job) {
-        if (selected) ctx.fillStyle = "#2f6f66";
-        else if (job.paint) ctx.fillStyle = "#2f6b4d";
+        if (selected) ctx.fillStyle = "#2a6a9a";
+        else if (job.paint) ctx.fillStyle = "#3a6a9a";
         else if (job.wip) ctx.fillStyle = "#6d5a2a";
-        else ctx.fillStyle = "#3a6b52";
+        else ctx.fillStyle = "#4a6aaf";
       } else {
-        ctx.fillStyle = "#121a16";
+        ctx.fillStyle = "#0a1020";
       }
       ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
-      ctx.strokeStyle = selected ? "#60c6ba" : "#2a3d33";
+      ctx.strokeStyle = selected ? "#3ad0ff" : "#2a3a5a";
       ctx.strokeRect(rect.x, rect.y, rect.w, rect.h);
       if (occ && job) {
-        ctx.fillStyle = "#f3f7f2";
+        ctx.fillStyle = "#edf1ff";
         ctx.font = "600 10px Segoe UI, sans-serif";
         const label = job.id.replace("JOB-", "");
         ctx.fillText(label, rect.x + 4, rect.y + Math.min(16, rect.h - 4));
       } else {
-        ctx.fillStyle = "#4d6356";
+        ctx.fillStyle = "#5a6a9a";
         ctx.font = "10px Segoe UI, sans-serif";
         ctx.fillText(String(slot), rect.x + 4, rect.y + 12);
       }
@@ -194,7 +194,7 @@ function drawMap() {
   }
 
   if (state.placeMode) {
-    ctx.fillStyle = "rgba(67,182,127,0.12)";
+    ctx.fillStyle = "rgba(58,208,255,0.14)";
     ctx.fillRect(0, 0, width, height);
   }
 }
