@@ -408,6 +408,63 @@ code {
   z-index: 1;
 }
 
+.pipeline-spotlight {
+  margin: 0 0 1.25rem;
+  padding: 1.6rem 1.7rem;
+  border: 1px solid rgba(57, 208, 255, 0.35);
+  border-radius: var(--radius-sm);
+  background:
+    linear-gradient(135deg, rgba(57, 208, 255, 0.12), rgba(187, 99, 255, 0.08) 55%, rgba(255, 255, 255, 0.02)),
+    var(--bg-panel);
+  box-shadow: var(--shadow);
+}
+
+.pipeline-spotlight h3 {
+  margin: 0.35rem 0 0.75rem;
+  font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+  line-height: 1.25;
+}
+
+.pipeline-spotlight > p:last-of-type {
+  margin-bottom: 1.1rem;
+  color: var(--muted);
+}
+
+.output-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.output-chip-list li {
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid rgba(126, 223, 251, 0.28);
+  background: rgba(57, 208, 255, 0.1);
+  color: #d7f6ff;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.88rem;
+  letter-spacing: 0.01em;
+}
+
+.pipeline-plugin-grid {
+  margin-bottom: 1.25rem;
+}
+
+.capability-card-emphasis {
+  border-color: rgba(187, 99, 255, 0.35);
+  background:
+    linear-gradient(180deg, rgba(187, 99, 255, 0.1), rgba(255, 255, 255, 0.02)),
+    var(--bg-panel);
+}
+
+.capability-card-emphasis .panel-label {
+  margin-bottom: 0.45rem;
+}
+
 .project-layout {
   grid-template-columns: 1.15fr 0.85fr;
   align-items: start;

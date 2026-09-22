@@ -6,13 +6,13 @@
   <title>Acor.dev | Web-Based Workflow Tools Portfolio</title>
   <meta
     name="description"
-    content="Acor.dev is a portfolio of web-based manufacturing and operations software: connected department dashboards, reporting, labeling, forecasting, machine telemetry, and a CAD/CNC pipeline."
+    content="Acor.dev is a portfolio of manufacturing software: web operations tools, machine-ready file generation, and AutoCAD and Fusion plugins that turn parametric geometry into production programs."
   >
   <meta name="theme-color" content="#080d1f">
   <meta property="og:title" content="Acor.dev | Web-Based Workflow Tools Portfolio">
   <meta
     property="og:description"
-    content="Web-based software for operations, manufacturing, and workflow optimization: dashboards, reporting, labeling, forecasting, telemetry, and a CAD/CNC pipeline."
+    content="Web operations tools plus a CAD/CNC pipeline that generates machine-ready files, with plugins for AutoCAD and Fusion."
   >
   <meta property="og:type" content="website">
   <meta property="og:image" content="rsc/img/acor_social_1200x630.png">
@@ -23,7 +23,7 @@
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
     rel="stylesheet"
   >
-  <link rel="stylesheet" href="styles.css?v=20260922c">
+  <link rel="stylesheet" href="styles.css?v=20260922d">
 </head>
 <body>
   <div class="page-shell">
@@ -59,19 +59,21 @@
             <p class="eyebrow">Web-based workflow tools for manufacturing</p>
             <h1>I build software that fixes real-world workflow problems.</h1>
             <p class="hero-lead">
-              I design and build a connected suite of web-based tools for a cabinet production environment: shared
-              department dashboards, reporting, labeling, forecasting, machine telemetry, and a CAD/CNC file pipeline.
+              I design and build a connected suite for cabinet production: shared department dashboards, reporting,
+              labeling, forecasting, and machine telemetry &mdash; plus a CAD/CNC pipeline that
+              <strong>generates machine-ready files</strong> and plugs into AutoCAD and Fusion.
             </p>
             <p class="hero-lead">
-              The work started as standalone desktop utilities. It has since moved to clean, browser-based landings that
-              run in the shop and off the floor, reduce manual steps, and keep data consistent between departments.
-              Everything shown here is sanitized: mock data only, no customer or company records.
+              That generation layer is easy to undersell and hard to replace: parametric DXFs, catalog builds, nesting
+              batches, program translation, and one-touch mill load. The shop tools started as desktop utilities and
+              now run as clean browser landings. Everything shown here is sanitized: mock data only, no customer or
+              company records.
             </p>
 
             <div class="hero-actions">
               <a class="button button-primary" href="#demos">Watch the demos</a>
+              <a class="button button-secondary" href="#pipeline">CAD plugins &amp; file generation</a>
               <a class="button button-secondary" href="demos/warehouse-mapper/index.html" target="_blank" rel="noreferrer">Open warehouse mapper</a>
-              <a class="button button-secondary" href="#suite">Explore the suite</a>
             </div>
 
             <div class="hero-metrics">
@@ -80,12 +82,12 @@
                 <strong>Manufacturing and operations</strong>
               </article>
               <article class="metric-card">
-                <span class="metric-label">Delivery style</span>
-                <strong>Web-based, built for real use</strong>
+                <span class="metric-label">File generation</span>
+                <strong>Machine-ready DXF, MDB, nests, NC</strong>
               </article>
               <article class="metric-card">
-                <span class="metric-label">Data</span>
-                <strong>Sanitized demos, no customer data</strong>
+                <span class="metric-label">CAD plugins</span>
+                <strong>AutoCAD insert + Fusion catalog</strong>
               </article>
             </div>
           </div>
@@ -132,13 +134,16 @@
             <article class="capability-card reveal">
               <h3>Live Web Demos</h3>
               <p>
-                Sanitized, clickable demos for cut operations, pallet locating, and wood-usage forecasting — mock data
-                only, no backend, no customer records.
+                Sanitized, clickable demos for cut operations, pallet locating, wood-usage forecasting, and warehouse
+                mapping — mock data only, no backend, no customer records.
               </p>
             </article>
             <article class="capability-card reveal">
-              <h3>Real Capabilities</h3>
-              <p>Reporting, labeling, forecasting, telemetry, and a CAD/CNC pipeline, each explained by what it produces.</p>
+              <h3>Machine-ready file generation</h3>
+              <p>
+                Not just dashboards: the suite writes the files production actually runs — DXF, PDF drawings, Fusion
+                catalog builds, nesting MDBs, TAP/XPR programs — with AutoCAD and Fusion plugins in the loop.
+              </p>
             </article>
             <article class="capability-card reveal">
               <h3>Case Studies</h3>
@@ -392,26 +397,63 @@
         <div class="container">
           <div class="section-heading reveal">
             <p class="eyebrow">CAD and CNC pipeline</p>
-            <h2>From parametric geometry to a machine-ready program.</h2>
+            <h2>We generate the machine-ready files — and plug into AutoCAD and Fusion to do it.</h2>
             <p>
-              The other half of the suite moves cabinet geometry through CAD and out to the machines. These are the
-              recently added tools that generate, translate, and observe production files.
+              Dashboards are only half the story. The generation side of the suite turns parametric cabinet geometry
+              into files the shop can open, nest, load, and cut: DXFs, drawing PDFs, Fusion catalog builds, nesting
+              MDBs, translated NC programs, and released nest sets. AutoCAD and Fusion are not screenshots of someone
+              else&rsquo;s CAD work — they are first-class plugin targets in the same pipeline.
             </p>
           </div>
 
-          <div class="capability-grid">
-            <article class="capability-card reveal">
-              <h3>Parametric DXF generator</h3>
-              <p>A desktop dialog that takes a part family and live dimensions and writes a ready DXF, with a scriptable command line for batch use. No CAD seat required.</p>
-            </article>
-            <article class="capability-card reveal">
+          <article class="pipeline-spotlight reveal">
+            <p class="panel-label">What gets written</p>
+            <h3>Machine-ready outputs, not mockups</h3>
+            <p>
+              Production starts with files that already match how the floor runs. The tools below author those files
+              from shared rules and dimensions, then hand them to CAM, the mill overlay, or the operator station.
+            </p>
+            <ul class="output-chip-list" aria-label="Generated file types">
+              <li>Parametric DXF</li>
+              <li>Corpus PDF plots</li>
+              <li>Fusion catalog builds</li>
+              <li>Nesting MDB batches</li>
+              <li>TAP &harr; XPR / NC</li>
+              <li>Released nest sheets</li>
+              <li>One-touch mill load</li>
+            </ul>
+          </article>
+
+          <div class="capability-grid pipeline-plugin-grid">
+            <article class="capability-card capability-card-emphasis reveal">
+              <p class="panel-label">Plugin</p>
               <h3>AutoCAD plugin</h3>
-              <p>An in-AutoCAD command inserts a parametric cabinet part as a block and plots corpus drawings to PDF, packaged as a versioned plugin bundle across AutoCAD 2022&ndash;2026.</p>
+              <p>
+                In-AutoCAD command (<code>TLINSERT</code>) inserts a parametric cabinet part as a live block and plots
+                corpus drawings to PDF. Packaged as a versioned ApplicationPlugins bundle across AutoCAD 2022&ndash;2026 —
+                install once, use it like a native command.
+              </p>
             </article>
-            <article class="capability-card reveal">
+            <article class="capability-card capability-card-emphasis reveal">
+              <p class="panel-label">Plugin</p>
               <h3>Fusion 360 catalog generator</h3>
-              <p>A Fusion script that resolves construction and customer views of cabinets from the same geometry. Over 1,300 products in the catalog build from source-backed rules.</p>
+              <p>
+                A Fusion script that builds construction and customer views of cabinets from the same geometry rules.
+                Over 1,300 products in the catalog resolve from source-backed definitions — not hand-drawn one-offs.
+              </p>
             </article>
+            <article class="capability-card capability-card-emphasis reveal">
+              <p class="panel-label">Generator</p>
+              <h3>Parametric DXF generator</h3>
+              <p>
+                A desktop dialog (and scriptable CLI) that takes a part family and live dimensions and writes a
+                machine-ready DXF. No CAD seat required for the batch path — useful when engineering needs files faster
+                than opening a full drawing session.
+              </p>
+            </article>
+          </div>
+
+          <div class="capability-grid">
             <article class="capability-card reveal">
               <h3>MDB batch generation</h3>
               <p>Generates the Access-format part and grid batches the CAM/nesting app consumes, with title-cased parts, stable cabinet grid numbering, and construction mapping.</p>
@@ -647,7 +689,7 @@
             </article>
             <article class="about-card">
               <h3>Portfolio structure</h3>
-              <p>The web suite leads, operations and CAD/CNC tools follow, and earlier desktop demos stay for context.</p>
+              <p>The web suite and live demos lead; machine-ready file generation and CAD plugins follow; earlier desktop clips stay for context.</p>
             </article>
           </div>
         </div>
