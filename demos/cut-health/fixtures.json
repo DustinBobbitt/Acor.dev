@@ -1,0 +1,399 @@
+{
+  "default": {
+    "ok": true,
+    "demo": true,
+    "enabled": false,
+    "items": [],
+    "jobs": []
+  },
+  "routes": {
+    "GET /api/overview": {
+      "today": {
+        "total": 86,
+        "completed": 86,
+        "carcass": 63,
+        "trim": 23,
+        "manual_added": {
+          "count": 7,
+          "requests": 3
+        },
+        "latest_refresh_timestamp": "2026-07-01T08:30:00",
+        "source_state": "Sanitized portfolio fixture"
+      },
+      "recent_performance": {
+        "last_7_days": {
+          "total": 511,
+          "carcass": 382,
+          "trim": 129,
+          "average_per_day": 73,
+          "days": 7,
+          "excluded_days": 0,
+          "in_progress_days": 0,
+          "catch_up_days": 0
+        },
+        "last_30_days": {
+          "total": 2086,
+          "carcass": 1558,
+          "trim": 528,
+          "average_per_day": 70,
+          "days": 30,
+          "excluded_days": 0,
+          "in_progress_days": 0,
+          "catch_up_days": 0
+        },
+        "trend_7_days": [
+          {
+            "day": "2026-06-25",
+            "label": "Thu",
+            "total": 64,
+            "carcass": 48,
+            "trim": 16
+          },
+          {
+            "day": "2026-06-26",
+            "label": "Fri",
+            "total": 78,
+            "carcass": 56,
+            "trim": 22
+          },
+          {
+            "day": "2026-06-29",
+            "label": "Mon",
+            "total": 81,
+            "carcass": 62,
+            "trim": 19
+          },
+          {
+            "day": "2026-06-30",
+            "label": "Tue",
+            "total": 72,
+            "carcass": 53,
+            "trim": 19
+          },
+          {
+            "day": "2026-07-01",
+            "label": "Wed",
+            "total": 86,
+            "carcass": 63,
+            "trim": 23
+          },
+          {
+            "day": "2026-07-02",
+            "label": "Thu",
+            "total": 68,
+            "carcass": 50,
+            "trim": 18
+          },
+          {
+            "day": "2026-07-03",
+            "label": "Fri",
+            "total": 62,
+            "carcass": 50,
+            "trim": 12
+          }
+        ]
+      },
+      "backlog": {
+        "ahead_goal_days": 8,
+        "jobs_needed_to_reach_goal": 14,
+        "items_needed_to_reach_goal": 128,
+        "due_within_goal": 276,
+        "overdue": 42,
+        "due_today": 31,
+        "snapshot_rows": 642
+      },
+      "reports": [],
+      "settings": {
+        "ahead_goal_days": 8,
+        "header_style": "default"
+      }
+    },
+    "GET /api/offline-mode": {
+      "ok": true,
+      "offline": false,
+      "enabled": false,
+      "drives": [],
+      "storage": {
+        "mode": "demo"
+      },
+      "network": {
+        "available": true
+      }
+    },
+    "GET /api/auto-refresh/status": {
+      "ok": true,
+      "server": {
+        "enabled": false,
+        "last_action": "disabled"
+      },
+      "insight": {
+        "status": "idle"
+      },
+      "snapshot": {
+        "source_state": "Sanitized portfolio fixture"
+      }
+    },
+    "GET /api/operator-packets": {
+      "ok": true,
+      "jobs": [
+        {
+          "po_number": "JOB-1042",
+          "firm_date": "2026-07-02",
+          "status": "ready",
+          "cabinet_count": 5
+        },
+        {
+          "po_number": "JOB-1088",
+          "firm_date": "2026-07-02",
+          "status": "printed",
+          "cabinet_count": 4
+        }
+      ]
+    },
+    "GET /api/palette-labels": {
+      "ok": true,
+      "mode": "ready",
+      "ready": [
+        {
+          "po_number": "JOB-2140",
+          "cabinets": 6,
+          "status": "ready"
+        },
+        {
+          "po_number": "JOB-2148",
+          "cabinets": 4,
+          "status": "ready"
+        },
+        {
+          "po_number": "JOB-2162",
+          "cabinets": 8,
+          "status": "ready"
+        }
+      ],
+      "recent": [],
+      "items": []
+    },
+    "GET /api/manual-added": {
+      "ok": true,
+      "count": 7,
+      "requests": 3,
+      "items": []
+    },
+    "GET /api/po-suggestions": {
+      "items": [
+        "JOB-1042",
+        "JOB-1088",
+        "JOB-2140"
+      ]
+    },
+    "GET /api/workload-distribution": {
+      "ok": true,
+      "buckets": [
+        {
+          "label": "Overdue",
+          "total": 42
+        },
+        {
+          "label": "Today",
+          "total": 31
+        },
+        {
+          "label": "Tomorrow",
+          "total": 58
+        }
+      ]
+    },
+    "GET /api/completed-today": {
+      "ok": true,
+      "day": "2026-07-01",
+      "total": 86,
+      "jobs": [
+        {
+          "po_number": "JOB-1042",
+          "cabinet_count": 5,
+          "carcass": 4,
+          "trim": 1,
+          "completed_at": "2026-07-01T10:15:00"
+        },
+        {
+          "po_number": "JOB-1088",
+          "cabinet_count": 4,
+          "carcass": 3,
+          "trim": 1,
+          "completed_at": "2026-07-01T11:40:00"
+        }
+      ]
+    },
+    "GET /api/ahead-goal": {
+      "ok": true,
+      "ahead_goal_days": 8,
+      "jobs_needed_to_reach_goal": 14,
+      "items_needed_to_reach_goal": 128
+    },
+    "GET /api/trim-checklist": {
+      "ok": true,
+      "day": "2026-07-01",
+      "items": [
+        {
+          "item": "Trim rails",
+          "qty": 12,
+          "status": "ready"
+        },
+        {
+          "item": "Trim panels",
+          "qty": 8,
+          "status": "pending"
+        }
+      ]
+    },
+    "GET /api/restock": {
+      "ok": true,
+      "items": [],
+      "count": 0
+    },
+    "GET /api/machine-issues": {
+      "ok": true,
+      "items": []
+    },
+    "GET /api/omni-dispatch": {
+      "ok": true,
+      "sets": [
+        {
+          "id": "set-1",
+          "name": "Batch A",
+          "po_numbers": [
+            "JOB-2201",
+            "JOB-2202"
+          ],
+          "cabinet_count": 12,
+          "status": "ready"
+        }
+      ],
+      "alerts": []
+    },
+    "GET /api/omni-floor-live": {
+      "ok": true,
+      "stations": [],
+      "events": []
+    },
+    "GET /api/morning-cut-plan/live": {
+      "ok": true,
+      "events": [],
+      "pinned": false,
+      "date_basis": "departure"
+    },
+    "POST /api/morning-cut-plan/draft": {
+      "ok": true,
+      "max_cabinets": 150,
+      "outstanding_cabinets": 42,
+      "manual_cabinets": 0,
+      "forecast_cabinets": 48,
+      "plan_cabinets": 90,
+      "over_target": false,
+      "plan_over_target": false,
+      "blocked_by_pipeline": false,
+      "outstanding": [
+        {
+          "po_number": "JOB-1042",
+          "cabinet_count": 5,
+          "role": "outstanding",
+          "firm_date": "2026-07-02"
+        },
+        {
+          "po_number": "JOB-1088",
+          "cabinet_count": 4,
+          "role": "outstanding",
+          "firm_date": "2026-07-02"
+        }
+      ],
+      "new_work": [
+        {
+          "po_number": "JOB-2201",
+          "cabinet_count": 6,
+          "role": "forecast",
+          "firm_date": "2026-07-08"
+        },
+        {
+          "po_number": "JOB-2202",
+          "cabinet_count": 8,
+          "role": "forecast",
+          "firm_date": "2026-07-08"
+        },
+        {
+          "po_number": "JOB-2203",
+          "cabinet_count": 5,
+          "role": "forecast",
+          "firm_date": "2026-07-09"
+        }
+      ]
+    },
+    "POST /api/smart-batches/plan": {
+      "ok": true,
+      "max_cabinets": 150,
+      "available_new_cabinets": 48,
+      "total_cabinets": 48,
+      "eligible_job_count": 12,
+      "batches": [
+        {
+          "name": "Demo Batch 1",
+          "cabinet_count": 24,
+          "job_count": 4,
+          "jobs": [
+            "JOB-2201",
+            "JOB-2202",
+            "JOB-2203",
+            "JOB-2204"
+          ]
+        },
+        {
+          "name": "Demo Batch 2",
+          "cabinet_count": 24,
+          "job_count": 3,
+          "jobs": [
+            "JOB-2205",
+            "JOB-2206",
+            "JOB-2207"
+          ]
+        }
+      ],
+      "picked_jobs": [
+        {
+          "po_number": "JOB-2201",
+          "firm_date": "2026-07-08",
+          "cabinet_count": 6
+        },
+        {
+          "po_number": "JOB-2202",
+          "firm_date": "2026-07-08",
+          "cabinet_count": 8
+        },
+        {
+          "po_number": "JOB-2203",
+          "firm_date": "2026-07-09",
+          "cabinet_count": 5
+        }
+      ],
+      "stain_grade": {
+        "cabinet_count": 0,
+        "jobs": []
+      }
+    },
+    "POST /api/smart-batches/generate": {
+      "ok": true,
+      "demo": true,
+      "message": "Demo mode \u2014 production writes disabled.",
+      "batches": [],
+      "failures": []
+    },
+    "POST /api/morning-cut-plan/produce": {
+      "ok": true,
+      "demo": true,
+      "message": "Demo mode \u2014 produce disabled."
+    },
+    "POST /api/*": {
+      "ok": true,
+      "demo": true,
+      "message": "Demo mode \u2014 writes disabled."
+    }
+  }
+}

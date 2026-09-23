@@ -3,91 +3,344 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Warehouse Mapper Demo · Sanitized</title>
-  <meta name="description" content="Sanitized interactive demo of a warehouse rack map with bay-level inventory counts. Mock data only.">
+  <title>Warehouse Mapper</title>
   <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="acor-theme.css">
+
+<script>
+(() => {
+  const FIXTURE_URL = new URL("fixtures.json", window.location.href).href;
+  let fixturesPromise = null;
+  function loadFixtures() {
+    if (!fixturesPromise) {
+      fixturesPromise = fetch(FIXTURE_URL).then((r) => r.json()).catch(() => ({}));
+    }
+    return fixturesPromise;
+  }
+  function matchRoute(routes, method, path) {
+    const key = method.toUpperCase() + " " + path.split("?")[0];
+    if (routes[key] !== undefined) return routes[key];
+    const bare = path.split("?")[0];
+    for (const [pattern, value] of Object.entries(routes)) {
+      const [m, p] = pattern.split(" ");
+      if (m !== method.toUpperCase()) continue;
+      if (p.endsWith("*") && bare.startsWith(p.slice(0, -1))) return value;
+      if (p === bare) return value;
+    }
+    return undefined;
+  }
+  const originalFetch = window.fetch.bind(window);
+  window.fetch = async (input, init = {}) => {
+    const url = typeof input === "string" ? input : (input && input.url) || "";
+    const method = String((init && init.method) || "GET").toUpperCase();
+    let path = url;
+    try {
+      const abs = new URL(url, window.location.href);
+      if (abs.origin === window.location.origin) path = abs.pathname + abs.search;
+    } catch (_e) {}
+    if (!path.includes("/api/")) {
+      return originalFetch(input, init);
+    }
+    const fixtures = await loadFixtures();
+    const routes = fixtures.routes || {};
+    let body = matchRoute(routes, method, path);
+    if (body === undefined) {
+      body = fixtures.default || { ok: true, demo: true, items: [], jobs: [], error: null };
+    }
+    if (typeof body === "function") {
+      body = body(path, init);
+    }
+    // Clone so callers can mutate without poisoning fixtures.
+    const payload = JSON.parse(JSON.stringify(body));
+    return new Response(JSON.stringify(payload), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  };
+  window.__ACOR_DEMO__ = true;
+})();
+</script>
+
 </head>
 <body>
-  <div class="app-shell">
-    <header class="topbar">
-      <div class="brand-block">
-        <div class="brand-mark" aria-hidden="true">WM</div>
-        <div>
-          <p class="eyebrow">Sanitized Portfolio Demo</p>
-          <h1>Warehouse Mapper</h1>
-        </div>
+  <p class="demo-banner">Sanitized portfolio demo of the real product UI — mock fixtures only. No customer names, company logos, or live shop data.</p>
+  <div id="landingOverlay" class="landing-overlay" role="dialog" aria-modal="true" aria-label="Warehouse access selection">
+    <div class="landing-card">
+      <h1>Warehouse Mapper</h1>
+      <p>Select how you want to use the tool on this device.</p>
+      <div class="landing-actions">
+        <button id="landingUserBtn" type="button">User</button>
+        <button id="landingAdminBtn" type="button">Admin</button>
       </div>
-      <div class="topbar-actions">
-        <span class="meta-chip" id="mapMeta">Loading…</span>
-        <button class="button secondary" id="resetCountsBtn" type="button">Reset counts</button>
-      </div>
-    </header>
-
-    <p class="demo-banner">
-      Mock map only — no customer data, purchase orders, or company branding.
-      Click a rack to open its bay grid, enter DEMO-* counts, or search a SKU to highlight hits on the map.
-    </p>
-
-    <main class="app-layout">
-      <aside class="side-panel">
-        <label class="field-label" for="skuSearchInput">Search SKU</label>
-        <input id="skuSearchInput" type="search" placeholder="e.g. DEMO-022" autocomplete="off">
-        <p class="panel-summary" id="searchSummary">Type a DEMO-* SKU</p>
-        <div class="hit-list" id="hitList"></div>
-        <div class="sku-catalog">
-          <p class="field-label">Demo catalog</p>
-          <div class="sku-chips" id="skuChips"></div>
+      <form id="landingDepartmentForm" class="landing-admin-form hidden">
+        <label for="landingDepartmentSelect">Department</label>
+        <select id="landingDepartmentSelect"></select>
+        <div class="landing-actions">
+          <button id="landingDepartmentCancelBtn" type="button">Cancel</button>
+          <button type="submit">Enter User Mode</button>
         </div>
-      </aside>
-
-      <section class="map-panel">
-        <div class="map-toolbar">
-          <span class="map-title" id="mapTitle">Floor overview</span>
-          <span class="map-legend">
-            <span class="swatch rack"></span> Rack
-            <span class="swatch occupied"></span> Has stock
-            <span class="swatch hit"></span> Search hit
-            <span class="swatch selected"></span> Selected
-          </span>
+      </form>
+      <form id="landingAdminForm" class="landing-admin-form hidden">
+        <label for="landingAdminPassword">Admin Password</label>
+        <input id="landingAdminPassword" type="password" autocomplete="current-password" placeholder="Default: admin">
+        <div class="landing-actions">
+          <button id="landingAdminCancelBtn" type="button">Cancel</button>
+          <button type="submit">Enter Admin</button>
         </div>
-        <div class="map-scroll">
-          <canvas id="mapCanvas" width="1100" height="520" aria-label="Warehouse map overview"></canvas>
-        </div>
-        <div class="map-status" id="mapStatus">Loading map…</div>
-      </section>
-
-      <aside class="detail-panel" id="detailPanel">
-        <p class="eyebrow" id="detailEyebrow">Selection</p>
-        <h2 id="detailTitle">Pick a rack</h2>
-        <p class="detail-hint" id="detailHint">
-          Click any rack on the overview to open its levels × bays grid and enter mock counts.
-        </p>
-        <div class="bay-grid-wrap" id="bayGridWrap" hidden>
-          <div class="bay-grid-meta" id="bayGridMeta"></div>
-          <div class="bay-grid" id="bayGrid"></div>
-        </div>
-        <div class="count-form" id="countForm" hidden>
-          <p class="field-label">Bay count entry</p>
-          <div class="count-row">
-            <label>
-              <span>SKU</span>
-              <select id="countSkuSelect"></select>
-            </label>
-            <label>
-              <span>Qty</span>
-              <input id="countQtyInput" type="number" min="0" step="1" value="0">
-            </label>
-          </div>
-          <div class="detail-actions">
-            <button class="button" id="applyCountBtn" type="button">Apply count</button>
-            <button class="button secondary" id="clearBayBtn" type="button">Clear bay</button>
-          </div>
-          <p class="count-feedback" id="countFeedback"></p>
-        </div>
-      </aside>
-    </main>
+      </form>
+      <p id="landingError" class="hint landing-error"></p>
+    </div>
   </div>
+  <header class="topbar">
+      <h1>Warehouse Mapper</h1>
+    <div class="topbar-actions">
+      <button id="accessSwitchBtn" type="button">Switch Mode</button>
+      <button id="refreshBtn" type="button">Refresh</button>
+    </div>
+  </header>
 
+  <main class="layout">
+    <section class="panel panel-grid">
+      <div class="control-toolbar">
+        <div class="control-group">
+          <label for="viewMode">View</label>
+          <select id="viewMode">
+            <option value="overview">Overview</option>
+            <option value="rack">Rack View</option>
+            <option value="floor">Floor Zone View</option>
+            <option value="slotted">Slotted Pallet View</option>
+            <option value="audit">Audit Tool</option>
+            <option value="management">Management Overview</option>
+            <option value="config">Movable Overlay Editor</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label for="areaSelect">Area</label>
+          <select id="areaSelect"></select>
+        </div>
+        <div class="control-group">
+          <label for="rackSelect">Rack (Aisle)</label>
+          <select id="rackSelect"></select>
+        </div>
+        <div class="control-group">
+          <label for="zoneSelect">Floor Zone</label>
+          <select id="zoneSelect"></select>
+        </div>
+        <div class="control-group">
+          <label for="slottedSelect">Slotted Pallet</label>
+          <select id="slottedSelect"></select>
+        </div>
+        <div class="control-group map-group">
+          <label for="mapSelect">Map</label>
+          <select id="mapSelect"></select>
+          <div class="map-row">
+            <button id="mapLoadBtn" type="button">Load</button>
+            <button id="mapLatestBtn" type="button">Latest</button>
+          </div>
+        </div>
+        <div class="control-group search-group">
+          <label for="searchInput">Find stock</label>
+          <label for="searchMatchMode" class="hint">Product matching</label>
+          <select id="searchMatchMode"><option value="contains">Contains text</option><option value="exact">Exact product code</option></select>
+          <div class="search-row">
+            <input id="searchInput" type="text" placeholder="Item number contains...">
+            <button id="searchBtn" type="button">Search</button>
+            <button id="clearSearchBtn" type="button">Exit Search</button>
+          </div>
+          <p id="searchSummary" class="hint search-summary">Search: - Returned: 0 in 0 unique locations</p>
+        </div>
+      </div>
+      <h2 id="viewTitle">Rack View</h2>
+      <div id="detailViewControls" class="overview-controls hidden">
+        <button id="detailBackBtn" type="button">Return to Overview</button>
+      </div>
+      <div id="overviewControls" class="overview-controls hidden">
+        <button id="overviewBackBtn" type="button" hidden>Return to Overview</button>
+        <button id="overviewAddPalletBtn" type="button" hidden>Add Pallet</button>
+        <button id="overviewOpenOverlayBtn" type="button" hidden>Open Overlay Editor</button>
+        <button id="zoomOutBtn" type="button">-</button>
+        <button id="zoomInBtn" type="button">+</button>
+        <button id="fitBtn" type="button">Fit</button>
+        <button id="resetPanBtn" type="button">Reset Pan</button>
+      </div>
+      <div id="auditToolbar" class="audit-toolbar hidden">
+        <div class="audit-toolbar-row">
+          <label for="auditNameInput">Request Name</label>
+          <input id="auditNameInput" type="text" value="Audit Session 1">
+        </div>
+        <div class="audit-toolbar-row">
+          <label for="auditModeSelect">Mode</label>
+          <select id="auditModeSelect">
+            <option value="assisted">Assisted Count</option>
+            <option value="blind">Blind Count</option>
+          </select>
+        </div>
+        <div class="audit-toolbar-row">
+          <label for="auditAssigneeSelect">Assign To</label>
+          <select id="auditAssigneeSelect"></select>
+        </div>
+        <div class="audit-toolbar-row">
+          <label for="auditTargetDepartmentSelect">Audit Department</label>
+          <select id="auditTargetDepartmentSelect"></select>
+        </div>
+        <label id="auditOwnDepartmentOverrideRow" class="audit-toolbar-row audit-override-row hidden">
+          <input id="auditOwnDepartmentOverride" type="checkbox">
+          I understand this assigns someone to audit their own department.
+        </label>
+        <div class="audit-toolbar-actions">
+          <button id="auditStartBtn" type="button">Request Audit</button>
+          <button id="auditPrintAssignmentBtn" type="button" class="hidden">Print Assignment</button>
+          <button id="auditCloseBtn" type="button" class="hidden">Close Audit</button>
+          <button id="auditCompleteScopeBtn" type="button" class="hidden">Complete Scope Export</button>
+        </div>
+        <div id="auditSessionPill" class="audit-session-pill hidden">No active audit</div>
+        <div id="auditRoleSummary" class="audit-session-pill hidden">Role: legacy</div>
+      </div>
+      <div class="legend" id="legendBar">
+        <span class="legend-item"><span id="legendSwatch1" class="swatch swatch-empty"></span><span id="legendLabel1">Empty</span></span>
+        <span class="legend-item"><span id="legendSwatch2" class="swatch swatch-occupied"></span><span id="legendLabel2">Occupied</span></span>
+        <span class="legend-item"><span id="legendSwatch3" class="swatch swatch-mixed"></span><span id="legendLabel3">Mixed</span></span>
+        <span class="legend-item"><span id="legendSwatch4" class="swatch swatch-selected"></span><span id="legendLabel4">Selected</span></span>
+        <span class="legend-item"><span id="legendSwatch5" class="swatch swatch-hover"></span><span id="legendLabel5">Hover</span></span>
+        <button id="heatModeToggleBtn" type="button" class="legend-toggle">Heat Map: Off</button>
+      </div>
+      <p id="viewSummary" class="hint">No locations loaded.</p>
+      <div id="searchModeBar" class="search-mode-bar hidden">
+        <span id="searchModeText">Search mode</span>
+        <button id="searchModeExitBtn" type="button">Exit Search Mode</button>
+      </div>
+      <div id="auditRequestBanner" class="audit-request-banner hidden">
+        <div>
+          <strong>Outstanding audit request</strong>
+          <p id="auditRequestText">No active request.</p>
+        </div>
+        <button id="auditRequestStartBtn" type="button">Start Audit Count</button>
+      </div>
+      <div id="gridWrap" class="rack-grid-wrap">
+        <p class="empty-state">Select a rack, floor zone, or slotted pallet to view locations.</p>
+      </div>
+      <div id="searchResultsPanel" class="search-results-panel">
+        <h3>Search Results</h3>
+        <div id="searchResults" class="search-results search-results-main"></div>
+      </div>
+      <div id="floatingInspector" class="floating-inspector hidden" role="dialog" aria-label="Quick bay editor">
+        <div class="fi-head">
+          <strong>Quick Edit</strong>
+          <button id="fiCloseBtn" type="button" class="fi-icon-btn">x</button>
+        </div>
+        <div class="fi-loc" id="fiLocation">-</div>
+        <div class="fi-field">
+          <label for="fiItemInput">Item</label>
+          <input id="fiItemInput" type="text">
+        </div>
+        <div class="fi-field">
+          <label for="fiQtyInput">Qty</label>
+          <div class="fi-qty-row">
+            <button id="fiMinusBtn" type="button">-1</button>
+            <button id="fiPlusBtn" type="button">+1</button>
+            <button id="fiPlus5Btn" type="button">+5</button>
+            <input id="fiQtyInput" type="number" min="0" step="1">
+          </div>
+        </div>
+        <div class="fi-field">
+          <label for="fiRecordedInput">Recorded</label>
+          <input id="fiRecordedInput" type="text">
+        </div>
+        <div class="fi-field fi-mixed-row">
+          <label for="fiMixedToggle">Mixed Bay</label>
+          <input id="fiMixedToggle" type="checkbox">
+          <button id="fiMixedEditBtn" type="button">Edit Mixed</button>
+        </div>
+        <div class="fi-actions">
+          <button id="fiPrevBtn" type="button">Prev</button>
+          <button id="fiNextBtn" type="button">Next</button>
+          <button id="fiSaveBtn" type="button">Save</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="detailPanel" class="panel panel-details">
+      <h2 id="detailTitle">Location Details</h2>
+      <div id="auditSupervisorPanel" class="audit-supervisor-panel hidden"></div>
+      <div id="departmentAdminPanel" class="department-admin-panel hidden"></div>
+      <div id="overviewActionPanel" class="overview-action-panel hidden"></div>
+      <form id="detailForm" class="detail-form">
+        <div class="row">
+          <label>Location</label>
+          <output id="locationCode">-</output>
+        </div>
+        <div class="row">
+          <label for="itemInput">Item Number</label>
+          <input id="itemInput" type="text">
+        </div>
+        <div class="row">
+          <label for="qtyInput">Qty</label>
+          <input id="qtyInput" type="number" min="0" step="1">
+        </div>
+        <div class="row">
+          <label for="recordedInput">Recorded Location</label>
+          <input id="recordedInput" type="text">
+        </div>
+        <div class="row">
+          <label for="poInput">PO Number</label>
+          <input id="poInput" type="text">
+        </div>
+        <div class="row">
+          <label>Last Inventoried</label>
+          <output id="lastInventoriedOutput">Never</output>
+        </div>
+        <div id="auditSessionRow" class="row hidden">
+          <label>Audit Session</label>
+          <output id="auditSessionOutput">-</output>
+        </div>
+        <div id="auditExpectedItemRow" class="row hidden">
+          <label>Expected Item</label>
+          <output id="auditExpectedItemOutput">-</output>
+        </div>
+        <div id="auditExpectedQtyRow" class="row hidden">
+          <label>Expected Qty</label>
+          <output id="auditExpectedQtyOutput">-</output>
+        </div>
+        <div id="auditResultRow" class="row hidden">
+          <label>Audit Status</label>
+          <output id="auditResultOutput">Uncounted</output>
+        </div>
+        <div id="auditNotesRow" class="row hidden">
+          <label for="auditNotesInput">Audit Notes</label>
+          <textarea id="auditNotesInput" rows="3" placeholder="Optional count note or variance explanation"></textarea>
+        </div>
+        <div id="mixedToggleRow" class="row checkbox">
+          <label for="mixedToggle">Mixed Bay</label>
+          <input id="mixedToggle" type="checkbox">
+        </div>
+        <div id="mixedEditor" class="mixed-editor hidden">
+          <div id="mixedRows"></div>
+          <button id="addMixedRowBtn" type="button">+ Add Mixed Item</button>
+        </div>
+        <div class="form-actions">
+          <button id="saveBtn" type="submit">Save Bay</button>
+          <button id="pullOutBtn" type="button" class="hidden">Pull Out as Pallet</button>
+          <button id="moveAreaBtn" type="button" class="hidden">Move To Another Area</button>
+        </div>
+      </form>
+      <p id="statusText" class="hint">No bay selected.</p>
+    </section>
+  </main>
+
+  <script src="modules/constants.js"></script>
+  <script src="modules/helpers.js"></script>
+  <script src="modules/geometry.js"></script>
+  <script src="modules/asset-templates.js"></script>
+  <script src="modules/api.js"></script>
+  <script src="modules/place-workspace.js"></script>
+  <script src="modules/management.js"></script>
+  <script src="modules/search.js"></script>
+  <script src="modules/audit.js"></script>
+  <script src="modules/heat-visual-age.js"></script>
+  <script src="modules/rack-pan.js"></script>
+  <script src="modules/detail-panel.js"></script>
+  <script src="modules/inspector.js"></script>
+  <script src="modules/renderers.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

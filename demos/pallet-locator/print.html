@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Print Cut Pallet Map</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; color: #0f172a; background: #f1f5f9; font-family: "Segoe UI", system-ui, sans-serif; }
+    .print-controls { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; padding: 14px 20px; color: #fff; background: #1e293b; box-shadow: 0 2px 8px rgba(15, 23, 42, .22); }
+    .print-controls h1 { margin: 0; font-size: 17px; }
+    .area-options { display: flex; gap: 12px; flex-wrap: wrap; }
+    .area-option { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border: 1px solid rgba(255,255,255,.25); border-radius: 7px; background: rgba(255,255,255,.08); cursor: pointer; }
+    button { padding: 8px 14px; border: 0; border-radius: 7px; font: inherit; font-weight: 700; cursor: pointer; }
+    .print-button { color: #fff; background: #2563eb; }
+    .back-button { color: #1e293b; background: #e2e8f0; }
+    .print-meta { margin-left: auto; color: #cbd5e1; font-size: 12px; }
+    #message { max-width: 980px; margin: 20px auto; padding: 16px; border-radius: 8px; background: #fff; }
+    .maps { max-width: 1500px; margin: 18px auto; padding: 0 18px 18px; }
+    .area-sheet { min-height: 7.35in; margin: 0 0 20px; padding: 12px 14px 10px; background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; box-shadow: 0 1px 4px rgba(15,23,42,.12); break-inside: avoid; page-break-inside: avoid; }
+    .sheet-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+    .sheet-heading h2 { margin: 0; font-size: 18px; }
+    .sheet-heading p { margin: 0; color: #64748b; font-size: 11px; }
+    .area-sheet svg { display: block; width: 100%; height: 6.65in; border: 1px solid #94a3b8; background: #fff; }
+    .map-area { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 2; }
+    .map-null { fill: #e5e7eb; stroke: #64748b; stroke-width: 2; stroke-dasharray: 9 7; }
+    .map-zone { fill: #dcfce7; stroke: #16a34a; stroke-width: 2; }
+    .map-rack { fill: #dbeafe; stroke: #1d4ed8; stroke-width: 2.4; }
+    .map-bay-line { stroke: #60a5fa; stroke-width: 1; }
+    .map-slotted { fill: #fef3c7; stroke: #ca8a04; stroke-width: 2.2; }
+    .map-pallet { fill: #fee2e2; stroke: #b91c1c; stroke-width: 2.5; }
+    .map-pallet.paint { fill: #bbf7d0; stroke: #15803d; }
+    .map-pallet.reclaimed { fill: #ede9fe; stroke: #7c3aed; }
+    .map-label { fill: #0f172a; font: 700 28px "Segoe UI", sans-serif; paint-order: stroke; stroke: #fff; stroke-width: 5px; stroke-linejoin: round; }
+    .map-sublabel { fill: #334155; font: 600 18px "Segoe UI", sans-serif; paint-order: stroke; stroke: #fff; stroke-width: 4px; }
+    .legend { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 6px; color: #334155; font-size: 11px; }
+    .legend span::before { content: "■ "; }
+    .legend .rack::before { color: #2563eb; }
+    .legend .slot::before { color: #ca8a04; }
+    .legend .pallet::before { color: #b91c1c; }
+    .legend .reclaimed::before { color: #7c3aed; }
+    .legend .obstruction::before { color: #64748b; }
+    @page { size: landscape; margin: .22in; }
+    @media print {
+      body { background: #fff; }
+      .no-print { display: none !important; }
+      .maps { max-width: none; margin: 0; padding: 0; }
+      .area-sheet { min-height: auto; height: 7.55in; margin: 0; padding: 0; border: 0; border-radius: 0; box-shadow: none; page-break-after: always; }
+      .area-sheet:last-child { page-break-after: auto; }
+      .area-sheet svg { height: 6.95in; }
+    }
+  </style>
+</head>
+<body>
+  <header class="print-controls no-print">
+    <h1>Print Cut Pallet Map</h1>
+    <div id="areaOptions" class="area-options" aria-label="Areas to print"></div>
+    <button id="printButton" class="print-button" type="button">Print Selected Areas</button>
+    <button id="backButton" class="back-button" type="button">Back to Locator</button>
+    <span id="printMeta" class="print-meta">Loading current map…</span>
+  </header>
+  <div id="message">Loading the surveyed warehouse map…</div>
+  <main id="maps" class="maps"></main>
+  <script src="/modules/geometry.js"></script>
+  <script src="/print.js"></script>
+</body>
+</html>

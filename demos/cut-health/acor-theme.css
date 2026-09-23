@@ -1,0 +1,36 @@
+
+/* Acor portfolio overlay — brand shell for real product demos */
+:root {
+  --bg: #070b16 !important;
+  --band: #0c1222 !important;
+  --band-2: #121a30 !important;
+  --tile: #162038 !important;
+  --tile-2: #1a2744 !important;
+  --border: #3a4a72 !important;
+  --text: #edf1ff !important;
+  --muted: #9eacd4 !important;
+  --accent: #3ad0ff !important;
+  --accent-2: #b85fff !important;
+  --selected: #3ad0ff !important;
+  color-scheme: dark;
+}
+body {
+  background: #070b16 !important;
+  color: #edf1ff !important;
+  font-family: "Plus Jakarta Sans", "Segoe UI", Arial, sans-serif !important;
+}
+.brand-name, .eyebrow, [class*="timberland"] {
+  /* company marks stripped in HTML; keep muted accents */
+}
+.demo-banner {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(58, 208, 255, 0.28);
+  border-radius: 12px;
+  background: rgba(58, 208, 255, 0.08);
+  color: #9eacd4;
+  font-size: 0.92rem;
+}
+.button, button.button, .button.primary {
+  border-radius: 8px !important;
+}

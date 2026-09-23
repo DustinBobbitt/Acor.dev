@@ -3,99 +3,265 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pallet Locator Demo · Sanitized</title>
-  <meta name="description" content="Sanitized interactive demo of a warehouse pallet locator map. Mock data only.">
+  <title>Pallet Locator</title>
   <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="acor-theme.css">
+
+<script>
+(() => {
+  const FIXTURE_URL = new URL("fixtures.json", window.location.href).href;
+  let fixturesPromise = null;
+  function loadFixtures() {
+    if (!fixturesPromise) {
+      fixturesPromise = fetch(FIXTURE_URL).then((r) => r.json()).catch(() => ({}));
+    }
+    return fixturesPromise;
+  }
+  function matchRoute(routes, method, path) {
+    const key = method.toUpperCase() + " " + path.split("?")[0];
+    if (routes[key] !== undefined) return routes[key];
+    const bare = path.split("?")[0];
+    for (const [pattern, value] of Object.entries(routes)) {
+      const [m, p] = pattern.split(" ");
+      if (m !== method.toUpperCase()) continue;
+      if (p.endsWith("*") && bare.startsWith(p.slice(0, -1))) return value;
+      if (p === bare) return value;
+    }
+    return undefined;
+  }
+  const originalFetch = window.fetch.bind(window);
+  window.fetch = async (input, init = {}) => {
+    const url = typeof input === "string" ? input : (input && input.url) || "";
+    const method = String((init && init.method) || "GET").toUpperCase();
+    let path = url;
+    try {
+      const abs = new URL(url, window.location.href);
+      if (abs.origin === window.location.origin) path = abs.pathname + abs.search;
+    } catch (_e) {}
+    if (!path.includes("/api/")) {
+      return originalFetch(input, init);
+    }
+    const fixtures = await loadFixtures();
+    const routes = fixtures.routes || {};
+    let body = matchRoute(routes, method, path);
+    if (body === undefined) {
+      body = fixtures.default || { ok: true, demo: true, items: [], jobs: [], error: null };
+    }
+    if (typeof body === "function") {
+      body = body(path, init);
+    }
+    // Clone so callers can mutate without poisoning fixtures.
+    const payload = JSON.parse(JSON.stringify(body));
+    return new Response(JSON.stringify(payload), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  };
+  window.__ACOR_DEMO__ = true;
+})();
+</script>
+
 </head>
 <body>
-  <div class="app-shell">
-    <header class="topbar">
-      <div class="brand-block">
-        <div class="brand-mark" aria-hidden="true">PL</div>
-        <div>
-          <p class="eyebrow">Sanitized Portfolio Demo</p>
-          <h1>Pallet Locator</h1>
-        </div>
+  <p class="demo-banner">Sanitized portfolio demo of the real product UI — mock fixtures only. No customer names, company logos, or live shop data.</p>
+  <header class="topbar">
+    <div class="brand">
+      
+      <div>
+        <p class="brand-name">Acor.dev</p>
+        <h1>Pallet Locator</h1>
       </div>
-      <div class="topbar-actions">
-        <label class="toggle-label">
-          <input type="checkbox" id="hideWipToggle">
-          <span>Hide WIP</span>
-        </label>
-        <label class="toggle-label">
-          <span>Jobs</span>
-          <select id="jobFilterSelect">
-            <option value="all">All</option>
-            <option value="active">Active upcoming</option>
-            <option value="orphaned">On floor · cut complete</option>
-            <option value="unplaced">Not placed yet</option>
-          </select>
-        </label>
-        <button class="button secondary" id="undoBtn" type="button" disabled>Undo</button>
-        <button class="button" id="placeModeBtn" type="button">+ Place pallet</button>
-      </div>
-    </header>
-
-    <p class="demo-banner">
-      Mock warehouse only — no customer names, purchase-order text, or company branding.
-      Search a job, click a pallet on the map, or place an unplaced job onto a free rack slot.
-    </p>
-
-    <main class="app-layout">
-      <aside class="job-panel">
-        <label class="job-search-label" for="jobSearchInput">Find pallet</label>
-        <input id="jobSearchInput" type="search" placeholder="Job ID (e.g. JOB-2140)" autocomplete="off">
-        <p class="job-panel-summary" id="jobPanelSummary">Upcoming jobs</p>
-        <div class="job-list" id="jobList"></div>
-      </aside>
-
-      <section class="map-panel">
-        <div class="map-toolbar">
-          <span class="map-title">Cut floor map</span>
-          <span class="map-legend">
-            <span class="swatch placed"></span> Placed
-            <span class="swatch paint"></span> Paint
-            <span class="swatch wip"></span> WIP
-            <span class="swatch selected"></span> Selected
-          </span>
-        </div>
-        <div class="map-scroll">
-          <canvas id="mapCanvas" width="980" height="560" aria-label="Warehouse map"></canvas>
-        </div>
-        <div class="map-status" id="mapStatus">Ready</div>
-      </section>
-
-      <aside class="detail-panel" id="detailPanel" hidden>
-        <button class="detail-close" id="detailClose" type="button" aria-label="Close">&times;</button>
-        <p class="eyebrow">Selected pallet</p>
-        <h2 id="detailJobName">—</h2>
-        <div class="detail-meta" id="detailMeta"></div>
-        <div class="detail-actions">
-          <button class="button secondary" id="detailClearBtn" type="button">Clear placement</button>
-        </div>
-      </aside>
-    </main>
-  </div>
-
-  <div class="modal-backdrop" id="placeModal" hidden>
-    <div class="modal" role="dialog" aria-labelledby="placeModalTitle">
-      <h3 id="placeModalTitle">Place pallet</h3>
-      <p class="modal-hint">Pick an unplaced job, then click a free slot on a rack.</p>
-      <label>
-        <span>Job</span>
-        <select id="placeJobSelect"></select>
+    </div>
+    <div class="topbar-actions">
+      <label class="toggle-label">
+        <input type="checkbox" id="hideWipToggle">
+        <span>Hide WIP</span>
       </label>
-      <label class="check-row"><input type="checkbox" id="placeIsPaint"> Paint job (cyan tip)</label>
-      <label class="check-row"><input type="checkbox" id="placeIsWip"> WIP</label>
-      <label class="check-row"><input type="checkbox" id="placeIsMixed"> Mixed pallet</label>
+      <label class="toggle-label">
+        <span>Jobs</span>
+        <select id="jobFilterSelect">
+          <option value="all">All</option>
+          <option value="active">Active Upcoming</option>
+          <option value="orphaned">On Floor - Cut Complete</option>
+        </select>
+      </label>
+      <button id="undoBtn" type="button" disabled title="Undo last place, move, or delete (Ctrl+Z)">Undo</button>
+      <button id="manageJobsBtn" type="button">Manage Upcoming Jobs</button>
+      <button id="placeModeBtn" type="button">+ Place Pallet</button>
+      <button id="printMapBtn" type="button">Print Map</button>
+      <button id="refreshBtn" type="button">Refresh</button>
+    </div>
+  </header>
+  <div class="jobs-feed-warning hidden" id="jobsFeedWarning"></div>
+
+  <main class="app-layout">
+    <aside class="job-panel" id="jobPanel">
+      <div class="job-panel-header">
+        <div class="job-panel-tabs" role="tablist" aria-label="Locator lists">
+          <button id="upcomingTabBtn" class="job-panel-tab active" type="button" role="tab" aria-selected="true">Upcoming</button>
+          <button id="reclaimedTabBtn" class="job-panel-tab" type="button" role="tab" aria-selected="false">Reclaimed</button>
+        </div>
+        <label class="job-search-label" for="jobSearchInput">Find pallet</label>
+        <input id="jobSearchInput" type="search" placeholder="PO, customer, or cabinet" autocomplete="off">
+        <p id="jobPanelSummary" class="job-panel-summary">Upcoming jobs</p>
+      </div>
+      <div class="job-list" id="jobList"></div>
+    </aside>
+
+    <section class="map-panel" id="mapPanel">
+      <div class="map-toolbar" id="mapToolbar" role="toolbar" aria-label="Warehouse areas">
+        <button id="areaAllBtn" class="area-tab active" type="button" data-area="all">All areas</button>
+      </div>
+      <div class="map-scroll" id="mapScroll">
+        <canvas id="mapCanvas"></canvas>
+      </div>
+      <div class="map-status" id="mapStatus"></div>
+    </section>
+
+    <aside class="detail-panel hidden" id="detailPanel">
+      <button class="detail-close" id="detailClose">&times;</button>
+      <h3 id="detailJobName"></h3>
+      <div class="detail-meta" id="detailMeta"></div>
+      <div class="detail-actions" id="detailActions"></div>
+    </aside>
+  </main>
+
+  <div class="modal-overlay hidden" id="placeModal">
+    <div class="modal">
+      <h3 id="placeModalTitle">Place Pallet</h3>
+      <div class="form-group">
+        <label for="placeJobName">Purchase Order / Job Name</label>
+        <input id="placeJobName" type="text" list="jobSuggestions" placeholder="e.g. JOB-2410-OAK-CABINET" autocomplete="off">
+        <datalist id="jobSuggestions"></datalist>
+      </div>
+      <div class="form-group reclaimed-primary-cabinet hidden" id="placeReclaimedCabinetWrap">
+        <span class="reclaimed-primary-label">Cabinet being placed</span>
+        <strong id="placeReclaimedCabinetLabel"></strong>
+      </div>
+      <div class="form-group">
+        <label class="inline-check"><input type="checkbox" id="placeIsMixed"> <span id="placeMixedLabelText">Mixed pallet (multiple POs/jobs)</span></label>
+      </div>
+      <div class="form-group mixed-jobs-wrap hidden" id="placeMixedRowsWrap">
+        <div id="placeGenericMixedWrap">
+          <label>Additional POs / Jobs</label>
+          <div id="placeMixedRows"></div>
+          <button id="placeAddMixedRowBtn" type="button" class="btn-secondary">+ Add PO / Job</button>
+        </div>
+        <div class="hidden" id="placeReclaimedMixedWrap">
+          <label for="placeReclaimedMixedSearch">Other reclaimed cabinets on this pallet</label>
+          <input id="placeReclaimedMixedSearch" type="search" placeholder="Filter by cabinet or job" autocomplete="off">
+          <p class="mixed-job-help">Select only the individual cabinets physically sharing this pallet. Cabinets already placed elsewhere are shown but cannot be selected here.</p>
+          <div class="reclaimed-mixed-list" id="placeReclaimedMixedList"></div>
+          <div class="mixed-job-selection-count" id="placeReclaimedMixedCount"></div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label><input type="checkbox" id="placeIsPaint"> Paint Job (green)</label>
+        </div>
+        <div class="form-group">
+          <label><input type="checkbox" id="placeIsWip"> WIP</label>
+        </div>
+      </div>
+      <div class="form-group" id="placeSingleCabinetWrap">
+        <label class="inline-check"><input type="checkbox" id="placeIsSingleCabinet"> Single cabinet job (auto-place on Single Cabinet Jobs rack)</label>
+      </div>
+      <div class="form-group">
+        <label for="placeNotes">Notes (optional)</label>
+        <input id="placeNotes" type="text" placeholder="">
+      </div>
+      <p class="modal-hint" id="placeModalHint">Click a location on the map after confirming. Or select a job and click the map.</p>
       <div class="modal-buttons">
-        <button class="button" id="placeConfirmBtn" type="button">Confirm &amp; click map</button>
-        <button class="button secondary" id="placeCancelBtn" type="button">Cancel</button>
+        <button id="placeConfirmBtn" type="button">Confirm &amp; Click Map</button>
+        <button id="placeCancelBtn" type="button" class="btn-secondary">Cancel</button>
       </div>
     </div>
   </div>
 
-  <script src="demo-data.js"></script>
+  <div class="modal-overlay hidden" id="jobsManageModal">
+    <div class="modal modal-wide">
+      <div class="modal-header">
+        <h3>Manage Upcoming Jobs</h3>
+        <button id="jobsManageCloseBtn" type="button" class="modal-close">&times;</button>
+      </div>
+
+      <div class="jobs-manage-layout">
+        <section class="jobs-manage-editor">
+          <h4 id="jobEditorTitle">Add Manual Job</h4>
+          <div class="form-group">
+            <label for="jobEditorName">Purchase Order / Job Name</label>
+            <input id="jobEditorName" type="text" autocomplete="off">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="jobEditorDate">Firm Date</label>
+              <input id="jobEditorDate" type="date">
+            </div>
+            <div class="form-group">
+              <label class="inline-check compact-check">
+                <input id="jobEditorIsPaint" type="checkbox">
+                <span>Paint Job</span>
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="jobEditorNotes">Notes</label>
+            <input id="jobEditorNotes" type="text" autocomplete="off">
+          </div>
+          <div class="modal-buttons left-buttons">
+            <button id="jobEditorSaveBtn" type="button">Save</button>
+            <button id="jobEditorCancelBtn" type="button" class="btn-secondary">Clear</button>
+          </div>
+          <p class="modal-hint" id="jobEditorHint">Manual jobs live only in the locator overlay.</p>
+        </section>
+
+        <section class="jobs-manage-table-wrap">
+          <div class="jobs-manage-section">
+            <div class="jobs-manage-section-header">
+              <h4>Generated Feed Jobs</h4>
+              <span class="section-note">Read-only feed with local hide/override support</span>
+            </div>
+            <div class="jobs-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Job</th>
+                    <th>Firm Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="generatedJobsTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="jobs-manage-section">
+            <div class="jobs-manage-section-header">
+              <h4>Manual Jobs</h4>
+              <span class="section-note">Restart pallets and locator-only work</span>
+            </div>
+            <div class="jobs-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Job</th>
+                    <th>Firm Date</th>
+                    <th>Notes</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="manualJobsTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script src="modules/geometry.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
+

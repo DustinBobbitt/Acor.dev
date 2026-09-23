@@ -3,116 +3,141 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Wood Usage &amp; Forecast Demo · Sanitized</title>
-  <meta name="description" content="Sanitized interactive demo of wood usage and capacity forecasting. Mock data only.">
+  <title>Wood Usage & Forecast</title>
   <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="acor-theme.css">
+
+<script>
+(() => {
+  const FIXTURE_URL = new URL("fixtures.json", window.location.href).href;
+  let fixturesPromise = null;
+  function loadFixtures() {
+    if (!fixturesPromise) {
+      fixturesPromise = fetch(FIXTURE_URL).then((r) => r.json()).catch(() => ({}));
+    }
+    return fixturesPromise;
+  }
+  function matchRoute(routes, method, path) {
+    const key = method.toUpperCase() + " " + path.split("?")[0];
+    if (routes[key] !== undefined) return routes[key];
+    const bare = path.split("?")[0];
+    for (const [pattern, value] of Object.entries(routes)) {
+      const [m, p] = pattern.split(" ");
+      if (m !== method.toUpperCase()) continue;
+      if (p.endsWith("*") && bare.startsWith(p.slice(0, -1))) return value;
+      if (p === bare) return value;
+    }
+    return undefined;
+  }
+  const originalFetch = window.fetch.bind(window);
+  window.fetch = async (input, init = {}) => {
+    const url = typeof input === "string" ? input : (input && input.url) || "";
+    const method = String((init && init.method) || "GET").toUpperCase();
+    let path = url;
+    try {
+      const abs = new URL(url, window.location.href);
+      if (abs.origin === window.location.origin) path = abs.pathname + abs.search;
+    } catch (_e) {}
+    if (!path.includes("/api/")) {
+      return originalFetch(input, init);
+    }
+    const fixtures = await loadFixtures();
+    const routes = fixtures.routes || {};
+    let body = matchRoute(routes, method, path);
+    if (body === undefined) {
+      body = fixtures.default || { ok: true, demo: true, items: [], jobs: [], error: null };
+    }
+    if (typeof body === "function") {
+      body = body(path, init);
+    }
+    // Clone so callers can mutate without poisoning fixtures.
+    const payload = JSON.parse(JSON.stringify(body));
+    return new Response(JSON.stringify(payload), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  };
+  window.__ACOR_DEMO__ = true;
+})();
+</script>
+
 </head>
 <body>
+  <p class="demo-banner">Sanitized portfolio demo of the real product UI — mock fixtures only. No customer names, company logos, or live shop data.</p>
   <div class="app-shell">
     <header class="topbar">
-      <div class="brand-block">
-        <div class="brand-mark" aria-hidden="true">WU</div>
-        <div>
-          <p class="eyebrow">Sanitized Portfolio Demo</p>
-          <h1>Wood Usage &amp; Forecast</h1>
-        </div>
+      <div>
+        <p class="eyebrow">Acor.dev</p>
+        <h1>Wood Usage & Forecast</h1>
+        <div id="suiteNav"></div>
       </div>
       <div class="topbar-actions">
-        <button class="button secondary" id="resetSampleBtn" type="button">Load sample SKUs</button>
-        <button class="button" id="exportCsvBtn" type="button">Export CSV</button>
+        <button id="openDesktopApp" class="button secondary" type="button">Demo mode</button>
+        <button id="refreshButton" class="button">Refresh</button>
       </div>
     </header>
-
-    <p class="demo-banner">
-      Mock catalog and pricing only — no customer jobs, company rates, or live databases.
-      Enter SKUs (with optional qty syntax like <code>B30[2]</code>), calculate sheet usage and machine time, and browse a sanitized forecast list.
-    </p>
-
-    <section class="metric-band" id="heroMetrics"></section>
-
+    <section class="hero"><div class="metric-band" id="heroMetrics"></div></section>
     <main class="content-grid">
-      <section class="panel wide">
+      <section class="panel full-width-panel">
         <div class="panel-header">
-          <div>
-            <p class="section-label">Jobs</p>
-            <h2>Pricing forecast</h2>
-          </div>
+          <div><p class="section-label">Jobs</p><h2>Pricing forecast</h2></div>
           <div class="toolbar-row" id="jobViewFilters">
-            <button class="button" data-view="all" type="button">All</button>
-            <button class="button secondary" data-view="Upcoming" type="button">Upcoming</button>
-            <button class="button secondary" data-view="In cut" type="button">In cut</button>
-            <button class="button secondary" data-view="Cut complete" type="button">Cut complete</button>
+            <button class="button job-view-button" data-view="all" type="button">All</button>
+            <button class="button secondary job-view-button" data-view="upcoming" type="button">Upcoming</button>
+            <button class="button secondary job-view-button" data-view="in_cut" type="button">In Cut</button>
+            <button class="button secondary job-view-button" data-view="cut_complete" type="button">Cut Complete</button>
           </div>
         </div>
-        <label class="field">
-          <span>Find a job</span>
-          <input id="jobSearch" type="search" placeholder="JOB-2140">
-        </label>
+        <p id="jobPricingStatus" class="task-note">Loading the latest durable Cut snapshot…</p>
+        <label class="walkup-form"><span>Find a job</span><input id="jobSearch" placeholder="PO or order number"></label>
         <div id="jobPricingTable"></div>
       </section>
-
-      <section class="panel wide">
-        <div class="panel-header">
-          <div>
-            <p class="section-label">Calculate</p>
-            <h2>Batch wood usage</h2>
+      <section class="panel full-width-panel">
+        <div class="panel-header"><div><p class="section-label">Calculate</p><h2>Batch wood usage</h2></div>
+          <div class="toolbar-row">
+            <button id="exportCsvButton" class="button secondary" type="button">Export CSV</button>
           </div>
         </div>
-        <form id="calculateForm" class="calc-form">
-          <label class="field">
-            <span>SKUs (one per line, commas, or qty like CB33[2])</span>
-            <textarea id="skuInput" rows="7" spellcheck="false"></textarea>
+        <form id="calculateForm" class="walkup-form">
+          <label>
+            <span>SKUs (one per line, commas, or qty syntax like CB30[4])</span>
+            <textarea id="skuInput" rows="6" placeholder="C2DB24&#10;CTVB36[2]&#10;CB30"></textarea>
           </label>
           <div class="form-actions">
             <button class="button" type="submit">Calculate</button>
           </div>
         </form>
-        <p class="task-note" id="actionStatus"></p>
+        <p id="actionStatus" class="task-note"></p>
         <div id="calculateResults"></div>
         <div id="calculatePricing"></div>
       </section>
-
       <section class="panel">
-        <div class="panel-header">
-          <div>
-            <p class="section-label">Find similar</p>
-            <h2>SKU lookup</h2>
-          </div>
-        </div>
-        <form id="similarForm" class="calc-form">
-          <label class="field">
-            <span>SKU prefix</span>
-            <input id="similarInput" placeholder="B3">
-          </label>
-          <div class="form-actions">
-            <button class="button secondary" type="submit">Find</button>
-          </div>
+        <div class="panel-header"><div><p class="section-label">Find Similar</p><h2>SKU lookup</h2></div></div>
+        <form id="similarForm" class="walkup-form">
+          <label><span>SKU prefix</span><input id="similarInput" placeholder="C2DB"></label>
+          <div class="form-actions"><button class="button secondary" type="submit">Find</button></div>
         </form>
         <div id="similarResults"></div>
       </section>
-
       <section class="panel">
-        <div class="panel-header">
-          <div>
-            <p class="section-label">Gaps</p>
-            <h2>Top missing SKUs</h2>
-          </div>
-        </div>
-        <div id="missingTable"></div>
+        <div class="panel-header"><div><p class="section-label">Pending</p><h2>Pending cabinets</h2></div></div>
+        <div id="pendingTable"></div>
       </section>
-
-      <section class="panel wide">
-        <div class="panel-header">
-          <div>
-            <p class="section-label">Recent</p>
-            <h2>Calculations</h2>
-          </div>
-        </div>
+      <section class="panel full-width-panel">
+        <div class="panel-header"><div><p class="section-label">Coverage</p><h2>Database health</h2></div></div>
+        <div class="metric-band" id="coverageMetrics"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-header"><div><p class="section-label">Recent</p><h2>Calculations</h2></div></div>
         <div id="historyTable"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-header"><div><p class="section-label">Gaps</p><h2>Top missing SKUs</h2></div></div>
+        <div id="missingTable"></div>
       </section>
     </main>
   </div>
-  <script src="demo-data.js"></script>
-  <script src="app.js"></script>
+  <script src="shared.js"></script>
+  <script src="/static/wood-usage/app.js"></script>
 </body>
 </html>

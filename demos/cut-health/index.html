@@ -3,122 +3,889 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Cut Operations Health Demo</title>
+  <title>Acor.dev Cut Department</title>
   <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="acor-theme.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<script>
+(() => {
+  const FIXTURE_URL = new URL("fixtures.json", window.location.href).href;
+  let fixturesPromise = null;
+  function loadFixtures() {
+    if (!fixturesPromise) {
+      fixturesPromise = fetch(FIXTURE_URL).then((r) => r.json()).catch(() => ({}));
+    }
+    return fixturesPromise;
+  }
+  function matchRoute(routes, method, path) {
+    const key = method.toUpperCase() + " " + path.split("?")[0];
+    if (routes[key] !== undefined) return routes[key];
+    const bare = path.split("?")[0];
+    for (const [pattern, value] of Object.entries(routes)) {
+      const [m, p] = pattern.split(" ");
+      if (m !== method.toUpperCase()) continue;
+      if (p.endsWith("*") && bare.startsWith(p.slice(0, -1))) return value;
+      if (p === bare) return value;
+    }
+    return undefined;
+  }
+  const originalFetch = window.fetch.bind(window);
+  window.fetch = async (input, init = {}) => {
+    const url = typeof input === "string" ? input : (input && input.url) || "";
+    const method = String((init && init.method) || "GET").toUpperCase();
+    let path = url;
+    try {
+      const abs = new URL(url, window.location.href);
+      if (abs.origin === window.location.origin) path = abs.pathname + abs.search;
+    } catch (_e) {}
+    if (!path.includes("/api/")) {
+      return originalFetch(input, init);
+    }
+    const fixtures = await loadFixtures();
+    const routes = fixtures.routes || {};
+    let body = matchRoute(routes, method, path);
+    if (body === undefined) {
+      body = fixtures.default || { ok: true, demo: true, items: [], jobs: [], error: null };
+    }
+    if (typeof body === "function") {
+      body = body(path, init);
+    }
+    // Clone so callers can mutate without poisoning fixtures.
+    const payload = JSON.parse(JSON.stringify(body));
+    return new Response(JSON.stringify(payload), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  };
+  window.__ACOR_DEMO__ = true;
+})();
+</script>
+
 </head>
 <body>
+  <p class="demo-banner">Sanitized portfolio demo of the real product UI — mock fixtures only. No customer names, company logos, or live shop data.</p>
   <div class="app-shell">
     <header class="topbar">
-      <div class="brand-block">
-        <div class="brand-mark" aria-hidden="true">CO</div>
-        <div>
-          <p class="eyebrow">Sanitized Portfolio Demo</p>
-          <h1>Cut Operations Health</h1>
+      <div class="topbar-main">
+        <div class="brand-block brand-stylized">
+          
+          <div class="brand-copy">
+            <p class="brand-name">Acor.dev</p>
+            <h1 class="brand-title">Cut Department</h1>
+            <p class="brand-tagline">Building quality. One kitchen at a time.</p>
+          </div>
         </div>
+        <div class="metric-band topbar-metrics" id="heroMetrics"></div>
       </div>
-      <div class="topbar-actions">
-        <button class="button secondary" id="openPalletLabelsTop" type="button">Pallet Labels Ready</button>
-        <button class="button" id="openPacketTop" type="button">Review &amp; Generate</button>
+      <div class="meta-row topbar-meta">
+        <span id="sourceState">Source: --</span>
+        <form id="topbarItemSearchForm" class="topbar-item-search" action="#">
+          <label class="topbar-item-search-label" for="topbarItemSearch">
+            <span>Item search</span>
+            <input id="topbarItemSearch" type="search" placeholder="B24, W2430, UC3096" autocomplete="off">
+          </label>
+          <button class="button compact" type="submit">Look up</button>
+        </form>
+        <button id="openWalkupRequestTopbar" class="button compact" type="button" title="Search a cabinet and generate walk-up TAP files">Walk-up Request</button>
+        <button id="openManualAddedTopbar" class="button secondary compact" type="button" title="Today's logged walk-up jobs">Today's Walk-ups</button>
+        <a class="button secondary compact" href="/pipeline-audit" title="View the immutable Cut Pipeline Control action history">Pipeline Audit</a>
+        <span class="refresh-meta">
+          <span id="refreshState">Latest refresh: --</span>
+          <span id="autoRefreshState" class="auto-refresh-state" data-depth="advanced">Auto Insight: checking…</span>
+          <button id="insightRefreshButton" class="button secondary compact" type="button" title="Pull latest data from Insight SQL">Refresh Insight</button>
+          <span class="depth-switch" role="group" aria-label="Dashboard detail level">
+            <button
+              id="depthSimpleButton"
+              class="depth-switch-button is-active"
+              type="button"
+              aria-pressed="true"
+              title="Only the daily path: plan the work, watch the Omni, read the numbers"
+            >Simple</button>
+            <button
+              id="depthFullButton"
+              class="depth-switch-button"
+              type="button"
+              aria-pressed="false"
+              title="Every control, including tuning, exceptions, and admin tools"
+            >Full</button>
+          </span>
+        </span>
       </div>
     </header>
 
-    <section class="hero-band">
-      <div class="hero-copy">
-        <p class="section-label">Today So Far</p>
-        <h2>Live queue, output, labels, and operator packets in one workflow.</h2>
-      </div>
-      <div class="metric-band" id="heroMetrics"></div>
-      <div class="meta-row">
-        <span id="sourceState">Source: --</span>
-        <span id="refreshState">Latest refresh: --</span>
-      </div>
-    </section>
+    <main class="content-grid">
 
-    <main>
-      <section class="section-band">
-        <div class="section-header">
-          <div>
-            <p class="section-label">Recent Performance</p>
-            <h2>Output trend</h2>
-          </div>
-          <div class="summary-pill" id="sevenDayAverage">--</div>
+      <section class="panel cnc-workflow-nav-panel" aria-labelledby="cncWorkflowTitle">
+        <div class="cnc-workflow-nav-copy">
+          <p class="section-label">Morning CNC workflow</p>
+          <h2 id="cncWorkflowTitle">Morning</h2>
+          <p id="cncWorkflowDescription" class="panel-copy">Set the day: the checklist, the pinned Cut plan, and the produced-work target that decides what goes to the floor.</p>
         </div>
-        <div class="performance-layout">
-          <div class="trend-chart" id="trendChart"></div>
-          <div class="workload-map" aria-label="Workload distribution" id="workloadMap"></div>
+        <div class="cnc-workflow-nav-controls">
+          <div class="cnc-workflow-tabs" role="tablist" aria-label="CNC workflow workspaces">
+            <button class="cnc-workflow-tab is-active" type="button" role="tab" aria-selected="true" data-cnc-workflow-target="morning">Morning</button>
+            <button class="cnc-workflow-tab" type="button" role="tab" aria-selected="false" data-cnc-workflow-target="omni">Omni Queue</button>
+            <button class="cnc-workflow-tab" type="button" role="tab" aria-selected="false" data-cnc-workflow-target="glass">Glass Prep</button>
+            <button class="cnc-workflow-tab" type="button" role="tab" aria-selected="false" data-cnc-workflow-target="production">Production Metrics</button>
+            <button class="cnc-workflow-tab" type="button" role="tab" aria-selected="false" data-cnc-workflow-target="pricing">Pricing</button>
+            <button class="cnc-workflow-tab" type="button" role="tab" aria-selected="false" data-cnc-workflow-target="reference">Reference</button>
+          </div>
         </div>
       </section>
 
-      <section class="section-band">
-        <div class="section-header">
+      <section class="panel pricing-workspace" id="pricingWorkspace" data-cnc-workflow-view="pricing" aria-labelledby="pricingWorkspaceTitle" hidden>
+        <div class="panel-header pricing-header">
+          <div>
+            <p class="section-label">Repository admin · V1 + V2</p>
+            <h2 id="pricingWorkspaceTitle">Cut job pricing</h2>
+            <p class="panel-copy">V1 remains visible while the queue generates isolated DXF nests for the evidence-backed V2 estimate. Jobs with unmapped cabinets are blocked from quoting.</p>
+          </div>
+          <button class="button secondary" id="pricingRefresh" type="button">Refresh</button>
+        </div>
+        <div class="pricing-metrics" id="pricingMetrics" aria-label="Pricing summary">
+          <article><strong id="pricingMetricJobs">—</strong><span>Known jobs</span></article>
+          <article><strong id="pricingMetricReady">—</strong><span>Fully mapped</span></article>
+          <article><strong id="pricingMetricOutstanding">—</strong><span>V2 outstanding</span></article>
+          <article><strong id="pricingMetricComplete">—</strong><span>V2 complete</span></article>
+          <article><strong id="pricingMetricBlocked">—</strong><span>Blocked mapping</span></article>
+        </div>
+        <div class="pricing-toolbar">
+          <div class="segmented-control" id="pricingFilters" role="group" aria-label="Job status">
+            <button class="segment active" type="button" data-pricing-view="all">All</button>
+            <button class="segment" type="button" data-pricing-view="upcoming">Upcoming</button>
+            <button class="segment" type="button" data-pricing-view="in_cut">In Cut</button>
+            <button class="segment" type="button" data-pricing-view="cut_complete">Cut Complete</button>
+          </div>
+          <label class="pricing-search"><span>Find job</span><input id="pricingSearch" type="search" placeholder="PO or order number"></label>
+          <label class="pricing-run-limit"><span>Jobs per V2 run</span><input id="pricingRunLimit" type="number" min="1" max="25" value="3"></label>
+          <button class="button" id="pricingRunQueue" type="button">Run next jobs</button>
+        </div>
+        <p class="pricing-status" id="pricingQueueStatus" role="status">Open Pricing to load the V2 queue.</p>
+        <p class="pricing-status pricing-source" id="pricingSourceStatus"></p>
+        <div class="table-wrap pricing-table-wrap" id="pricingTable"></div>
+      </section>
+
+      <section class="panel new-hire-panel" id="newHireTaskPanel" data-cnc-workflow-view="morning" hidden>
+        <div class="panel-header">
+          <div>
+            <h2>Morning checklist</h2>
+          </div>
+          <div class="operator-toolbar">
+            <label class="date-control">
+              <span>Day</span>
+              <select id="newHireTaskDay">
+                <option value="">Today</option>
+                <option value="0">Monday</option>
+                <option value="1">Tuesday</option>
+                <option value="2">Wednesday</option>
+                <option value="3">Thursday</option>
+                <option value="4">Friday</option>
+              </select>
+            </label>
+            <button id="printTrimChecklistButton" class="button secondary" type="button">Print Trim Need List</button>
+            <button id="toggleNewHireTasks" class="button secondary" type="button" aria-expanded="true" aria-controls="newHireTaskBody">Collapse</button>
+            <button id="openTrimChecklist" class="button secondary" type="button">Trim Need List</button>
+          </div>
+        </div>
+        <div class="task-layout" id="newHireTaskBody">
+          <article class="task-card task-card-primary">
+            <div class="task-card-header">
+              <span class="task-kicker">Daily Task</span>
+              <strong id="newHireTaskTitle">--</strong>
+            </div>
+            <ol id="newHireTaskList" class="task-list"></ol>
+          </article>
+          <article class="task-card">
+            <div class="task-card-header">
+              <span class="task-kicker">If Waiting For Work</span>
+              <strong>Fallback work</strong>
+            </div>
+            <ul id="waitingForWorkList" class="task-list compact"></ul>
+          </article>
+          <article class="task-card">
+            <div class="task-card-header">
+              <span class="task-kicker">Scrap Conversion Priority</span>
+              <strong>Stock components</strong>
+            </div>
+            <ol id="scrapPriorityList" class="task-list compact"></ol>
+            <p id="scrapPriorityNote" class="task-note"></p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel restock-alert-panel" id="restockAlertPanel" data-cnc-workflow-view="morning" hidden>
+        <div class="panel-header">
+          <div>
+            <p class="section-label">Stock alert</p>
+            <h2>Stock available for upcoming work</h2>
+            <p id="restockAlertSummary" class="panel-copy">Checking cabinet and component stock...</p>
+          </div>
+          <button id="openRestockAlertViewerButton" class="button" type="button">Open Restock Viewer</button>
+        </div>
+        <div id="restockAlertJobs" class="restock-alert-jobs"></div>
+      </section>
+
+      <!-- Hidden unless offline mode is on or a drive is plugged in: an outage
+           control that is always on screen is one nobody reads. -->
+      <!-- Deliberately not workspace-scoped: the share being down is a state of
+           the whole department, not a Morning task, and someone standing on the
+           Omni tab during an outage still has to be able to see and change it. -->
+      <section class="panel offline-mode-panel" id="offlineModePanel" aria-labelledby="offlineModeTitle" hidden>
+        <div class="panel-header">
+          <div>
+            <p class="section-label">Continuity</p>
+            <h2 id="offlineModeTitle">Working without the share</h2>
+            <p id="offlineModeSummary" class="panel-copy">Checking&hellip;</p>
+          </div>
+          <button id="offlineModeToggle" class="button" type="button">Use Local Paperwork</button>
+        </div>
+        <p id="offlineModeRoot" class="panel-copy offline-mode-root"></p>
+        <!-- Which records are on screen and how old they are. The snapshot has
+             no age limit anywhere in the read path, so without this a queue
+             served from a month-old file looks exactly like a current one. -->
+        <p id="cutDataFreshness" class="panel-copy cut-data-freshness"></p>
+        <div id="resilienceStatus" class="offline-mode-drives" aria-live="polite"></div>
+        <div id="offlineModeDrives" class="offline-mode-drives"></div>
+      </section>
+
+      <section class="panel smart-batches-panel" id="smartBatchesPanel" data-cnc-workflow-view="morning" aria-labelledby="smartBatchesTitle">
+        <div class="panel-header">
+          <div>
+            <p class="section-label">Morning</p>
+            <h2 id="smartBatchesTitle">Today's Cut plan</h2>
+            <p id="smartBatchesSummary" class="panel-copy">
+              Loading the current produced pipeline and recommended morning work&hellip;
+            </p>
+          </div>
+          <div class="smart-batches-toolbar">
+            <div class="smart-batches-toolbar-actions">
+              <button id="openMorningCutPlanButton" class="button secondary" type="button" title="Live view of today's pinned Cut plan, Insight changes, and push-out alerts">Open Morning Plan</button>
+              <button id="openWalkupRequestFromPlan" class="button" type="button" title="Search a cabinet and generate walk-up TAP/MDB files">Walk-up Request</button>
+              <button id="openManualAddedFromPlan" class="button secondary" type="button" title="Today's logged walk-up jobs">Today's Walk-ups</button>
+              <button id="openBreakdownStockButton" class="button secondary" type="button" title="Ask Breakdown how many sides they want today">Breakdown Need List</button>
+            </div>
+            <label class="date-control" data-depth="advanced">
+              <span>In Cutting window</span>
+              <input id="smartBatchesMax" type="number" min="1" step="1" value="150" title="How many upcoming Insight In Cutting cabinets Smart Batches may inspect">
+            </label>
+            <label class="date-control" data-depth="advanced">
+              <span>Max per set</span>
+              <input id="smartBatchesCap" type="number" min="1" step="1" value="15">
+            </label>
+            <label class="date-control" data-depth="advanced">
+              <span>Sort by</span>
+              <select id="smartBatchesDateBasis">
+                <option value="scheduled_departure">Scheduled Departure</option>
+                <option value="firm_date">Firm Date</option>
+              </select>
+            </label>
+          </div>
+        </div>
+        <div id="smartBatchesWipMetrics" class="metric-band compact-metrics morning-pipeline-strip" aria-live="polite"></div>
+        <!-- Re-cut a set with rack parts held back. Sits under Smart Batches
+             because it is the same operator's next question after a morning
+             run, but it shares no code with it: no paperwork, no MDB, no DXFs,
+             only programs. -->
+        <!-- Not data-depth="advanced": pulling from the rack is routine operator
+             work, and hiding it behind the Simple/Full toggle meant the panel
+             rendered but never appeared. -->
+        <section id="rebatchPanel" class="cnc-planning-surface" aria-labelledby="rebatchHeading" hidden>
+          <div class="cnc-planning-section-head">
+            <div>
+              <span class="cnc-planning-kicker">Component rack</span>
+              <h3 id="rebatchHeading">Re-cut a set without what is already pulled</h3>
+            </div>
+            <button id="rebatchToggle" class="button secondary compact" type="button">Show</button>
+          </div>
+          <div id="rebatchBody" hidden>
+            <p class="cnc-planning-note">
+              Pick the set, then <strong>tick the parts to cut</strong> — the
+              ones flagged at the station, or anything else that needs running
+              again. Everything left clear is treated as already in hand and is
+              held back. Paperwork and DXFs are untouched.
+            </p>
+            <div class="date-controls">
+              <label class="date-control">
+                <span>Set</span>
+                <select id="rebatchSet"><option value="">Loading…</option></select>
+              </label>
+              <label class="date-control">
+                <span>Cabinets</span>
+                <input id="rebatchCabinets" type="text" placeholder="1,2,4,7-9" title="Cabinet numbers to review, e.g. 1,2,4,7-9">
+              </label>
+              <button id="rebatchLoad" class="button secondary compact" type="button">Load parts</button>
+            </div>
+            <div id="rebatchParts" class="rebatch-parts"></div>
+            <div class="date-controls">
+              <button id="rebatchRun" class="button compact" type="button" disabled>Write programs</button>
+              <span id="rebatchStatus" class="cnc-planning-note" aria-live="polite"></span>
+            </div>
+          </div>
+        </section>
+        <div class="cnc-planning-layout">
+          <section class="cnc-planning-surface cnc-plan-surface" aria-labelledby="smartPlanHeading">
+            <div class="cnc-planning-section-head">
+              <div>
+                <span class="cnc-planning-kicker">Morning recommendation</span>
+                <h3 id="smartPlanHeading">What to produce next</h3>
+              </div>
+              <button id="smartBatchesPreview" class="button secondary compact" type="button">Refresh plan</button>
+            </div>
+            <fieldset class="output-route-choice" aria-label="Production output route">
+              <legend>Production output</legend>
+              <label class="output-route-option">
+                <input type="radio" name="smartBatchesOutputRoute" value="omni_tap" checked>
+                <span><strong>Omni</strong><small>Generate TAPs for production</small></span>
+              </label>
+              <label class="output-route-option onboarding">
+                <input type="radio" name="smartBatchesOutputRoute" value="python_mm_dxf">
+                <span><strong>Python <em>Onboarding</em></strong><small>Generate millimeter DXFs for EnRoute; no TAPs</small></span>
+              </label>
+            </fieldset>
+            <!-- Output toggles are advanced: the defaults (MDB + operator sheets +
+                 hand cuts routed to Omni) are what a normal morning wants, and
+                 turning one off is a deliberate exception, not a daily choice. -->
+            <div class="smart-batches-options" data-depth="advanced">
+              <label><input type="checkbox" id="smartBatchesRefreshInsight"> Refresh Insight first</label>
+              <label><input type="checkbox" id="smartBatchesGenMdb" checked> MDB</label>
+              <label><input type="checkbox" id="smartBatchesGenWorksheets" checked> Operator sheets</label>
+              <label title="Optional: create a second EnRoute posting target and require its TAPs before Omni releases the set"><input type="checkbox" id="smartBatchesRouteHandcuts"> Route hand cuts to Omni</label>
+            </div>
+            <div id="smartBatchesBody" class="mdb-wizard-body smart-batches-inline-body">
+              <p class="pq-note-empty">Loading the produced-work plan&hellip;</p>
+            </div>
+            <div class="smart-batches-actions">
+              <button id="smartBatchesGenerate" class="button" type="button">Produce recommended work</button>
+              <button id="smartBatchesOpenOutput" class="button secondary" type="button" hidden>Open last folder</button>
+            </div>
+          </section>
+          <section class="cnc-planning-surface cnc-staging-surface" aria-labelledby="smartStagingHeading">
+            <div class="cnc-planning-section-head">
+              <div>
+                <span class="cnc-planning-kicker">Produced, not yet at Omni</span>
+                <h3 id="smartStagingHeading">Staging overview</h3>
+              </div>
+              <button id="smartStagingRefresh" class="button secondary compact" type="button">Refresh staging</button>
+            </div>
+            <p id="smartStagingState" class="omni-dispatch-state" role="status">Loading staged sets&hellip;</p>
+            <div id="smartStagingBoard" class="smart-staging-board" data-omni-controls aria-busy="true">
+              <article class="omni-dispatch-lane omni-dispatch-lane-staged">
+                <div class="omni-dispatch-lane-header">
+                  <div>
+                    <span class="omni-dispatch-lane-kicker">Paperwork produced</span>
+                    <h3>Awaiting TAPs</h3>
+                  </div>
+                  <span id="smartPreparingCount" class="omni-dispatch-count">0</span>
+                </div>
+                <p class="omni-dispatch-lane-hint muted-text">Click a card to copy its MDB path for AI Center. Use Select for Post on the Bridge before you nest.</p>
+                <div id="smartPreparingLane" class="omni-dispatch-list"></div>
+              </article>
+              <article class="omni-dispatch-lane">
+                <div class="omni-dispatch-lane-header">
+                  <div>
+                    <span class="omni-dispatch-lane-kicker">Post complete</span>
+                    <h3>Ready, not released</h3>
+                  </div>
+                  <span id="smartReadyHeldCount" class="omni-dispatch-count">0</span>
+                </div>
+                <div id="smartReadyHeldLane" class="omni-dispatch-list"></div>
+              </article>
+            </div>
+          </section>
+          <section id="pipelineAdminPanel" class="cnc-planning-surface" data-cnc-workflow-view="morning" data-depth="advanced" aria-labelledby="pipelineAdminHeading">
+            <div class="cnc-planning-section-head">
+              <div>
+                <span class="cnc-planning-kicker">Pipeline admins</span>
+                <h3 id="pipelineAdminHeading">Pipeline and smart-batch history</h3>
+              </div>
+              <button id="pipelineAdminRefresh" class="button secondary compact" type="button">Refresh</button>
+            </div>
+            <p class="cnc-planning-note">
+              Everything listed below is counting against the morning cabinet target right now.
+              Drop unreleased produced sets so they stop filling it. Roll back a smart-batch run
+              only when none of its sets have started on the Omni.
+            </p>
+            <p id="pipelineAdminState" class="omni-dispatch-state" role="status"></p>
+            <div class="pipeline-purge-bar">
+              <button id="pipelinePurgeBatches" class="button secondary compact" type="button">
+                Drop all produced batches
+              </button>
+              <button id="pipelinePurgeWalkups" class="button secondary compact" type="button">
+                Drop all outstanding walk-ups
+              </button>
+              <button id="pipelinePurgeSelected" class="button secondary compact" type="button" disabled>
+                Drop selected
+              </button>
+            </div>
+            <p id="pipelinePurgeState" class="omni-dispatch-state" role="status"></p>
+            <div class="pipeline-admin-grid">
+              <article class="pipeline-admin-column">
+                <h4>Outstanding pipeline</h4>
+                <div id="pipelineOutstandingList" class="pipeline-admin-list"></div>
+              </article>
+              <article class="pipeline-admin-column">
+                <h4>Smart-batch runs</h4>
+                <div id="smartBatchRunLog" class="pipeline-admin-list"></div>
+              </article>
+            </div>
+          </section>
+          <!-- Hand-pick override matches the reclaim + COH stack on the right. -->
+          <section class="panel production-queue-panel" id="productionQueuePanel" data-cnc-workflow-view="morning" hidden>
+            <div class="panel-header">
+              <div>
+                <p class="section-label">Morning &middot; exception path</p>
+                <h2>Prepare production files</h2>
+                <p class="panel-copy">Pick jobs and cabinets by hand when the recommended plan above needs overriding.</p>
+              </div>
+              <div class="operator-toolbar">
+                <label class="date-control">
+                  <span>Sort By</span>
+                  <select id="pqDateBasis">
+                    <option value="firm_date">Firm Date</option>
+                    <option value="scheduled_departure">Scheduled Departure Date</option>
+                  </select>
+                </label>
+                <label class="date-control">
+                  <span>Floor jobs</span>
+                  <select id="pqFloorMode" title="Jobs you have tagged as already started on the floor">
+                    <option value="hide">Hidden</option>
+                    <option value="show">Shown</option>
+                    <option value="only">Only these</option>
+                  </select>
+                </label>
+                <label class="pq-show-completed-toggle">
+                  <input id="pqShowCompleted" type="checkbox">
+                  <span>Show completed jobs</span>
+                </label>
+                <button id="pqAddFloorJobs" class="button secondary" type="button">Add to floor</button>
+                <button id="pqReviewGenerate" class="button">Review &amp; Generate</button>
+              </div>
+            </div>
+            <div class="operator-legend pq-status-guide" aria-label="Production queue status guide">
+              <span class="pq-guide-group">
+                <span class="pq-guide-label">Paperwork</span>
+                <span class="pq-status-badge pq-paperwork-missing">Needs paperwork</span>
+                <span class="pq-status-badge pq-paperwork-ready">Paperwork ready</span>
+              </span>
+              <span class="pq-guide-group">
+                <span class="pq-guide-label">Cut</span>
+                <span class="pq-status-badge pq-cut-waiting">Awaiting cut</span>
+                <span class="pq-status-badge pq-cut-progress">On CNC</span>
+                <span class="pq-status-badge pq-cut-split" title="Submitted · not cut"><span class="pq-cut-half pq-cut-complete">3</span><span class="pq-cut-half pq-cut-waiting">4</span></span>
+                <span class="pq-status-badge pq-cut-split" title="Submitted · cut, not submitted"><span class="pq-cut-half pq-cut-complete">3</span><span class="pq-cut-half pq-cut-progress">4</span></span>
+                <span class="pq-status-badge pq-cut-complete">Submitted</span>
+              </span>
+              <span class="pq-guide-group">
+                <span class="pq-guide-label">Flags</span>
+                <span class="pq-status-badge pq-flag-notes">Has notes</span>
+                <span class="pq-status-badge pq-flag-floor">On floor</span>
+                <span class="pq-status-badge pq-flag-cnc-ahead">CNC done · Insight open</span>
+                <span class="pq-status-badge pq-flag-cnc-missing">No CNC record</span>
+              </span>
+              <span id="pqHiddenCompletedHint" class="pq-hidden-hint" hidden></span>
+              <span id="pqFloorHint" class="pq-hidden-hint" hidden></span>
+            </div>
+            <div id="pqScrollArea" class="pq-scroll-area">
+              <div id="pqDateGroups"><p class="pq-note-empty" style="text-align:center;padding:2rem 0">Loading jobs…</p></div>
+            </div>
+          </section>
+          <div class="cnc-morning-side-stack">
+            <article id="reclaimMarryUpSection" class="omni-dispatch-lane omni-dispatch-lane-reclaim" data-depth="advanced-empty">
+              <div class="omni-dispatch-lane-header">
+                <div>
+                  <span class="omni-dispatch-lane-kicker">Cut complete · reclaim on job</span>
+                  <h3>Reclaim marry-up</h3>
+                </div>
+                <span id="reclaimMarryUpCount" class="omni-dispatch-count">0</span>
+              </div>
+              <p id="reclaimMarryUpHint" class="omni-dispatch-lane-hint muted-text">Confirm reclaimed cabinets were married back after the pallet label.</p>
+              <div id="reclaimMarryUpLane" class="omni-dispatch-list"></div>
+            </article>
+            <article id="cohTrimSection" class="omni-dispatch-lane omni-dispatch-lane-reclaim omni-dispatch-lane-coh" data-depth="advanced-empty">
+              <div class="omni-dispatch-lane-header">
+                <div>
+                  <span class="omni-dispatch-lane-kicker">Machined trim · 24×96 Standard Files</span>
+                  <h3>COH queue</h3>
+                </div>
+                <span id="cohTrimCount" class="omni-dispatch-count">0</span>
+              </div>
+              <p id="cohTrimHint" class="omni-dispatch-lane-hint muted-text">Standard 24×96 sizes write themselves into <code>Trim\COH</code> and stay <strong>Ready · held</strong> until someone flips <strong>Show on Omni</strong>. Odd stock stays <strong>Needs TAP</strong>.</p>
+              <div id="cohTrimLane" class="omni-dispatch-list"></div>
+            </article>
+          </div>
+        </div>
+        <section class="supervisor-label-queue" aria-labelledby="supervisorLabelQueueTitle">
+          <div class="cnc-planning-section-head">
+            <div>
+              <span class="cnc-planning-kicker">After TAPs are ready</span>
+              <h3 id="supervisorLabelQueueTitle">Cut labels</h3>
+              <p id="supervisorLabelQueueState" class="panel-copy">Checking ready batches and Cut Zebra printers&hellip;</p>
+            </div>
+            <div class="inline-actions">
+              <label class="date-control">
+                <span>Printer</span>
+                <select id="supervisorLabelPrinter"><option value="">Checking&hellip;</option></select>
+              </label>
+              <button id="supervisorRetryLabelPrint" class="button secondary compact" type="button" hidden>Retry last failed print</button>
+              <button id="supervisorReprintLabels" class="button secondary compact" type="button">Reprint labels</button>
+              <button id="supervisorRefreshLabels" class="button secondary compact" type="button">Refresh</button>
+            </div>
+          </div>
+          <div class="supervisor-label-bulk">
+            <label class="pq-show-completed-toggle">
+              <input id="supervisorLabelSelectAll" type="checkbox">
+              <span>Select all</span>
+            </label>
+            <span id="supervisorLabelSelectionCount" class="pq-hidden-hint">None selected</span>
+            <button id="supervisorPrintSelectedLabels" class="button compact" type="button" disabled>Print selected</button>
+            <button id="supervisorDeleteSelectedLabels" class="button secondary compact" type="button" disabled>Remove selected</button>
+          </div>
+          <p id="supervisorLabelBulkState" class="pq-hidden-hint" hidden></p>
+          <div id="supervisorLabelQueueJobs" class="supervisor-label-jobs"></div>
+        </section>
+      </section>
+
+      <section class="panel omni-dispatch-panel" id="omniDispatchPanel" data-cnc-workflow-view="omni" aria-labelledby="omniDispatchTitle" hidden>
+        <div class="panel-header">
+          <div>
+            <p class="section-label">Omni Cut Station</p>
+            <h2 id="omniDispatchTitle">Set dispatch</h2>
+            <p class="panel-copy">Control which prepared sets the CNC operator can see and the order they should run.</p>
+          </div>
+          <div class="operator-toolbar operator-toolbar-wrap">
+            <span id="omniDispatchAccess" class="omni-dispatch-access">Loading access…</span>
+            <button id="openPreviewCheckButton" class="button secondary compact" type="button" data-depth="advanced" title="Check TAP previews against the paperwork cabinet list">Preview Check</button>
+            <button id="openOmniRecutsButton" class="button secondary compact" type="button" data-depth="advanced" title="Recuts submitted from Omni Cut Station on the CNC">Omni Recuts</button>
+            <button id="openMissingMdbItemsButton" class="button secondary compact" type="button" data-depth="advanced" title="Cabinets skipped or missing from MDB generation">Missing items</button>
+            <button id="openReclaimedViewerButton" class="button secondary compact" type="button" data-depth="advanced" title="Jobs with cabinets expected on a reclaimed pallet">Reclaimed cabinets</button>
+            <button id="omniDispatchRefresh" class="button secondary" type="button">Refresh sets</button>
+          </div>
+        </div>
+        <section class="omni-alert-rail" id="omniAlertRail" aria-labelledby="omniAlertRailTitle" hidden>
+          <div class="omni-alert-rail-head">
+            <div>
+              <span class="omni-dispatch-lane-kicker">Floor attention</span>
+              <h3 id="omniAlertRailTitle">Needs you</h3>
+              <p class="omni-alert-rail-copy muted-text">Same 5-day window as Omni Cut Station. <strong>Seen</strong> hides a stall until the floor moves again. Older work needs a rebatch.</p>
+            </div>
+            <span id="omniAlertRailCount" class="omni-dispatch-count">0</span>
+          </div>
+          <div id="omniAlertRailList" class="omni-alert-rail-list" role="list"></div>
+        </section>
+        <section class="omni-floor-status" id="omniFloorStatusPanel" aria-labelledby="omniFloorStatusTitle">
+          <div class="omni-floor-status-head">
+            <div>
+              <span class="omni-dispatch-lane-kicker">CNC floor</span>
+              <h3 id="omniFloorStatusTitle">Operator status</h3>
+              <p id="omniFloorStatusSubtitle" class="omni-floor-status-subtitle muted-text">Live viewer, today&rsquo;s progress, and recut pipeline.</p>
+            </div>
+          </div>
+          <div id="omniFloorStatusMetrics" class="omni-floor-status-metrics" aria-live="polite"></div>
+          <div class="omni-floor-status-grid">
+            <article class="omni-floor-status-lane">
+              <h4>Currently viewing</h4>
+              <div id="omniFloorLiveLane" class="omni-floor-status-list"></div>
+            </article>
+            <article class="omni-floor-status-lane">
+              <h4>Progress today</h4>
+              <div id="omniFloorProgressLane" class="omni-floor-status-list"></div>
+            </article>
+            <article class="omni-floor-status-lane omni-floor-status-lane-attention">
+              <h4>Needs attention</h4>
+              <div id="omniFloorAttentionLane" class="omni-floor-status-list"></div>
+            </article>
+            <article class="omni-floor-status-lane" data-depth="advanced-empty">
+              <h4>Recuts</h4>
+              <div id="omniFloorRecutsLane" class="omni-floor-status-list"></div>
+            </article>
+          </div>
+        </section>
+        <div id="omniDispatchSummary" class="omni-dispatch-summary" aria-live="polite"></div>
+        <p id="omniDispatchState" class="omni-dispatch-state" role="status">Loading set dispatch…</p>
+        <div id="omniDispatchBoard" class="omni-dispatch-board" data-omni-controls aria-busy="true">
+          <!-- Advanced: this lane repeats Morning's "Awaiting TAPs". Posting is a
+               morning job, so in Simple mode the Omni tab stays about the floor. -->
+          <article class="omni-dispatch-lane" data-depth="advanced-empty">
+            <div class="omni-dispatch-lane-header">
+              <div>
+                <span class="omni-dispatch-lane-kicker">Not posted</span>
+                <h3>Preparing &amp; held</h3>
+              </div>
+              <span id="omniPreparingCount" class="omni-dispatch-count">0</span>
+            </div>
+            <p class="omni-dispatch-lane-hint muted-text">Click a card to copy its MDB path for AI Center.</p>
+            <div id="omniPreparingLane" class="omni-dispatch-list"></div>
+          </article>
+          <article class="omni-dispatch-lane">
+            <div class="omni-dispatch-lane-header">
+              <div>
+                <span class="omni-dispatch-lane-kicker">Post complete</span>
+                <h3>Ready &amp; held</h3>
+              </div>
+              <span id="omniReadyHeldCount" class="omni-dispatch-count">0</span>
+            </div>
+            <div id="omniReadyHeldLane" class="omni-dispatch-list"></div>
+          </article>
+          <article class="omni-dispatch-lane omni-dispatch-lane-queue">
+            <div class="omni-dispatch-lane-header">
+              <div>
+                <span class="omni-dispatch-lane-kicker">Visible at CNC</span>
+                <h3>Released to Omni</h3>
+              </div>
+              <span id="omniReleasedCount" class="omni-dispatch-count">0</span>
+            </div>
+            <p class="omni-dispatch-lane-help">Drag cards or use the arrow buttons. Priority sets stay above regular work.</p>
+            <div id="omniReleasedLane" class="omni-dispatch-list omni-dispatch-sortable"></div>
+          </article>
+          <article class="omni-dispatch-lane" data-depth="advanced-empty">
+            <div class="omni-dispatch-lane-header">
+              <div>
+                <span class="omni-dispatch-lane-kicker">Run history</span>
+                <h3>Completed</h3>
+              </div>
+              <span id="omniCompletedCount" class="omni-dispatch-count">0</span>
+            </div>
+            <div id="omniCompletedLane" class="omni-dispatch-list"></div>
+          </article>
+          <article class="omni-dispatch-lane omni-dispatch-lane-exception" data-depth="advanced-empty">
+            <div class="omni-dispatch-lane-header">
+              <div>
+                <span class="omni-dispatch-lane-kicker">Needs admin review</span>
+                <h3>ERP exceptions</h3>
+              </div>
+              <span id="omniExceptionCount" class="omni-dispatch-count">0</span>
+            </div>
+            <p class="omni-dispatch-lane-help">These sets were retained because they were released, active, or only partly left In Cutting.</p>
+            <div id="omniExceptionLane" class="omni-dispatch-list"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel" data-cnc-workflow-view="production" hidden>
+        <div class="panel-header">
+          <div>
+            <p class="section-label">Recent Performance</p>
+            <h2 id="rpTitle">Output trends</h2>
+            <p class="panel-copy" id="rpCopy">Click a day to view completed jobs for that date.</p>
+          </div>
+          <div class="rp-nav">
+            <button id="rpPrev" class="rp-arrow" type="button" aria-label="Previous tile">&#8249;</button>
+            <div class="rp-dots" id="rpDots"></div>
+            <button id="rpNext" class="rp-arrow" type="button" aria-label="Next tile">&#8250;</button>
+          </div>
+        </div>
+        <div class="rp-slides">
+          <div class="rp-slide" data-rp="0">
+            <div class="performance-grid" id="performanceMetrics">
+              <div class="metric skeleton-metric" aria-hidden="true"><span class="skel-line skel-label"></span><span class="skel-line skel-value"></span><span class="skel-line skel-sub"></span></div>
+              <div class="metric skeleton-metric" aria-hidden="true"><span class="skel-line skel-label"></span><span class="skel-line skel-value"></span><span class="skel-line skel-sub"></span></div>
+              <div class="metric skeleton-metric" aria-hidden="true"><span class="skel-line skel-label"></span><span class="skel-line skel-value"></span><span class="skel-line skel-sub"></span></div>
+              <div class="metric skeleton-metric" aria-hidden="true"><span class="skel-line skel-label"></span><span class="skel-line skel-value"></span><span class="skel-line skel-sub"></span></div>
+            </div>
+            <div id="trendChart" class="trend-chart is-loading" aria-busy="true">
+              <p class="rp-loading">Loading output trends…</p>
+              <div class="skel-trend-row" aria-hidden="true"><span class="skel-line skel-day"></span><span class="skel-line skel-bar"></span><span class="skel-line skel-num"></span></div>
+              <div class="skel-trend-row" aria-hidden="true"><span class="skel-line skel-day"></span><span class="skel-line skel-bar"></span><span class="skel-line skel-num"></span></div>
+              <div class="skel-trend-row" aria-hidden="true"><span class="skel-line skel-day"></span><span class="skel-line skel-bar"></span><span class="skel-line skel-num"></span></div>
+              <div class="skel-trend-row" aria-hidden="true"><span class="skel-line skel-day"></span><span class="skel-line skel-bar"></span><span class="skel-line skel-num"></span></div>
+              <div class="skel-trend-row" aria-hidden="true"><span class="skel-line skel-day"></span><span class="skel-line skel-bar"></span><span class="skel-line skel-num"></span></div>
+            </div>
+          </div>
+          <div class="rp-slide" data-rp="1" hidden>
+            <div id="aheadRing" class="ahead-ring"></div>
+          </div>
+          <div class="rp-slide" data-rp="2" hidden>
+            <div id="workloadDist" class="workload-dist"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel glass-prep-panel" id="glassPrepPanel" data-cnc-workflow-view="glass" aria-labelledby="glassPrepTitle" hidden>
+        <div class="panel-header">
+          <div>
+            <p class="section-label">Glass prep</p>
+            <h2 id="glassPrepTitle">Glass doors coming up</h2>
+            <p class="panel-copy" id="glassPrepCopy">Finished-interior cabinets whose labels call for glass, and whether the doors and panes exist yet in Custom.</p>
+          </div>
+          <div class="operator-toolbar">
+            <label class="date-control glass-prep-location-control" data-depth="advanced">
+              <span>Store in</span>
+              <input id="glassPrepLocation" type="text" maxlength="120" placeholder="Rack / cart / shelf">
+            </label>
+            <button id="glassPrepRefresh" class="button secondary compact" type="button">Refresh</button>
+          </div>
+        </div>
+        <p id="glassPrepState" class="omni-dispatch-state" role="status">Loading glass prep&hellip;</p>
+        <div id="glassPrepMetrics" class="metric-band compact-metrics" aria-live="polite"></div>
+        <div id="glassPrepFlags" class="operator-legend glass-prep-guide" aria-label="Glass prep status guide"></div>
+        <div id="glassPrepDetail" data-depth="advanced">
+          <div id="glassPrepList" class="pq-scroll-area glass-prep-list"></div>
+        </div>
+      </section>
+
+      <div class="omni-run-layout" data-cnc-workflow-view="omni" hidden>
+        <div class="omni-run-side-stack">
+      <section class="panel run-times-panel" id="runTimesPanel" data-cnc-workflow-view="omni" hidden>
+        <div class="panel-header">
+          <div>
+            <p class="section-label">CNC run times</p>
+            <h2 id="runTimesTitle">How long sheets took</h2>
+            <p class="panel-copy" id="runTimesCopy">Measured from the control loading a TAP to M30.</p>
+          </div>
+          <div class="operator-toolbar">
+            <label class="date-control">
+              <span>Day</span>
+              <input id="runTimesDay" type="text" size="7" placeholder="7-31" title="Day folder, e.g. 7-31. Blank = today.">
+            </label>
+            <button id="runTimesRefresh" class="button secondary compact" type="button">Refresh</button>
+          </div>
+        </div>
+        <p id="runTimesState" class="omni-dispatch-state" role="status">Loading run times&hellip;</p>
+        <div id="runTimesMetrics" class="metric-band compact-metrics" aria-live="polite"></div>
+        <div id="runTimesDetail" data-depth="advanced">
+          <table class="mdb-wizard-table" id="runTimesTable">
+            <thead>
+              <tr><th>Sheet</th><th>Set</th><th>Cut time</th><th>Est</th><th>Pace</th><th>Source</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <button id="runTimesToggle" class="button secondary compact row-collapse-toggle" type="button" aria-expanded="false" hidden></button>
+        </div>
+      </section>
+
+      <section class="panel run-timeline-panel" id="runTimelinePanel" data-cnc-workflow-view="omni" hidden>
+        <div class="panel-header">
+          <div>
+            <p class="section-label">CNC day timeline</p>
+            <h2 id="runTimelineTitle">What happened, in order</h2>
+            <p class="panel-copy">Each set from load to last sheet. Waiting is time the operator was not engaged — not loading, not cutting, not a tool change. Gaps still show the breakdown.</p>
+          </div>
+          <div class="operator-toolbar">
+            <label class="date-control">
+              <span>Day</span>
+              <input id="runTimelineDay" type="text" size="7" placeholder="7-31" title="Day folder, e.g. 7-31. Blank = today.">
+            </label>
+            <button id="runTimelineRefresh" class="button secondary compact" type="button">Refresh</button>
+          </div>
+        </div>
+        <p id="runTimelineState" class="omni-dispatch-state" role="status">Loading timeline&hellip;</p>
+        <div id="runTimelineSets"></div>
+      </section>
+        </div>
+
+      <section class="panel run-eventlog-panel" id="runEventLogPanel" data-cnc-workflow-view="omni" hidden>
+        <div class="panel-header">
+          <div>
+            <p class="section-label">Station event log</p>
+            <h2 id="runEventLogTitle">Raw, in the order it happened</h2>
+            <p class="panel-copy">Every event the station wrote, timestamped, nothing rolled up. Machine-side conditions are not in here &mdash; the controller is not read.</p>
+          </div>
+          <div class="operator-toolbar">
+            <label class="date-control">
+              <span>Day</span>
+              <input id="runEventLogDay" type="text" size="7" placeholder="7-31" title="Day folder, e.g. 7-31. Blank = the days with work on them.">
+            </label>
+            <button id="runEventLogCopy" class="button secondary compact" type="button">Copy</button>
+            <button id="runEventLogRefresh" class="button secondary compact" type="button">Refresh</button>
+          </div>
+        </div>
+        <p id="runEventLogState" class="omni-dispatch-state" role="status">Loading event log&hellip;</p>
+        <pre id="runEventLogConsole" class="run-eventlog-console" tabindex="0"></pre>
+      </section>
+      </div>
+
+      <section class="panel" data-cnc-workflow-view="production" hidden>
+        <div class="panel-header">
           <div>
             <p class="section-label">Backlog / Ahead Goal</p>
             <h2>Firm-date target</h2>
           </div>
-          <label class="compact-control">
-            <span>Days ahead</span>
-            <input id="daysAhead" type="number" min="1" max="30" value="8">
-          </label>
+          <div class="operator-toolbar operator-toolbar-wrap">
+            <button id="openPoChangesButton" class="button secondary compact" type="button" title="Firm date / scheduled departure changes by PO">PO Changes</button>
+            <button id="openNonCutPushoutsButton" class="button secondary compact" type="button" title="Jobs pushed In Cutting → Cutting Complete by someone other than cut">Non-cut push-outs</button>
+          </div>
+          <form id="settingsForm" class="settings-form">
+            <label for="aheadGoalDays">Goal horizon (calendar days by SDD)</label>
+            <input id="aheadGoalDays" name="aheadGoalDays" type="number" min="14" max="14" value="14" readonly>
+            <button class="button" type="submit">Save</button>
+          </form>
         </div>
         <div class="metric-band" id="backlogMetrics"></div>
       </section>
 
-      <section class="section-band">
-        <div class="section-header">
+      <section class="panel" id="departmentScanPanel" data-cnc-workflow-view="production" hidden>
+        <div class="panel-header">
           <div>
-            <p class="section-label">Production Queue</p>
-            <h2>Prepare production packets</h2>
+            <p class="section-label">Shop scans</p>
+            <h2>Picking and department metrics</h2>
+            <p class="panel-copy">Unique items from Insight scans, cached locally. Scan rows can be higher when the same ICN is backflushed.</p>
           </div>
-          <div class="toolbar-row">
-            <label>
-              <span>Sort by</span>
-              <select id="dateBasis">
-                <option value="firm">Firm Date</option>
-                <option value="departure">Scheduled Departure Date</option>
-              </select>
+          <div class="operator-toolbar">
+            <label class="date-control">
+              <span>Day</span>
+              <input id="departmentScanDay" type="date">
             </label>
-            <button class="button secondary" id="toggleCompleted" type="button" aria-pressed="false">Show Completed</button>
-            <button class="button" id="reviewGenerate" type="button">Review &amp; Generate</button>
+            <button id="departmentScanRefresh" class="button secondary compact" type="button">Refresh</button>
           </div>
         </div>
-        <div class="operator-legend">
-          <span><span class="bulb bulb-gray"></span> not generated</span>
-          <span><span class="bulb bulb-yellow"></span> packet printed / in progress</span>
-          <span><span class="bulb bulb-green"></span> cutting complete</span>
-          <span><span class="bulb bulb-zombie"></span> returned after completion</span>
+        <p id="departmentScanState" class="omni-dispatch-state" role="status">Open this tab to load yesterday&rsquo;s cache.</p>
+        <div id="departmentScanPicking" class="metric-band compact-metrics"></div>
+        <div class="table-wrap">
+          <table class="mdb-wizard-table" id="departmentScanTable">
+            <thead>
+              <tr>
+                <th>Department</th>
+                <th>Unique items</th>
+                <th>Scan rows</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
         </div>
-        <div class="queue-list" id="queueList"></div>
-      </section>
-
-      <section class="section-band two-column">
-        <div>
-          <div class="section-header">
-            <div>
-              <p class="section-label">Morning Checklist</p>
-              <h2>Daily area task</h2>
-            </div>
-            <button class="button secondary compact" id="toggleChecklist" type="button" aria-expanded="false">Expand</button>
-          </div>
-          <div class="checklist-body" id="checklistBody" hidden></div>
-        </div>
-        <div>
-          <div class="section-header">
-            <div>
-              <p class="section-label">Walk-Up Requests</p>
-              <h2>Manual work bucket</h2>
-            </div>
-          </div>
-          <div class="request-list" id="requestList"></div>
+        <h3 class="panel-subhead">Picking by employee</h3>
+        <div class="table-wrap">
+          <table class="mdb-wizard-table" id="departmentScanPickingTable">
+            <thead>
+              <tr>
+                <th>Employee</th>
+                <th>Unique items</th>
+                <th>Scan rows</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
         </div>
       </section>
 
-      <section class="section-band">
-        <div class="section-header">
+      <section class="panel" id="eodReviewPanel" data-cnc-workflow-view="production" hidden>
+        <div class="panel-header">
+          <div>
+            <p class="section-label">End of Day gate</p>
+            <h2>Needs Review</h2>
+            <p class="panel-copy">Items that left the queue without CNC evidence. Confirm they were cut, or mark them as pulled from the warehouse.</p>
+          </div>
+          <div class="operator-toolbar">
+            <span id="eodReviewCount" class="pill pill-pending">0</span>
+            <button id="openEodReview" class="button secondary compact" type="button">Review items</button>
+          </div>
+        </div>
+        <p id="eodReviewState" class="omni-dispatch-state" role="status">Checking the EOD evidence gate&hellip;</p>
+      </section>
+
+      <section class="panel reports-panel" data-cnc-workflow-view="production" hidden>
+        <div class="panel-header">
           <div>
             <p class="section-label">Recent Reports</p>
             <h2>End-of-day papers</h2>
+            <p class="panel-copy">Generated onto the network EOD archive so the supervisor can open them from any Cut Operations copy.</p>
           </div>
-          <button class="button secondary" type="button">Share Selected</button>
+          <div class="operator-toolbar operator-toolbar-wrap">
+            <button id="openCohViewer" class="button secondary" type="button" title="In-cutting COH sizes, TAP status, and Show on Omni">COH queue</button>
+            <button id="printNewHirePacket" class="button secondary" type="button" title="Make a dated folder with Welcome to Cabinets, training docs, and a blank Training Matrix">Print new hire packet</button>
+            <button id="shareSelectedReports" class="button">Share Selected</button>
+          </div>
         </div>
         <div class="table-wrap">
           <table>
@@ -128,87 +895,1436 @@
                 <th>Day</th>
                 <th>Report</th>
                 <th>Finalized</th>
-                <th>Status</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody id="reportsTable"></tbody>
           </table>
         </div>
       </section>
+
+      <section class="panel department-records-panel" data-cnc-workflow-view="reference" hidden>
+        <div class="panel-header">
+          <div>
+            <p class="section-label">Department Records</p>
+            <h2>Training &amp; machine history</h2>
+          </div>
+          <div class="operator-toolbar operator-toolbar-wrap view-launcher-toolbar">
+            <button id="openRemoteQueueButton" class="button secondary compact" type="button" title="Approve floor skill requests">Remote Queue</button>
+            <button id="openPreviewCheckButtonRef" class="button secondary compact" type="button" title="Check TAP previews against the paperwork cabinet list">Preview Check</button>
+            <button id="openRestockViewerButton" class="button secondary compact" type="button" title="Cabinet restock inventory and upcoming job matches">Restock Viewer</button>
+            <button id="openRouterStockButton" class="button secondary compact" type="button" title="Breakdown need list — how many sides they want today">Router Stock Pars</button>
+            <button id="openRecurringInventoryButton" class="button secondary compact" type="button" title="Maintain recurring shop supplies, count stock, and prepare order requests">Inventory</button>
+            <button id="openLabelReprintButton" class="button secondary compact" type="button" title="Reprint 4×2 cut labels for a job">Label Reprint</button>
+            <button id="openPrintMapButton" class="button secondary compact" type="button" title="Choose warehouse areas and print the current Cut Pallet Locator map">Print Map</button>
+            <button id="openSmartBatchesButton" class="button secondary compact" type="button" title="Auto-pick gray jobs by SDD and generate smart operator batches">Smart Batches</button>
+            <button id="openStandardFilesAdminButton" class="button secondary compact" type="button" title="Maintain the reusable Omni cabinet-program library">Standard Files</button>
+            <button id="openNotesButton" class="button secondary compact" type="button" title="Floor notes logged via the note skill">Notes</button>
+            <button id="openEodEmailButton" class="button secondary compact" type="button" title="Control the daily Cut End of Day Outlook email">EOD Email</button>
+            <button id="openTrimChecklistPreviewButton" class="button secondary compact" type="button" title="Preview, download, or print the trim need list">Trim Need List</button>
+            <button id="openBreakdownChecklistButton" class="button secondary compact" type="button" title="Ask Breakdown how many sides they want today">Breakdown Need List</button>
+            <button id="openCabinetWelcomeGuideButton" class="button secondary compact" type="button" title="Shop-wide new-hire guide: cabinet families, depth, and nomenclature">Welcome to Cabinets</button>
+          </div>
+        </div>
+        <div class="metric-band" id="departmentRecordTiles"></div>
+      </section>
     </main>
   </div>
 
-  <div class="modal-backdrop" id="palletLabelsModal" hidden>
-    <section class="modal-card wide-modal" role="dialog" aria-modal="true" aria-labelledby="palletLabelsTitle">
+  <div id="machineIssuesModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="machineIssuesTitle">
       <div class="modal-header">
         <div>
-          <p class="section-label">Pallet Labels</p>
-          <h2 id="palletLabelsTitle">Pallet labels ready</h2>
-        </div>
-        <button class="button secondary" id="closePalletLabels" type="button">Close</button>
-      </div>
-      <p class="modal-summary" id="palletLabelsSummary"></p>
-      <div class="modal-toolbar">
-        <div class="segmented-control" role="tablist">
-          <button class="segment active" id="readyLabelsTab" type="button">Ready to Print</button>
-          <button class="segment" id="printedLabelsTab" type="button">Recently Printed</button>
+          <p class="section-label">Machine Reliability</p>
+          <h2 id="machineIssuesTitle">Machine issue log</h2>
         </div>
         <div class="inline-actions">
-          <button class="button secondary" id="selectAllLabels" type="button">Select All</button>
-          <button class="button" id="printLabels" type="button">Print Selected</button>
+          <button id="printMachineIssues" class="button secondary" type="button">Print / PDF</button>
+          <button id="closeMachineIssuesModal" class="button secondary" type="button">Close</button>
         </div>
       </div>
-      <div class="table-wrap">
+      <p id="machineIssuesSummary" class="modal-summary"></p>
+      <div class="metric-band compact-metrics" id="machineIssueMetrics"></div>
+      <div id="machineIssuesPendingBanner" class="pending-banner" hidden></div>
+      <div class="modal-toolbar">
+        <button id="toggleMachineIssueForm" class="button secondary" type="button" aria-expanded="false" aria-controls="machineIssueFormBody">Add issue</button>
+      </div>
+      <div class="modal-scroll-region">
+        <div id="machineIssueFormBody" class="modal-form-panel" hidden>
+          <form id="machineIssueForm" class="contribution-form">
+            <input type="hidden" name="id" id="machineIssueId">
+            <div class="form-grid">
+            <label>
+              <span>Date</span>
+              <input name="date" id="machineIssueDate" placeholder="YYYY-MM-DD" required>
+            </label>
+            <label>
+              <span>Machine</span>
+              <select name="machine" id="machineIssueMachine" required></select>
+            </label>
+            <label>
+              <span>Status</span>
+              <select name="status" id="machineIssueStatus" required></select>
+            </label>
+            <label>
+              <span>Issue</span>
+              <input name="issue" required>
+            </label>
+          </div>
+          <label>
+            <span>Notified (comma-separated)</span>
+            <input name="notified" id="machineIssueNotified" placeholder="Maintenance, Engineer, Plant Manager">
+          </label>
+          <label>
+            <span>Summary</span>
+            <textarea name="summary" rows="2" required></textarea>
+          </label>
+          <label>
+            <span>Actions / follow-up</span>
+            <textarea name="actions" rows="2"></textarea>
+          </label>
+          <label>
+            <span>Result</span>
+            <textarea name="result" rows="2"></textarea>
+          </label>
+          <div class="form-actions">
+            <button class="button" type="submit" id="machineIssueSubmitBtn">Add Issue</button>
+            <button class="button secondary" type="button" id="cancelMachineIssueEdit" hidden>Cancel edit</button>
+          </div>
+        </form>
+        </div>
+        <div class="table-wrap modal-table-wrap">
+        <table>
+          <thead>
+            <tr id="machineIssueHeaders">
+              <th class="sortable-header active-sort" data-sort="date">Date <span class="sort-arrow">&#9660;</span></th>
+              <th class="sortable-header" data-sort="machine">Machine <span class="sort-arrow"></span></th>
+              <th>Issue</th>
+              <th>Notified</th>
+              <th class="sortable-header" data-sort="status">Status <span class="sort-arrow"></span></th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="machineIssuesTable"></tbody>
+        </table>
+      </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="trainingMatrixModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="trainingMatrixTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">New Hire Training</p>
+          <h2 id="trainingMatrixTitle">New hire daily training review</h2>
+        </div>
+        <div class="inline-actions">
+          <button id="addTraineeBtn" class="button" type="button">+ Add Trainee</button>
+          <button id="closeTrainingMatrixModal" class="button secondary" type="button">Close</button>
+        </div>
+      </div>
+
+      <div class="modal-toolbar">
+        <div class="inline-actions">
+          <label class="date-control">
+            <span>Trainee</span>
+            <select id="dtTraineeSelect"></select>
+          </label>
+          <label class="date-control">
+            <span>Date</span>
+            <input type="date" id="dtDate">
+          </label>
+        </div>
+        <div class="segmented-control" role="tablist" aria-label="Training views">
+          <button id="dtTabReview" class="segment active" type="button">Daily Review</button>
+          <button id="dtTabSummary" class="segment" type="button">Proficiency</button>
+          <button id="dtTabLog" class="segment" type="button">History</button>
+        </div>
+      </div>
+
+      <div id="dtReviewPane" class="modal-scroll-region">
+        <p id="dtReviewHint" class="modal-summary">Check off skill areas observed today, rate each one, and add support remarks. Use <strong>Supervised</strong> when the trainee did the core work but you handled related steps or stayed nearby — not the same as <strong>Needed Help</strong>.</p>
+        <div id="dtSkillGrid" class="dt-skill-grid"></div>
+        <label class="dt-remarks-block">
+          <span>Department support / remarks</span>
+          <textarea id="dtDailyRemarks" rows="3" placeholder="Cleanup, organization, material movement, staging — anything worth noting today."></textarea>
+        </label>
+        <div class="form-actions" style="margin-top:1rem">
+          <button id="dtSubmitReview" class="button" type="button">Save Daily Review</button>
+        </div>
+      </div>
+
+      <div id="dtSummaryPane" class="modal-scroll-region" hidden>
+        <div class="metric-band compact-metrics" id="dtSummaryMetrics"></div>
+        <div id="dtProficiencyGrid" class="dt-proficiency-grid"></div>
+      </div>
+
+      <div id="dtLogPane" class="modal-scroll-region" hidden>
+        <div id="dtLogEntries" class="dt-log-entries"></div>
+      </div>
+    </section>
+  </div>
+
+  <div id="cohViewerModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="cohViewerTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Standard Files · Trim</p>
+          <h2 id="cohViewerTitle">COH queue</h2>
+        </div>
+        <div class="inline-actions">
+          <button id="cohViewerRefresh" class="button secondary" type="button">Refresh</button>
+          <button id="closeCohViewerModal" class="button secondary" type="button">Close</button>
+        </div>
+      </div>
+      <p class="modal-summary">Standard 24×96 sizes write themselves into Trim\\COH and stay Ready · held until someone flips Show on Omni. Odd stock stays Needs TAP.</p>
+      <div class="modal-scroll-region">
+        <div id="cohViewerLane" class="omni-dispatch-list"></div>
+      </div>
+    </section>
+  </div>
+
+  <div id="itemLookupModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="itemLookupTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Item search</p>
+          <h2 id="itemLookupTitle">Item lookup</h2>
+        </div>
+        <button id="closeItemLookupModal" class="button secondary" type="button">Close</button>
+      </div>
+      <form id="itemLookupForm" class="modal-toolbar">
+        <label class="date-control grow-control">
+          <span>Item number</span>
+          <input id="itemLookupQuery" type="search" placeholder="e.g. B24, CB24, C3DB33" autocomplete="off" required>
+        </label>
+        <button class="button" type="submit">Look up</button>
+      </form>
+      <p id="itemLookupSummary" class="modal-summary">Search an item to see dimensions, generate TAP/MDB/DXF, or produce a skin if the library does not already have one.</p>
+      <div id="itemLookupResults" class="modal-scroll-region"></div>
+    </section>
+  </div>
+
+  <div id="completedTodayModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="completedTodayTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Daily Production</p>
+          <h2 id="completedTodayTitle">Completed today</h2>
+        </div>
+        <button id="closeCompletedTodayModal" class="button secondary" type="button">Close</button>
+      </div>
+      <p id="completedTodaySummary" class="modal-summary"></p>
+      <div id="completedTodayJobs" class="completed-jobs-list modal-scroll-region"></div>
+    </section>
+  </div>
+
+  <div id="aheadGoalModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="aheadGoalTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Ahead Goal</p>
+          <h2 id="aheadGoalTitle">Jobs to reach goal</h2>
+        </div>
+        <button id="closeAheadGoalModal" class="button secondary" type="button">Close</button>
+      </div>
+      <p id="aheadGoalSummary" class="modal-summary"></p>
+      <div id="aheadGoalJobs" class="completed-jobs-list modal-scroll-region"></div>
+    </section>
+  </div>
+
+  <div id="manualAddedModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="manualAddedTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Walk-Up Requests</p>
+          <h2 id="manualAddedTitle">Walk-ups today</h2>
+        </div>
+        <button id="closeManualAddedModal" class="button secondary" type="button">Close</button>
+      </div>
+      <p id="manualAddedSummary" class="modal-summary"></p>
+      <div class="modal-toolbar">
+        <button id="openWalkupRequestModal" class="button" type="button">Walk-up Request</button>
+      </div>
+      <form id="walkupForm" class="walkup-form modal-form-compact">
+        <div class="form-grid">
+          <label>
+            <span>Description</span>
+            <input name="description" required>
+          </label>
+          <label>
+            <span>PO Number</span>
+            <input name="poNumber" id="poNumberInput" list="poSuggestions">
+            <datalist id="poSuggestions"></datalist>
+          </label>
+          <label>
+            <span>Work Type</span>
+            <select name="workType">
+              <option value="carcass">Carcass</option>
+              <option value="trim">Trim</option>
+              <option value="breakdown_stock">Breakdown stock item</option>
+              <option value="restock_replenishment">Restock TAP replenishment</option>
+              <option value="other" selected>Other</option>
+            </select>
+          </label>
+          <label>
+            <span>Item Count</span>
+            <input name="itemCount" type="number" min="0" step="1" value="0">
+          </label>
+          <label>
+            <span>PW .5</span>
+            <input name="pw05" type="number" min="0" step="0.01" value="0">
+          </label>
+          <label>
+            <span>PW .75</span>
+            <input name="pw075" type="number" min="0" step="0.01" value="0">
+          </label>
+        </div>
+        <div class="form-actions">
+          <button class="button" type="submit">Add Request</button>
+        </div>
+      </form>
+      <div class="table-wrap modal-table-wrap">
         <table>
           <thead>
             <tr>
-              <th></th>
-              <th>Job</th>
-              <th>Firm Date</th>
-              <th>Status</th>
-              <th>Queued</th>
-              <th>Printed</th>
-              <th>Print Count</th>
+              <th>When</th>
+              <th>Description</th>
+              <th>PO</th>
+              <th>Type</th>
+              <th>Qty</th>
+              <th>PW .5</th>
+              <th>PW .75</th>
             </tr>
           </thead>
-          <tbody id="palletLabelsTable"></tbody>
+          <tbody id="manualAddedTable"></tbody>
         </table>
       </div>
     </section>
   </div>
 
-  <div class="modal-backdrop" id="packetModal" hidden>
-    <section class="modal-card wide-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="packetTitle">
+  <div id="walkupRequestModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="walkupRequestTitle">
       <div class="modal-header">
         <div>
-          <p class="section-label">Production Packet</p>
-          <h2 id="packetTitle">Review &amp; generate</h2>
+          <p class="section-label">Production Files</p>
+          <h2 id="walkupRequestTitle">Walk-up request</h2>
         </div>
-        <button class="button secondary" id="closePacket" type="button">Close</button>
+        <button id="closeWalkupRequestModal" class="button secondary" type="button">Close</button>
       </div>
-      <p class="modal-summary" id="packetSummary"></p>
-      <div class="modal-toolbar">
-        <label class="compact-control">
-          <span>Machine profile</span>
-          <select id="packetProfile">
-            <option value="northwood">Northwood / New operator</option>
-            <option value="omni">Omni / Hand-cut companion</option>
-          </select>
+      <label class="date-control walkup-folder-field">
+        <span>Folder name</span>
+        <input id="walkupRequestFolderTitle" type="text" placeholder="e.g. UC90, B24" autocomplete="off">
+      </label>
+      <fieldset class="output-route-choice compact-route-choice" aria-label="Walk-up production output route">
+        <legend>Production output</legend>
+        <label class="output-route-option">
+          <input type="radio" name="walkupOutputRoute" value="omni_tap" checked>
+          <span><strong>Omni</strong><small>Generate TAPs</small></span>
         </label>
+        <label class="output-route-option onboarding">
+          <input type="radio" name="walkupOutputRoute" value="python_mm_dxf">
+          <span><strong>Python <em>Onboarding</em></strong><small>MM DXFs for EnRoute; no TAPs</small></span>
+        </label>
+      </fieldset>
+      <label class="date-control walkup-folder-field">
+        <span>Request purpose</span>
+        <select id="walkupRequestPurpose">
+          <option value="other" selected>One-off request</option>
+          <option value="breakdown_stock">Breakdown stock item</option>
+          <option value="restock_replenishment">Restock TAP replenishment</option>
+        </select>
+      </label>
+      <div id="walkupRequestSearchPane">
+        <form id="walkupRequestForm" class="modal-toolbar">
+          <label class="date-control grow-control">
+            <span>Item number</span>
+            <input id="walkupRequestQuery" type="search" placeholder="e.g. B24, CB24, UC90" autocomplete="off" required>
+          </label>
+          <button class="button secondary" type="submit">Look up</button>
+        </form>
+        <p id="walkupRequestSummary" class="modal-summary">Search cabinet_componets.csv, add items, then review dimensions before generating MDB files.</p>
+        <div id="walkupRequestSelected" class="walkup-selected-list"></div>
+        <div id="walkupRequestResults" class="modal-scroll-region"></div>
+      </div>
+      <div id="walkupRequestReviewPane" hidden>
+        <p class="modal-summary">Confirm dimensions and uncheck any parts already available from stock before generating.</p>
+        <div id="walkupRequestReviewList" class="walkup-review-list modal-scroll-region"></div>
+      </div>
+      <div id="walkupRequestResult" class="walkup-request-result" hidden>
+        <div id="walkupRequestResultMetrics" class="metric-grid"></div>
         <div class="inline-actions">
-          <button class="button secondary" id="selectAllJobs" type="button">Select All</button>
-          <button class="button secondary" id="clearAllJobs" type="button">Clear All</button>
-          <button class="button" id="generatePacket" type="button">Generate Packet</button>
+          <button id="walkupRequestOpenOutput" class="button secondary" type="button">Open folder</button>
         </div>
       </div>
-      <div class="modal-scroll-region">
-        <div id="packetBody"></div>
+      <div class="form-actions" id="walkupRequestSearchActions">
+        <button id="walkupRequestReviewBtn" class="button" type="button">Review &amp; generate</button>
       </div>
-      <div class="result-strip" id="packetResult" hidden></div>
+      <div class="form-actions" id="walkupRequestReviewActions" hidden>
+        <button id="walkupRequestBackBtn" class="button secondary" type="button">Back</button>
+        <button id="walkupRequestGenerate" class="button" type="button">Generate files</button>
+      </div>
     </section>
   </div>
 
-  <script src="demo-data.js"></script>
+  <div id="paletteLabelsModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="paletteLabelsTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Pallet Labels</p>
+          <h2 id="paletteLabelsTitle">Pallet labels ready</h2>
+        </div>
+        <button id="closePaletteLabelsModal" class="button secondary" type="button">Close</button>
+      </div>
+      <p id="paletteLabelsSummary" class="modal-summary"></p>
+      <div class="modal-toolbar">
+        <div class="segmented-control" role="tablist" aria-label="Pallet label views">
+          <button id="paletteLabelsModeReady" class="segment active" type="button">Ready to Print</button>
+          <button id="paletteLabelsModePrinted" class="segment" type="button">Recently Printed</button>
+        </div>
+        <div class="inline-actions">
+          <button id="selectAllPaletteLabels" class="button secondary" type="button">Select All</button>
+          <button id="printPaletteLabelsSelected" class="button" type="button">Print Selected</button>
+          <button id="reprintPaletteLabelsSelected" class="button" type="button">Reprint Selected</button>
+        </div>
+      </div>
+      <div class="modal-scroll-region">
+        <div class="table-wrap modal-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>PO Number</th>
+                <th>Firm Date</th>
+                <th>Status</th>
+                <th>Queued</th>
+                <th>Printed</th>
+                <th>Print Count</th>
+              </tr>
+            </thead>
+            <tbody id="paletteLabelsTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="snapshotHistoryModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal" role="dialog" aria-modal="true" aria-labelledby="snapshotHistoryTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Training Progress</p>
+          <h2 id="snapshotHistoryTitle">Snapshot history</h2>
+        </div>
+        <button id="closeSnapshotHistoryModal" class="button secondary" type="button">Close</button>
+      </div>
+      <p id="snapshotHistorySummary" class="modal-summary"></p>
+      <div class="modal-toolbar">
+        <button id="openSnapshotFolder" class="button secondary" type="button">Open Snapshot Folder</button>
+      </div>
+      <div class="table-wrap modal-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Created</th>
+              <th>Independent</th>
+              <th>Avg Level</th>
+              <th>Can Train</th>
+              <th>Signed Off</th>
+              <th>Safety Gaps</th>
+              <th>Obs. Gaps</th>
+              <th>Evidence</th>
+              <th>Note</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="snapshotHistoryTable"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <div id="pqFloorAddModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="pqFloorAddTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">On the floor</p>
+          <h2 id="pqFloorAddTitle">Add in-cutting jobs</h2>
+        </div>
+        <button id="closePqFloorAddModal" class="button secondary" type="button">Close</button>
+      </div>
+      <p id="pqFloorAddSummary" class="modal-summary">Jobs with items still in cutting. Finished jobs are excluded.</p>
+      <div class="modal-scroll-region">
+        <div id="pqFloorAddGroups"></div>
+      </div>
+      <div class="inline-actions" style="margin-top:.75rem">
+        <button id="pqFloorAddSubmit" class="button" type="button">Add selected</button>
+      </div>
+    </section>
+  </div>
+
+  <div id="pqJobCardModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="pqJobCardTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Production queue</p>
+          <h2 id="pqJobCardTitle">Job details</h2>
+        </div>
+        <button id="closePqJobCardModal" class="button secondary" type="button">Close</button>
+      </div>
+      <p id="pqJobCardSummary" class="modal-summary">Cabinets, wood usage, and recorded events for this purchase order.</p>
+      <div class="modal-scroll-region">
+        <div id="pqJobCardBody"></div>
+      </div>
+    </section>
+  </div>
+
+  <div id="pqWizardModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="pqWizardTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Production Queue</p>
+          <h2 id="pqWizardTitle">Review &amp; generate</h2>
+        </div>
+        <div class="inline-actions">
+          <label class="date-control" style="margin-right:.5rem">
+            <span>Worksheet</span>
+            <select id="pqWorksheetProfile">
+              <option value="operator">Operator</option>
+              <option value="omni">Omni</option>
+              <option value="self">Self</option>
+            </select>
+          </label>
+          <button id="closePqWizard" class="button secondary" type="button">Close</button>
+        </div>
+      </div>
+      <p id="pqWizardSummary" class="modal-summary"></p>
+      <fieldset class="output-route-choice compact-route-choice" aria-label="Production Queue output route">
+        <legend>Production output</legend>
+        <label class="output-route-option">
+          <input type="radio" name="pqOutputRoute" value="omni_tap" checked>
+          <span><strong>Omni</strong><small>Generate TAPs for production</small></span>
+        </label>
+        <label class="output-route-option onboarding">
+          <input type="radio" name="pqOutputRoute" value="python_mm_dxf">
+          <span><strong>Python <em>Onboarding</em></strong><small>Generate millimeter DXFs for EnRoute; no TAPs</small></span>
+        </label>
+      </fieldset>
+      <div id="pqWizardToolbarReview" class="modal-toolbar">
+        <div class="inline-actions">
+          <button id="pqSelectAll" class="button secondary" type="button">Select All</button>
+          <button id="pqClearAll" class="button secondary" type="button">Clear All</button>
+          <button id="pqExpandParts" class="button secondary" type="button" title="Show parts to uncheck stock pulls">Show Components</button>
+          <button id="pqAdjustSelectedDims" class="button secondary pq-rare-action" type="button" title="Override W/H/D when Insight notes are missing or wrong">Adjust selected dims</button>
+        </div>
+        <div class="inline-actions">
+          <label><input type="checkbox" id="pqGenMdb" checked> MDB Files</label>
+          <label><input type="checkbox" id="pqGenWorksheets" checked> Production paperwork and files (cabinet list, issue logs, TAP previews, wrap verification, pallet labels, beam saw, labels)</label>
+          <label title="Optional: publish the separate hand-cuts MDB as the final Omni payload"><input type="checkbox" id="pqRouteHandcuts"> Route hand cuts to Omni</label>
+        </div>
+      </div>
+      <div id="pqWizardToolbarEdit" class="modal-toolbar" hidden>
+        <span class="pq-edit-toolbar-note">Adjust W/H/D as needed. Uncheck parts already in stock — they will be omitted from the MDB.</span>
+      </div>
+      <div id="pqWizardToolbarStaging" class="modal-toolbar" hidden>
+        <div class="inline-actions">
+          <label class="date-control">
+            <span>Cabinets per batch</span>
+            <input id="pqStageCap" type="number" min="1" step="1" value="15" style="width:4.5rem">
+          </label>
+          <button id="pqSuggestBatches" class="button secondary" type="button" title="Split the staged cabinets into batches of at most this size, keeping jobs together when they fit">Suggest batches</button>
+          <button id="pqStageAddBatch" class="button secondary" type="button">Add batch</button>
+        </div>
+        <span class="pq-edit-toolbar-note">Move cabinets between batches with the Batch dropdown. Each batch becomes its own paperwork folder.</span>
+      </div>
+      <div class="modal-scroll-region">
+        <div id="pqWizardBody" class="mdb-wizard-body"></div>
+      </div>
+      <div id="pqWizardActions" class="pq-wizard-actions">
+        <div id="pqWizardActionsReview" class="inline-actions">
+          <button id="pqStageBatches" class="button secondary" type="button" title="Split the selected cabinets into smaller batches before generating">Stage batches</button>
+          <button id="pqContinueWizard" class="button" type="button">Generate</button>
+        </div>
+        <div id="pqWizardActionsNotes" class="inline-actions" hidden>
+          <button id="pqNotesContinue" class="button secondary" type="button">Continue without changes</button>
+          <button id="pqNotesApply" class="button secondary" type="button">Apply from notes</button>
+          <button id="pqNotesEdit" class="button" type="button">Edit dimensions</button>
+        </div>
+        <div id="pqWizardActionsEdit" class="inline-actions" hidden>
+          <button id="pqEditBack" class="button secondary" type="button">Back</button>
+          <button id="pqWizardGenerate" class="button" type="button">Generate files</button>
+        </div>
+        <div id="pqWizardActionsStaging" class="inline-actions" hidden>
+          <button id="pqStagingBack" class="button secondary" type="button">Back to review</button>
+          <button id="pqGenerateAllBatches" class="button" type="button">Generate all batches</button>
+        </div>
+      </div>
+      <div id="pqWizardResult" class="mdb-wizard-result" hidden>
+        <div class="metric-band compact-metrics" id="pqResultMetrics"></div>
+        <div class="inline-actions" style="margin-top:.75rem">
+          <button id="pqOpenOutput" class="button secondary" type="button">Open Output Folder</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="standardFilesModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal modal-card-stacked standard-files-modal" role="dialog" aria-modal="true" aria-labelledby="standardFilesTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Omni Cut Station</p>
+          <h2 id="standardFilesTitle">Standard Files library</h2>
+        </div>
+        <div class="inline-actions">
+          <span id="standardFilesAccess" class="omni-dispatch-access">Loading accessâ€¦</span>
+          <button id="standardFilesRefresh" class="button secondary" type="button">Refresh</button>
+          <button id="closeStandardFilesModal" class="button secondary" type="button">Close</button>
+        </div>
+      </div>
+      <p id="standardFilesSummary" class="modal-summary">Loading reusable cabinet programsâ€¦</p>
+      <p id="standardFilesRoot" class="standard-files-root muted-text"></p>
+      <div class="modal-scroll-region">
+        <div class="standard-files-layout">
+          <section class="standard-files-catalog" aria-labelledby="standardFilesCatalogTitle">
+            <div class="morning-plan-section-head">
+              <h3 id="standardFilesCatalogTitle">Library programs</h3>
+              <span id="standardFilesCount" class="pill pill-pending">0</span>
+            </div>
+            <div id="standardFilesCatalog" class="standard-files-program-list"></div>
+          </section>
+          <section class="standard-files-editor" aria-labelledby="standardFilesEditorTitle">
+            <div class="morning-plan-section-head">
+              <h3 id="standardFilesEditorTitle">Add or edit a program</h3>
+              <button id="standardFilesReset" class="button secondary compact" type="button">New</button>
+            </div>
+            <form id="standardFilesForm">
+              <div class="standard-files-form-grid">
+                <label>
+                  <span>Category</span>
+                  <input id="standardFilesCategory" name="category" type="text" maxlength="80" list="standardFilesCategoryOptions" placeholder="Bases" required>
+                  <datalist id="standardFilesCategoryOptions"></datalist>
+                </label>
+                <label>
+                  <span>Program</span>
+                  <input id="standardFilesProgram" name="program" type="text" maxlength="80" placeholder="CB36" required>
+                </label>
+                <label>
+                  <span>Expected quantity</span>
+                  <input id="standardFilesExpectedQuantity" name="expected_quantity" type="number" min="1" max="100" step="1" value="1" required>
+                </label>
+              </div>
+              <label class="standard-files-description">
+                <span>Description</span>
+                <textarea id="standardFilesDescription" name="description" maxlength="500" rows="3" placeholder="Optional operator guidance"></textarea>
+              </label>
+              <label class="standard-files-upload">
+                <span>TAP files</span>
+                <input id="standardFilesTapFiles" name="tap_files" type="file" accept=".tap" multiple>
+                <small id="standardFilesExistingTaps">Choose TAPs for a new program. Metadata-only edits preserve existing TAPs.</small>
+              </label>
+              <label class="standard-files-replace">
+                <input id="standardFilesReplaceTaps" type="checkbox">
+                <span>Replace all existing TAPs with this upload</span>
+              </label>
+              <div class="inline-actions standard-files-form-actions">
+                <button id="standardFilesSave" class="button" type="submit">Save program</button>
+                <span id="standardFilesFormState" class="muted-text" role="status"></span>
+              </div>
+            </form>
+          </section>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="cabinetWelcomeGuideModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="cabinetWelcomeGuideTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Tools · Shop Training</p>
+          <h2 id="cabinetWelcomeGuideTitle">Welcome to Cabinets</h2>
+        </div>
+        <div class="inline-actions">
+          <button id="generateOnboardingPdfPacket" class="button" type="button" title="Bundle all onboarding guides into a printable PDF on the day's network folder">Generate Onboarding PDF Packet</button>
+          <button id="downloadCabinetWelcomeGuide" class="button secondary" type="button">Download</button>
+          <button id="printCabinetWelcomeGuide" class="button secondary" type="button">Print</button>
+          <button id="closeCabinetWelcomeGuideModal" class="button secondary" type="button">Close</button>
+        </div>
+      </div>
+      <p class="modal-summary">General cabinet knowledge for anyone starting at the shop — families, depth, and nomenclature.</p>
+      <div class="modal-scroll-region">
+        <div id="cabinetWelcomeGuideBody" class="trim-checklist-preview-paper cabinet-welcome-preview"></div>
+      </div>
+    </section>
+  </div>
+
+  <div id="cabinetWelcomeGuidePrintSheet" class="print-sheet" hidden>
+    <div id="cabinetWelcomeGuidePrintBody" class="print-sheet-body"></div>
+  </div>
+
+  <div id="trimChecklistPreviewModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="trimChecklistPreviewTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Tools</p>
+          <h2 id="trimChecklistPreviewTitle">Trim need list</h2>
+        </div>
+        <div class="inline-actions">
+          <button id="downloadTrimChecklistPreview" class="button secondary" type="button">Download checklist</button>
+          <button id="downloadTrimMaterialGuide" class="button secondary" type="button">Download guide</button>
+          <button id="printTrimChecklistPreview" class="button secondary" type="button">Print</button>
+          <button id="closeTrimChecklistPreviewModal" class="button secondary" type="button">Close</button>
+        </div>
+      </div>
+      <p id="trimChecklistPreviewSummary" class="modal-summary">Loading trim checklist preview…</p>
+      <div class="modal-toolbar trim-checklist-preview-toolbar">
+        <label class="trim-guide-toggle">
+          <input id="includeTrimMaterialGuide" type="checkbox" checked>
+          <span>Include material guide (locations, UV-1 / NO UV, thickness)</span>
+        </label>
+      </div>
+      <div class="modal-scroll-region">
+        <div id="trimChecklistPreviewBody" class="trim-checklist-preview-stack"></div>
+      </div>
+    </section>
+  </div>
+
+  <div id="trimChecklistModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="trimChecklistTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Trim</p>
+          <h2 id="trimChecklistTitle">Trim need list</h2>
+        </div>
+        <div class="inline-actions">
+          <span id="trimChecklistDirty" class="trim-dirty-indicator" hidden>Unsaved changes</span>
+          <button id="saveTrimChecklist" class="button" type="button" disabled>Save</button>
+          <button id="printTrimChecklist" class="button secondary" type="button">Print</button>
+          <button id="closeTrimChecklistModal" class="button secondary" type="button">Close</button>
+        </div>
+      </div>
+      <p id="trimChecklistSummary" class="modal-summary"></p>
+      <div class="modal-toolbar">
+        <span class="trim-legend">Today’s Sand-bound trim is listed below. Enter how many to cut (qty wanted). The large COH/Other block is for custom sizes and anything else — write those in.</span>
+      </div>
+      <div class="modal-scroll-region">
+        <div id="trimChecklistBody" class="trim-checklist-body"></div>
+      </div>
+    </section>
+  </div>
+
+  <div id="trimChecklistPrintSheet" class="print-sheet" hidden>
+    <div id="trimChecklistGuidePrintSection" class="trim-checklist-guide-print-section" hidden></div>
+    <header class="print-sheet-header trim-checklist-main-print-header">
+      <p class="print-sheet-eyebrow">Acor.dev · Cut Department</p>
+      <h1>Trim Need List</h1>
+      <p id="trimChecklistPrintMeta" class="print-sheet-meta"></p>
+    </header>
+    <div id="trimChecklistPrintBody" class="print-sheet-body"></div>
+  </div>
+
+  <div id="machineIssuesPrintSheet" class="print-sheet" hidden>
+    <header class="print-sheet-header">
+      <p class="print-sheet-eyebrow">Acor.dev · Cut Department</p>
+      <h1>Machine Issue &amp; Maintenance Log</h1>
+      <p id="machineIssuesPrintMeta" class="print-sheet-meta"></p>
+    </header>
+    <div id="machineIssuesPrintBody" class="print-sheet-body"></div>
+  </div>
+
+  <!-- Restock Viewer Modal -->
+  <div id="restockViewerModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal restock-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="restockViewerTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Tools</p>
+          <h2 id="restockViewerTitle">Restock Viewer</h2>
+        </div>
+        <div class="inline-actions">
+          <button id="refreshRestockViewer" class="button secondary" type="button">Refresh</button>
+          <button id="closeRestockViewerModal" class="button secondary" type="button">Close</button>
+        </div>
+      </div>
+      <p id="restockViewerSummary" class="modal-summary">Cabinet restock inventory matched against upcoming / in-cutting jobs.</p>
+      <div class="segmented-control restock-mode-tabs" role="tablist" aria-label="Restock inventory type">
+        <button id="restockModeCabinets" class="segment active" type="button" role="tab" aria-selected="true">Cabinets</button>
+        <button id="restockModeComponents" class="segment" type="button" role="tab" aria-selected="false">Components</button>
+      </div>
+      <div class="restock-layout">
+        <aside class="restock-sidebar">
+          <div class="restock-sidebar-header">
+            <strong id="restockInventoryHeading">Cabinets in restock</strong>
+            <span id="restockInventoryMeta" class="muted-text"></span>
+          </div>
+          <div id="restockInventoryList" class="restock-inventory-list" role="listbox" aria-label="Restock inventory"></div>
+          <form id="restockInventoryForm" class="restock-inventory-form">
+            <label class="date-control grow-control">
+              <span>Item</span>
+              <input id="restockItemInput" type="text" placeholder="e.g. CB12" autocomplete="off" required>
+            </label>
+            <label class="date-control">
+              <span>Qty</span>
+              <input id="restockQtyInput" type="number" min="1" step="1" value="1" required>
+            </label>
+            <button class="button" type="submit">Add / Update</button>
+            </form>
+            <form id="componentInventoryForm" class="component-inventory-form" hidden>
+              <label class="date-control component-kind-field"><span>Cabinet type</span><select id="componentCabinetTypeInput" required><option value="">Choose cabinet type</option></select></label>
+              <label class="date-control component-kind-field"><span>Component</span><select id="componentPartInput" disabled required><option value="">Choose component</option></select></label>
+              <label id="componentPrimaryField" class="date-control component-measurement-field" hidden><span id="componentPrimaryLabel">Component width</span><input id="componentPrimaryInput" type="number" min="0" step="0.001" placeholder="e.g. 29" disabled></label>
+              <label id="componentSecondaryField" class="date-control component-measurement-field" hidden><span id="componentSecondaryLabel">Component height</span><select id="componentSecondaryInput"><option value="">Choose measurement</option></select><input id="componentSecondaryNumberInput" type="number" min="0" step="0.001" placeholder="Enter measurement" hidden disabled></label>
+              <fieldset id="componentVariantField" class="component-variant-field" hidden><legend>Choose stock piece</legend><div id="componentVariantOptions" class="component-variant-options"></div></fieldset>
+              <p id="componentInferredSize" class="component-inferred-size">Choose the cabinet type first, then the component.</p>
+            <p id="componentCompatibility" class="component-compatibility" hidden></p>
+            <label class="date-control"><span>Location</span><input id="componentLocationInput" type="text" placeholder="e.g. Rack A"></label>
+            <label class="date-control"><span>Qty</span><input id="componentQtyInput" type="number" min="1" step="1" value="1" required></label>
+            <button id="componentInventorySubmit" class="button" type="submit" disabled>Add to stock</button>
+          </form>
+          <div class="inline-actions restock-sidebar-actions">
+            <button id="restockDeleteSelected" class="button secondary" type="button" disabled>Delete selected</button>
+            <button id="restockSaveInventory" class="button" type="button">Save</button>
+          </div>
+        </aside>
+        <div class="restock-main">
+          <form id="restockPoSearch" class="modal-toolbar">
+            <label class="date-control grow-control">
+              <span>Filter by PO</span>
+              <input id="restockPoInput" type="search" placeholder="e.g. WHITAKER — leave blank for All" autocomplete="off">
+            </label>
+            <button class="button secondary" type="submit">Apply</button>
+            <button id="restockClearPoFilter" class="button secondary" type="button">Clear</button>
+          </form>
+          <div id="restockJobsBody" class="restock-jobs-body modal-scroll-region"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="routerStockModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="routerStockTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Breakdown</p>
+          <h2 id="routerStockTitle">Breakdown need list</h2>
+        </div>
+        <div class="inline-actions">
+          <button id="printRouterStock" class="button secondary" type="button" title="Print a blank ask for Breakdown to write qty wanted">Print Ask</button>
+          <button id="generateRouterStock" class="button" type="button" title="Build today's Walk-up packet from the qtys you entered">Generate</button>
+          <button id="saveRouterStock" class="button secondary" type="button">Save</button>
+          <button id="closeRouterStockModal" class="button secondary" type="button">Close</button>
+        </div>
+      </div>
+      <p id="routerStockSummary" class="modal-summary">1) Print Ask for Breakdown. 2) When the paper returns, type the qtys here. 3) Generate today’s packet.</p>
+      <div class="modal-toolbar">
+        <span class="trim-legend">Only <strong>Qty wanted today</strong> matters. Leave blank for none. Walls are interchangeable (no left/right to pick). Generate builds only the lines with a qty.</span>
+      </div>
+      <div class="modal-scroll-region">
+        <div id="routerStockBody" class="trim-checklist-body"></div>
+      </div>
+    </section>
+  </div>
+
+  <div id="breakdownChecklistPrintSheet" class="print-sheet" hidden>
+    <header class="print-sheet-header">
+      <p class="print-sheet-eyebrow">Acor.dev · Cut Department</p>
+      <h1>Breakdown Need List</h1>
+      <p id="breakdownChecklistPrintMeta" class="print-sheet-meta"></p>
+    </header>
+    <div id="breakdownChecklistPrintBody" class="print-sheet-body"></div>
+  </div>
+
+  <div id="labelReprintModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="labelReprintTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Cut Labels</p>
+          <h2 id="labelReprintTitle">Reprint cut labels</h2>
+        </div>
+        <button id="closeLabelReprintModal" class="button secondary" type="button">Close</button>
+      </div>
+      <div id="labelReprintCcSection">
+        <p class="section-label" style="margin-bottom:6px">Outstanding cutting jobs</p>
+        <div id="labelReprintCcList" class="chip-list"><span class="muted-text">Loading…</span></div>
+      </div>
+      <form id="labelReprintSearch" class="modal-toolbar">
+        <label class="date-control grow-control">
+          <span>PO Number</span>
+          <input id="labelReprintPo" type="search" placeholder="e.g. PHILLI-CO/CWAL" autocomplete="off" required>
+        </label>
+        <button class="button" type="submit">Load job</button>
+      </form>
+      <p id="labelReprintSummary" class="modal-summary">Enter a PO number to see all items and their label status.</p>
+      <div id="labelReprintJobStatus" hidden>
+        <div class="metric-band compact-metrics" id="labelReprintMetrics"></div>
+        <div class="modal-toolbar">
+          <div class="inline-actions">
+            <button id="labelReprintSelectAll" class="button secondary" type="button">Select all</button>
+            <button id="labelReprintClearAll" class="button secondary" type="button">Clear all</button>
+          </div>
+          <div class="inline-actions">
+            <label class="date-control">
+              <span>Printer</span>
+              <select id="labelReprintPrinter"><option value="">Select Cut Zebra</option></select>
+            </label>
+            <div class="segmented-control" role="tablist" aria-label="Label type filter">
+              <button id="labelReprintTabAll" class="segment active" type="button">All</button>
+              <button id="labelReprintTabPlaceholder" class="segment" type="button">All 4&times;2</button>
+              <button id="labelReprintTabInsight" class="segment" type="button">Insight labels</button>
+            </div>
+          </div>
+          <button id="labelReprintPrintSelected" class="button" type="button" disabled>Print selected (0)</button>
+        </div>
+        <div class="table-wrap modal-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th><input type="checkbox" id="labelReprintCheckAll" title="Select all visible"></th>
+                <th>Item</th>
+                <th>Cabinet</th>
+                <th>Description</th>
+                <th>ICN ID</th>
+                <th>Status</th>
+                <th>Placeholder</th>
+                <th>Insight Label</th>
+              </tr>
+            </thead>
+            <tbody id="labelReprintTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="nonCutPushoutsModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="nonCutPushoutsTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Tools</p>
+          <h2 id="nonCutPushoutsTitle">Non-cut push-outs</h2>
+        </div>
+        <button id="closeNonCutPushoutsModal" class="button secondary" type="button">Close</button>
+      </div>
+      <p id="nonCutPushoutsSummary" class="modal-summary">Jobs with In Cutting → Cutting Complete scans by someone other than <code>cut</code>.</p>
+      <form id="nonCutPushoutsRange" class="modal-toolbar">
+        <label class="date-control">
+          <span>From</span>
+          <input id="nonCutPushoutsFrom" type="date" required>
+        </label>
+        <label class="date-control">
+          <span>To</span>
+          <input id="nonCutPushoutsTo" type="date" required>
+        </label>
+        <button class="button" type="submit">Apply</button>
+        <button id="nonCutPushoutsRefresh" class="button secondary" type="button" title="Re-poll Insight scan log into local cache">Refresh scans</button>
+      </form>
+      <div class="tool-split-layout">
+        <div class="tool-jobs-pane">
+          <p class="section-label">Jobs</p>
+          <div id="nonCutPushoutsJobs" class="pq-jobs-list tool-jobs-list">
+            <p class="muted-text">Loading…</p>
+          </div>
+        </div>
+        <div class="tool-detail-pane">
+          <div class="modal-toolbar">
+            <p class="section-label" id="nonCutPushoutsDetailLabel">Pieces</p>
+            <div class="inline-actions">
+              <button id="nonCutPushoutsSelectAll" class="button secondary" type="button" disabled>Select all</button>
+              <button id="nonCutPushoutsClearAll" class="button secondary" type="button" disabled>Clear all</button>
+            </div>
+            <span id="nonCutPushoutsSelectedCount" class="muted-text">0 selected</span>
+          </div>
+          <div class="table-wrap modal-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th><input type="checkbox" id="nonCutPushoutsCheckAll" title="Select all visible" disabled></th>
+                  <th>Item</th>
+                  <th>ICN</th>
+                  <th>Scanner</th>
+                  <th>Time</th>
+                </tr>
+              </thead>
+              <tbody id="nonCutPushoutsTable">
+                <tr><td class="empty-row" colspan="5">Select a job to see pieces.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="reclaimedViewerModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="reclaimedViewerTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Tools</p>
+          <h2 id="reclaimedViewerTitle">Reclaimed floor inventory</h2>
+        </div>
+        <div class="inline-actions">
+          <button id="printReclaimedFloorMatchList" class="button" type="button" disabled>Open floor match PDF</button>
+          <button id="refreshReclaimedFloorInventory" class="button secondary" type="button">Rescan</button>
+          <button id="closeReclaimedViewerModal" class="button secondary" type="button">Close</button>
+        </div>
+      </div>
+      <div class="reclaimed-viewer-tabs" role="tablist" aria-label="Reclaimed tools">
+        <button id="reclaimedFloorTab" class="button reclaimed-viewer-tab is-active" type="button" role="tab" aria-selected="true">Floor inventory</button>
+        <button id="reclaimedAllocationsTab" class="button secondary reclaimed-viewer-tab" type="button" role="tab" aria-selected="false">Cabinet allocations</button>
+      </div>
+      <section id="reclaimedFloorPanel">
+        <p id="reclaimedFloorMatchSummary" class="muted-text">Checking which allocated jobs already have a dedicated floor pallet...</p>
+        <p id="reclaimedFloorSummary" class="modal-summary">Loading current floor inventoryâ€¦</p>
+        <form id="reclaimedFloorForm" class="reclaimed-floor-form">
+          <input id="reclaimedFloorEntryId" type="hidden">
+          <label>Pallet / location
+            <input id="reclaimedFloorPallet" type="text" placeholder="e.g. Rack C or pallet 12">
+          </label>
+          <label>Job / PO name
+            <input id="reclaimedFloorJob" type="text" placeholder="e.g. Z-STM MARTIN-PO">
+          </label>
+          <label>Insight order #
+            <input id="reclaimedFloorOrder" type="text" inputmode="numeric" placeholder="Best match when known">
+          </label>
+          <label>Notes
+            <input id="reclaimedFloorNotes" type="text" placeholder="Contents or identifying note">
+          </label>
+          <div class="inline-actions reclaimed-floor-form-actions">
+            <button class="button" type="submit">Add to floor inventory</button>
+            <button id="reclaimedFloorCancelEdit" class="button secondary" type="button" hidden>Cancel edit</button>
+          </div>
+        </form>
+        <p class="muted-text reclaimed-rule-note">Gone means Assembly Complete, Packed, Loaded, or no active work orders. Cutting Complete, In Cutting, and Picked remain open.</p>
+        <div class="table-wrap modal-table-wrap reclaimed-floor-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Status</th>
+                <th>Pallet</th>
+                <th>Job / PO</th>
+                <th>Order #</th>
+                <th>Insight evidence</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="reclaimedFloorTable">
+              <tr><td class="empty-row" colspan="6">Loadingâ€¦</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section id="reclaimedAllocationsPanel" hidden>
+        <p id="reclaimedViewerSummary" class="modal-summary">Jobs with cabinets expected on a reclaimed pallet.</p>
+        <div class="tool-split-layout">
+        <div class="tool-jobs-pane">
+          <p class="section-label">Jobs</p>
+          <div id="reclaimedViewerJobs" class="pq-jobs-list tool-jobs-list">
+            <p class="muted-text">Loading…</p>
+          </div>
+        </div>
+        <div class="tool-detail-pane">
+          <div class="modal-toolbar">
+            <p class="section-label" id="reclaimedViewerDetailLabel">Cabinets</p>
+            <div class="inline-actions">
+              <button id="reclaimedViewerSelectAll" class="button secondary" type="button" disabled>Select all</button>
+              <button id="reclaimedViewerClearAll" class="button secondary" type="button" disabled>Clear all</button>
+            </div>
+            <span id="reclaimedViewerSelectedCount" class="muted-text">0 selected</span>
+          </div>
+          <div class="table-wrap modal-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th><input type="checkbox" id="reclaimedViewerCheckAll" title="Select all visible" disabled></th>
+                  <th>Item</th>
+                  <th>PO</th>
+                </tr>
+              </thead>
+              <tbody id="reclaimedViewerTable">
+                <tr><td class="empty-row" colspan="3">Select a job to see reclaimed cabinets.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      </section>
+    </section>
+  </div>
+
+  <div id="omniRecutsModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="omniRecutsTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Tools · Omni Cut Station</p>
+          <h2 id="omniRecutsTitle">Omni Recuts</h2>
+        </div>
+        <button id="closeOmniRecutsModal" class="button secondary" type="button">Close</button>
+      </div>
+      <p id="omniRecutsSummary" class="modal-summary">Recuts and CNC completion states written by Omni Cut Station.</p>
+      <form id="omniRecutsRange" class="modal-toolbar" style="margin-bottom:0.75rem;">
+        <label class="muted-text" for="omniRecutsDays">Lookback days</label>
+        <input id="omniRecutsDays" type="number" min="1" max="31" value="7" style="width:4.5rem;">
+        <button id="omniRecutsRefresh" class="button secondary" type="submit">Refresh</button>
+        <span id="omniRecutsHotZones" class="muted-text"></span>
+      </form>
+      <div class="tool-split-layout">
+        <div class="tool-jobs-pane">
+          <p class="section-label">Jobs</p>
+          <div id="omniRecutsJobs" class="pq-jobs-list tool-jobs-list">
+            <p class="muted-text">Loading…</p>
+          </div>
+        </div>
+        <div class="tool-detail-pane">
+          <div class="modal-toolbar">
+            <p class="section-label" id="omniRecutsDetailLabel">Recut items</p>
+            <span id="omniRecutsDetailMeta" class="muted-text"></span>
+            <button id="omniRecutsPrepareRebatch" class="button compact" type="button" hidden>Prepare rebatch</button>
+          </div>
+          <div class="table-wrap modal-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cabinet</th>
+                  <th>Part</th>
+                  <th>Type</th>
+                  <th>Zone</th>
+                  <th>Note</th>
+                  <th>Submitted</th>
+                </tr>
+              </thead>
+              <tbody id="omniRecutsTable">
+                <tr><td class="empty-row" colspan="6">Select a job to see submitted recuts.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="previewCheckModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="previewCheckTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Tools</p>
+          <h2 id="previewCheckTitle">Preview Check</h2>
+        </div>
+        <button id="closePreviewCheckModal" class="button secondary" type="button">Close</button>
+      </div>
+      <p id="previewCheckSummary" class="modal-summary">Paperwork cabinets versus parts found on TAP nest previews. Lit badges nested; grey still missing.</p>
+      <div class="modal-toolbar preview-check-toolbar">
+        <div class="preview-check-day-nav" role="group" aria-label="CNC day">
+          <button id="previewCheckPrevDay" class="button secondary compact" type="button" title="Previous day">&lsaquo;</button>
+          <span id="previewCheckDayLabel" class="preview-check-day-label">—</span>
+          <button id="previewCheckNextDay" class="button secondary compact" type="button" title="Next day">&rsaquo;</button>
+        </div>
+        <label class="date-control grow-control">
+          <span>Job</span>
+          <select id="previewCheckJob"><option value="">Choose a job…</option></select>
+        </label>
+        <button id="previewCheckRefresh" class="button secondary compact" type="button">Scan</button>
+      </div>
+      <div id="previewCheckBody" class="preview-check-body modal-scroll-region">
+        <p class="muted-text">Pick a day and a job to scan previews.</p>
+      </div>
+    </section>
+  </div>
+
+  <div id="missingMdbItemsModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="missingMdbItemsTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Tools</p>
+          <h2 id="missingMdbItemsTitle">Missing items</h2>
+        </div>
+        <button id="closeMissingMdbItemsModal" class="button secondary" type="button">Close</button>
+      </div>
+      <p id="missingMdbItemsSummary" class="modal-summary">Cabinets skipped during MDB generation (not in library, no parts, etc.).</p>
+      <div class="tool-split-layout">
+        <div class="tool-jobs-pane">
+          <p class="section-label">Jobs</p>
+          <div id="missingMdbItemsJobs" class="pq-jobs-list tool-jobs-list">
+            <p class="muted-text">Loading…</p>
+          </div>
+        </div>
+        <div class="tool-detail-pane">
+          <div class="modal-toolbar">
+            <p class="section-label" id="missingMdbItemsDetailLabel">Cabinets</p>
+            <div class="inline-actions">
+              <button id="missingMdbItemsSelectAll" class="button secondary" type="button" disabled>Select all</button>
+              <button id="missingMdbItemsClearAll" class="button secondary" type="button" disabled>Clear all</button>
+            </div>
+            <span id="missingMdbItemsSelectedCount" class="muted-text">0 selected</span>
+          </div>
+          <div class="table-wrap modal-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th><input type="checkbox" id="missingMdbItemsCheckAll" title="Select all visible" disabled></th>
+                  <th>Item</th>
+                  <th>Cab#</th>
+                  <th>Reason</th>
+                  <th>When</th>
+                </tr>
+              </thead>
+              <tbody id="missingMdbItemsTable">
+                <tr><td class="empty-row" colspan="5">Select a job to see missing items.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="poChangesModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="poChangesTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Schedule Changes</p>
+          <h2 id="poChangesTitle">PO date changes</h2>
+        </div>
+        <div class="inline-actions">
+          <button id="closePoChangesModal" class="button secondary" type="button">Close</button>
+        </div>
+      </div>
+      <p id="poChangesSummary" class="modal-summary">Firm date and scheduled departure changes detected across Insight snapshots.</p>
+      <div class="modal-scroll-region">
+        <div class="table-wrap modal-table-wrap">
+          <table id="poChangesTable">
+            <thead>
+              <tr><th>When</th><th>PO</th><th>Field</th><th>From</th><th></th><th>To</th></tr>
+            </thead>
+            <tbody id="poChangesBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="morningPlanModal" class="modal-backdrop" hidden>
+    <section class="modal-card morning-plan-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="morningPlanTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Live Cut Status</p>
+          <h2 id="morningPlanTitle">Morning Plan</h2>
+        </div>
+        <div class="inline-actions">
+          <label class="morning-plan-basis-control" for="morningPlanDateBasis">
+            <span>Plan priority</span>
+            <select id="morningPlanDateBasis">
+              <option value="firm_date">Firm Date</option>
+              <option value="scheduled_departure">Ship Date</option>
+            </select>
+          </label>
+          <label class="morning-plan-basis-control" for="morningPlanWipCeiling">
+            <span>Produced target</span>
+            <input id="morningPlanWipCeiling" type="number" min="0" step="1" value="0" title="0 = no cap on produced-work pipeline">
+          </label>
+          <label class="morning-plan-basis-control" for="morningPlanBatchCap">
+            <span>Batch size</span>
+            <input id="morningPlanBatchCap" type="number" min="1" step="1" value="15" title="Cabinets per produced smart batch">
+          </label>
+          <button id="morningPlanAddJob" class="button secondary" type="button">Add job</button>
+          <button id="morningPlanRefreshDraft" class="button secondary" type="button">Refresh draft</button>
+          <button id="morningPlanRefreshInsight" class="button secondary" type="button">Refresh Insight</button>
+          <button id="morningPlanProduce" class="button" type="button">Approve &amp; Produce</button>
+          <button id="closeMorningPlanModal" class="button secondary" type="button">Close</button>
+        </div>
+      </div>
+      <p id="morningPlanSummary" class="modal-summary">Loading morning plan draft…</p>
+      <div id="morningPlanRefreshBanner" class="morning-plan-refresh-banner" aria-live="polite"></div>
+      <div class="metric-band compact-metrics" id="morningPlanMetrics"></div>
+      <div class="morning-plan-toolbar">
+        <span id="morningPlanUpdatedAt" class="muted-text"></span>
+        <span class="muted-text">The draft is calculated automatically when this plan opens. Review it, then approve once to generate new paperwork, pin the plan, and send the checklist PDF to the listener for one-time printing.</span>
+      </div>
+      <div class="modal-scroll-region morning-plan-scroll">
+        <div class="morning-plan-layout">
+          <section class="morning-plan-jobs">
+            <div class="morning-plan-section-head">
+              <h3 id="morningPlanJobsHeading">Morning plan draft</h3>
+              <span id="morningPlanDraftHint" class="muted-text">Live preview</span>
+            </div>
+            <div id="morningPlanDraftList" class="morning-plan-draft-list" aria-live="polite"></div>
+          </section>
+          <aside class="morning-plan-events" id="morningPlanAddPanel" hidden>
+            <div class="morning-plan-section-head">
+              <h3>Add job</h3>
+              <button id="morningPlanCloseAdd" class="button secondary compact" type="button">Close</button>
+            </div>
+            <label class="morning-plan-add-search">
+              <span>Search PO</span>
+              <input id="morningPlanAddSearch" type="search" placeholder="Type a PO…" autocomplete="off">
+            </label>
+            <div id="morningPlanAddList" class="morning-plan-add-list"></div>
+          </aside>
+          <aside class="morning-plan-events" id="morningPlanEventsPanel">
+            <div class="morning-plan-section-head">
+              <h3>Changes since morning</h3>
+              <span id="morningPlanEventCount" class="pill pill-pending">0</span>
+            </div>
+            <div id="morningPlanEventsList" class="morning-plan-events-list"></div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="eodReviewModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="eodReviewTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">End of Day gate</p>
+          <h2 id="eodReviewTitle">Items that need review</h2>
+        </div>
+        <div class="inline-actions">
+          <button id="markAllEodReviewWarehouse" class="button secondary compact" type="button">Mark all as warehouse</button>
+          <button id="refreshEodReview" class="button secondary compact" type="button">Refresh</button>
+          <button id="closeEodReview" class="button secondary" type="button">Close</button>
+        </div>
+      </div>
+      <p id="eodReviewSummary" class="modal-summary">These left the queue without a measured CNC run. Mark warehouse if they were pulled, or confirm Cut if they really ran.</p>
+      <div class="modal-scroll-region">
+        <div class="table-wrap modal-table-wrap">
+          <table id="eodReviewTable">
+            <thead>
+              <tr><th>Day</th><th>PO</th><th>Item</th><th>Line</th><th>ICN</th><th>Why</th><th>Decision</th></tr>
+            </thead>
+            <tbody id="eodReviewTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="eodEmailModal" class="modal-backdrop" hidden>
+    <section class="modal-card modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="eodEmailTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Tools</p>
+          <h2 id="eodEmailTitle">End of Day email</h2>
+        </div>
+        <button id="closeEodEmailModal" class="button secondary" type="button">Close</button>
+      </div>
+      <p class="modal-summary">The morning Outlook send is off until you approve that report day. Approving does not email anyone; use Send now after you have reviewed the paper.</p>
+      <form id="eodEmailForm" class="contribution-form">
+        <label class="eod-email-toggle">
+          <input id="eodEmailEnabled" type="checkbox" disabled>
+          <span>Unattended 6:00 send (locked off — approval required)</span>
+        </label>
+        <div class="form-grid">
+          <label>
+            <span>Send time</span>
+            <input id="eodEmailTime" type="time" required>
+          </label>
+          <label>
+            <span>From</span>
+            <input id="eodEmailFrom" type="email" required>
+          </label>
+        </div>
+        <label>
+          <span>To</span>
+          <textarea id="eodEmailTo" rows="2" required placeholder="one address per line"></textarea>
+        </label>
+        <label>
+          <span>Cc</span>
+          <textarea id="eodEmailCc" rows="3" placeholder="one address per line"></textarea>
+        </label>
+        <p id="eodEmailStatus" class="muted-text"></p>
+        <div class="form-actions">
+          <button class="button" type="submit">Save addresses</button>
+          <button id="eodEmailApprove" class="button secondary" type="button">Approve yesterday’s report</button>
+          <button id="eodEmailSendNow" class="button secondary" type="button">Send now</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <div id="notesModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal modal-card-stacked" role="dialog" aria-modal="true" aria-labelledby="notesTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Floor Notes</p>
+          <h2 id="notesTitle">Operator notes</h2>
+        </div>
+        <div class="inline-actions">
+          <button id="closeNotesModal" class="button secondary" type="button">Close</button>
+        </div>
+      </div>
+      <p id="notesSummary" class="modal-summary">Notes logged from the floor via the <strong>note</strong> skill.</p>
+      <div class="modal-scroll-region">
+        <div class="table-wrap modal-table-wrap">
+          <table id="notesTable">
+            <thead>
+              <tr><th>Day</th><th>Time</th><th>Author</th><th>Note</th><th></th></tr>
+            </thead>
+            <tbody id="notesBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="recurringInventoryModal" class="modal-backdrop" hidden>
+    <section class="modal-card wide-modal modal-card-stacked recurring-inventory-modal" role="dialog" aria-modal="true" aria-labelledby="recurringInventoryTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-label">Shop supplies</p>
+          <h2 id="recurringInventoryTitle">Recurring inventory</h2>
+        </div>
+        <div class="inline-actions">
+          <button id="recurringInventoryCountPdf" class="button secondary" type="button">Open count sheet</button>
+          <button id="recurringInventoryOrderPdf" class="button secondary" type="button">Open order request</button>
+          <button id="closeRecurringInventoryModal" class="button secondary" type="button">Close</button>
+        </div>
+      </div>
+      <p id="recurringInventorySummary" class="modal-summary">Loading recurring inventory catalog...</p>
+      <div id="recurringInventoryMetrics" class="metric-band compact-metrics"></div>
+      <div class="modal-toolbar">
+        <button id="toggleRecurringInventoryForm" class="button" type="button" aria-expanded="false" aria-controls="recurringInventoryFormPanel">Add new item</button>
+        <label class="recurring-inventory-filter"><span>Category</span><select id="recurringInventoryCategoryFilter"><option value="">All categories</option></select></label>
+      </div>
+      <div class="modal-scroll-region">
+        <div id="recurringInventoryFormPanel" class="modal-form-panel" hidden>
+          <form id="recurringInventoryForm" class="recurring-inventory-form">
+            <input id="recurringInventoryId" name="id" type="hidden">
+            <div class="form-grid recurring-inventory-form-grid">
+              <label><span>Category</span><input id="recurringInventoryCategory" name="category" list="recurringInventoryCategoryChoices" placeholder="e.g. Fasteners" required></label>
+              <label><span>Item</span><input id="recurringInventoryItem" name="item" placeholder="e.g. 1-1/4 in screws" required></label>
+              <label class="inventory-wide-field"><span>Specification / size</span><input id="recurringInventorySpecification" name="specification" placeholder="Brand, size, finish, or other identifying detail"></label>
+              <label><span>Count unit</span><input id="recurringInventoryUnit" name="unit" placeholder="box, roll, each" value="each"></label>
+              <label><span>Storage location</span><input id="recurringInventoryLocation" name="location" placeholder="e.g. Supply rack B"></label>
+              <label><span>Preferred supplier</span><input id="recurringInventorySupplier" name="supplier" placeholder="Supplier name"></label>
+              <label><span>Supplier SKU</span><input id="recurringInventorySku" name="supplier_sku" placeholder="Catalog or part number"></label>
+              <label><span>Minimum</span><input id="recurringInventoryMinimum" name="minimum_qty" type="number" min="0" step="any" placeholder="Reorder at"></label>
+              <label><span>Target</span><input id="recurringInventoryTarget" name="target_qty" type="number" min="0" step="any" placeholder="Restock to"></label>
+              <label><span>Current count</span><input id="recurringInventoryCurrent" name="current_qty" type="number" min="0" step="any" placeholder="Leave blank until counted"></label>
+              <label class="inventory-wide-field"><span>Notes</span><input id="recurringInventoryNotes" name="notes" placeholder="Pack size, substitute, ordering note, etc."></label>
+            </div>
+            <div class="inline-actions">
+              <button class="button" type="submit">Save item</button>
+              <button id="cancelRecurringInventoryEdit" class="button secondary" type="button">Cancel</button>
+            </div>
+          </form>
+          <datalist id="recurringInventoryCategoryChoices">
+            <option value="Fasteners"></option><option value="Adhesives"></option><option value="Abrasives"></option>
+            <option value="Tooling"></option><option value="Packaging"></option><option value="PPE"></option>
+            <option value="Maintenance"></option><option value="Office"></option><option value="Other"></option>
+          </datalist>
+        </div>
+        <div class="table-wrap modal-table-wrap recurring-inventory-table-wrap">
+          <table id="recurringInventoryTable">
+            <thead><tr><th>Category</th><th>Item / specification</th><th>Location</th><th>Unit</th><th>Min</th><th>Target</th><th>Current</th><th>Order</th><th>Last count</th><th></th></tr></thead>
+            <tbody id="recurringInventoryBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="trim_material_guide.js"></script>
+  <script src="cabinet_welcome_guide.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

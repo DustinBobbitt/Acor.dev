@@ -1,0 +1,296 @@
+{
+  "default": {
+    "ok": true,
+    "demo": true,
+    "items": [],
+    "count": 0
+  },
+  "routes": {
+    "GET /api/wood-usage/overview": {
+      "ok": true,
+      "totals": {
+        "product_mappings": 742
+      },
+      "top_missing_items": [
+        {
+          "item_number": "DEMO-X1",
+          "search_count": 4,
+          "status": "pending",
+          "last_seen": "2026-07-01"
+        }
+      ],
+      "recent_calculations": [],
+      "data_files": {
+        "calculation_history": {
+          "exists": true,
+          "modified_at": "2026-07-01"
+        },
+        "woodusage_db": {
+          "exists": true,
+          "size_bytes": 512000
+        }
+      }
+    },
+    "GET /api/wood-usage/history": {
+      "ok": true,
+      "items": [
+        {
+          "timestamp": "2026-07-01T09:00:00",
+          "sku_count": 12,
+          "pw05": 4.2,
+          "pw075": 2.1
+        },
+        {
+          "timestamp": "2026-06-30T15:00:00",
+          "sku_count": 8,
+          "pw05": 2.8,
+          "pw075": 1.4
+        }
+      ]
+    },
+    "GET /api/wood-usage/pending": {
+      "ok": true,
+      "count": 4,
+      "items": [
+        {
+          "item_number": "DEMO-X1",
+          "type": "base",
+          "pw05": 0,
+          "pw075": 0,
+          "submitted_at": "2026-07-01"
+        }
+      ]
+    },
+    "GET /api/wood-usage/job-pricing": {
+      "ok": true,
+      "jobs": [
+        {
+          "po_number": "JOB-2140",
+          "order_number": "ORD-100",
+          "scheduled_departure_date": "2026-07-08",
+          "firm_date": "2026-07-05",
+          "stage": "Upcoming",
+          "evidence": "demo fixture",
+          "cabinet_count": 4,
+          "forecast_price": 1200.0,
+          "pricing_ready": false,
+          "coverage_percent": 78
+        },
+        {
+          "po_number": "JOB-2141",
+          "order_number": "ORD-101",
+          "scheduled_departure_date": "2026-07-09",
+          "firm_date": "2026-07-06",
+          "stage": "In cut",
+          "evidence": "demo fixture",
+          "cabinet_count": 5,
+          "forecast_price": 1285.5,
+          "pricing_ready": true,
+          "coverage_percent": 100
+        },
+        {
+          "po_number": "JOB-2142",
+          "order_number": "ORD-102",
+          "scheduled_departure_date": "2026-07-10",
+          "firm_date": "2026-07-07",
+          "stage": "Cut complete",
+          "evidence": "demo fixture",
+          "cabinet_count": 6,
+          "forecast_price": 1371.0,
+          "pricing_ready": true,
+          "coverage_percent": 100
+        },
+        {
+          "po_number": "JOB-2143",
+          "order_number": "ORD-103",
+          "scheduled_departure_date": "2026-07-11",
+          "firm_date": "2026-07-08",
+          "stage": "Upcoming",
+          "evidence": "demo fixture",
+          "cabinet_count": 7,
+          "forecast_price": 1456.5,
+          "pricing_ready": true,
+          "coverage_percent": 100
+        },
+        {
+          "po_number": "JOB-2144",
+          "order_number": "ORD-104",
+          "scheduled_departure_date": "2026-07-12",
+          "firm_date": "2026-07-09",
+          "stage": "In cut",
+          "evidence": "demo fixture",
+          "cabinet_count": 8,
+          "forecast_price": 1542.0,
+          "pricing_ready": false,
+          "coverage_percent": 78
+        },
+        {
+          "po_number": "JOB-2145",
+          "order_number": "ORD-105",
+          "scheduled_departure_date": "2026-07-13",
+          "firm_date": "2026-07-10",
+          "stage": "Cut complete",
+          "evidence": "demo fixture",
+          "cabinet_count": 9,
+          "forecast_price": 1627.5,
+          "pricing_ready": true,
+          "coverage_percent": 100
+        },
+        {
+          "po_number": "JOB-2146",
+          "order_number": "ORD-106",
+          "scheduled_departure_date": "2026-07-14",
+          "firm_date": "2026-07-11",
+          "stage": "Upcoming",
+          "evidence": "demo fixture",
+          "cabinet_count": 10,
+          "forecast_price": 1713.0,
+          "pricing_ready": true,
+          "coverage_percent": 100
+        },
+        {
+          "po_number": "JOB-2147",
+          "order_number": "ORD-107",
+          "scheduled_departure_date": "2026-07-15",
+          "firm_date": "2026-07-12",
+          "stage": "In cut",
+          "evidence": "demo fixture",
+          "cabinet_count": 11,
+          "forecast_price": 1798.5,
+          "pricing_ready": true,
+          "coverage_percent": 100
+        },
+        {
+          "po_number": "JOB-2148",
+          "order_number": "ORD-108",
+          "scheduled_departure_date": "2026-07-16",
+          "firm_date": "2026-07-13",
+          "stage": "Cut complete",
+          "evidence": "demo fixture",
+          "cabinet_count": 12,
+          "forecast_price": 1884.0,
+          "pricing_ready": false,
+          "coverage_percent": 78
+        },
+        {
+          "po_number": "JOB-2149",
+          "order_number": "ORD-109",
+          "scheduled_departure_date": "2026-07-17",
+          "firm_date": "2026-07-14",
+          "stage": "Upcoming",
+          "evidence": "demo fixture",
+          "cabinet_count": 13,
+          "forecast_price": 1969.5,
+          "pricing_ready": true,
+          "coverage_percent": 100
+        },
+        {
+          "po_number": "JOB-2150",
+          "order_number": "ORD-110",
+          "scheduled_departure_date": "2026-07-08",
+          "firm_date": "2026-07-05",
+          "stage": "In cut",
+          "evidence": "demo fixture",
+          "cabinet_count": 14,
+          "forecast_price": 2055.0,
+          "pricing_ready": true,
+          "coverage_percent": 100
+        },
+        {
+          "po_number": "JOB-2151",
+          "order_number": "ORD-111",
+          "scheduled_departure_date": "2026-07-09",
+          "firm_date": "2026-07-06",
+          "stage": "Cut complete",
+          "evidence": "demo fixture",
+          "cabinet_count": 15,
+          "forecast_price": 2140.5,
+          "pricing_ready": true,
+          "coverage_percent": 100
+        }
+      ],
+      "displayed_count": 12,
+      "counts": {},
+      "source": {
+        "refreshed_at": "2026-07-01T08:30:00"
+      },
+      "evidence_note": "Sanitized portfolio fixture"
+    },
+    "GET /api/wood-usage/forecast": {
+      "ok": true,
+      "days": 7,
+      "items": []
+    },
+    "GET /api/wood-usage/find-similar": {
+      "ok": true,
+      "items": [
+        {
+          "item_number": "DEMO-B30",
+          "family": "base"
+        },
+        {
+          "item_number": "DEMO-B36",
+          "family": "base"
+        }
+      ]
+    },
+    "POST /api/wood-usage/calculate": {
+      "ok": true,
+      "rows": [
+        {
+          "sku": "DEMO-B36",
+          "qty": 3,
+          "pw05": 1.2,
+          "pw075": 0.8,
+          "machine_min": 18
+        },
+        {
+          "sku": "DEMO-W3624",
+          "qty": 2,
+          "pw05": 0.6,
+          "pw075": 0.4,
+          "machine_min": 12
+        },
+        {
+          "sku": "DEMO-CB33",
+          "qty": 1,
+          "pw05": 0.9,
+          "pw075": 0.5,
+          "machine_min": 9
+        }
+      ],
+      "totals": {
+        "pw05": 2.7,
+        "pw075": 1.7,
+        "machine_min": 39
+      },
+      "pricing": {
+        "available": true,
+        "pricing_standard_value": 1840.0,
+        "rates": {
+          "machine_hour": 85.0
+        }
+      },
+      "unknown": [
+        "UNKNOWN-99"
+      ]
+    },
+    "POST /api/wood-usage/export": {
+      "ok": true,
+      "path": "",
+      "demo": true
+    },
+    "POST /api/launch-app": {
+      "ok": false,
+      "error": "Desktop launch disabled in portfolio demo."
+    },
+    "POST /api/open-path": {
+      "ok": false,
+      "error": "Path open disabled in portfolio demo."
+    },
+    "POST /api/*": {
+      "ok": true,
+      "demo": true
+    }
+  }
+}
