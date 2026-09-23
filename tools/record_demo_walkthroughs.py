@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MEDIA = ROOT / "rsc" / "media"
 RAW = ROOT / "tools" / "_recordings"
 BASE = "http://127.0.0.1:8765"
-VIEWPORT = {"width": 1440, "height": 900}
+VIEWPORT = {"width": 1600, "height": 1000}
 
 
 def ffmpeg() -> str:
@@ -33,6 +33,10 @@ def to_mp4(webm: Path, mp4: Path) -> None:
         str(webm),
         "-c:v",
         "libx264",
+        "-preset",
+        "slow",
+        "-crf",
+        "17",
         "-pix_fmt",
         "yuv420p",
         "-movflags",
@@ -165,7 +169,19 @@ def record_one(name: str, action, screenshot_name: str | None = None) -> Path:
         page = context.new_page()
         action(page)
         if screenshot_name:
-            page.screenshot(path=str(IMG / screenshot_name), full_page=False)
+            tmp_shot = RAW / f"_shot_{screenshot_name}"
+            page.screenshot(path=str(tmp_shot), full_page=False)
+            dest = IMG / screenshot_name
+            try:
+                if dest.exists():
+                    dest.unlink()
+                tmp_shot.replace(dest)
+            except OSError:
+                # File may be locked by a viewer; keep temp and copy best-effort.
+                try:
+                    shutil.copy2(tmp_shot, dest)
+                except OSError:
+                    print(f"warning: could not update {dest}; shot left at {tmp_shot}")
         video_path = Path(page.video.path())
         context.close()
         browser.close()

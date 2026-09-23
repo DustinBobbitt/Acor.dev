@@ -1,36 +1,135 @@
 
-/* Acor portfolio overlay — brand shell for real product demos */
+/* Acor portfolio overlay — coherent dark product wells + readable type */
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
+
 :root {
   --bg: #070b16 !important;
+  --bg-soft: #0c1222 !important;
   --band: #0c1222 !important;
   --band-2: #121a30 !important;
+  --surface: #121a30 !important;
   --tile: #162038 !important;
   --tile-2: #1a2744 !important;
+  --panel: #121a30 !important;
+  --card: #162038 !important;
   --border: #3a4a72 !important;
   --text: #edf1ff !important;
-  --muted: #9eacd4 !important;
+  --text-muted: #b4c0e4 !important;
+  --muted: #b4c0e4 !important;
   --accent: #3ad0ff !important;
   --accent-2: #b85fff !important;
+  --primary: #3ad0ff !important;
+  --primary-light: rgba(58, 208, 255, 0.18) !important;
   --selected: #3ad0ff !important;
+  --topbar-bg: #0c1222 !important;
+  --topbar-text: #edf1ff !important;
+  --green-fill: rgba(74, 222, 128, 0.22) !important;
+  --green-dark: #4ade80 !important;
+  --white-fill: #1a2744 !important;
+  --orange-border: #fb923c !important;
+  --orange-light: rgba(251, 146, 60, 0.22) !important;
+  --wip-badge: #fb923c !important;
+  --danger: #f87171 !important;
+  --shadow: 0 12px 40px rgba(0, 0, 0, 0.45) !important;
   color-scheme: dark;
 }
-body {
+
+html, body {
   background: #070b16 !important;
   color: #edf1ff !important;
   font-family: "Plus Jakarta Sans", "Segoe UI", Arial, sans-serif !important;
 }
-.brand-name, .eyebrow, [class*="timberland"] {
-  /* company marks stripped in HTML; keep muted accents */
+
+/* Surfaces that product CSS still paints light */
+.topbar, header, .app-header, .landing-overlay,
+.job-panel, .detail-panel, .map-panel, .panel, .card, .modal, .modal-overlay .modal,
+.rack-grid-wrap, .search-results-panel, .floating-inspector,
+.suite-shell, .workspace, .metric, .metric-band, aside, main,
+.job-bubble, .day-group, .form-group input, .form-group select, .form-group textarea,
+input, select, textarea, table, .mdb-wizard-table, .completed-job {
+  background-color: #121a30 !important;
+  color: #edf1ff !important;
+  border-color: #3a4a72 !important;
 }
+
+.job-panel, .detail-panel, .map-panel, .panel, .card, .modal {
+  box-shadow: inset 0 0 0 1px rgba(58, 208, 255, 0.08) !important;
+}
+
+.job-bubble {
+  background: #1a2744 !important;
+  color: #edf1ff !important;
+  border: 1px solid #3a4a72 !important;
+}
+.job-bubble .job-bubble-name,
+.job-bubble-name, .job-bubble-customer, .day-label, .day-count,
+.job-panel-summary, .label, .hint, .task-note, .section-label,
+.brand-name, h1, h2, h3, h4, p, td, th, label, span, strong, output {
+  color: #edf1ff !important;
+}
+.job-bubble-customer, .task-note, .hint, .muted, .text-muted, .day-count {
+  color: #b4c0e4 !important;
+}
+.job-bubble.paint { background: rgba(74, 222, 128, 0.18) !important; }
+.job-bubble.wip { border-color: #fb923c !important; }
+.job-bubble.selected {
+  outline: 2px solid #3ad0ff !important;
+  background: rgba(58, 208, 255, 0.16) !important;
+}
+
+button, .button, .btn, .area-tab, .job-panel-tab, .table-action-btn {
+  color: #edf1ff !important;
+  border-color: #3a4a72 !important;
+  background: #1a2744 !important;
+}
+button.primary, .button.primary, #placeModeBtn, .button-primary,
+button[type="submit"] {
+  background: linear-gradient(135deg, #3ad0ff, #b85fff) !important;
+  color: #070b16 !important;
+  border: none !important;
+  font-weight: 700 !important;
+}
+.area-tab.active, .job-panel-tab.active, .button.active, .job-view-button.active {
+  background: rgba(58, 208, 255, 0.22) !important;
+  color: #edf1ff !important;
+  border-color: #3ad0ff !important;
+}
+
+input, select, textarea {
+  background: #0c1222 !important;
+  color: #edf1ff !important;
+  border: 1px solid #3a4a72 !important;
+}
+input::placeholder, textarea::placeholder { color: #8b9acc !important; }
+
+.map-scroll, #mapCanvas, #gridWrap, .rack-grid-wrap {
+  background: #0a1020 !important;
+}
+
 .demo-banner {
-  margin: 0 0 1rem;
-  padding: 0.75rem 1rem;
-  border: 1px solid rgba(58, 208, 255, 0.28);
-  border-radius: 12px;
-  background: rgba(58, 208, 255, 0.08);
-  color: #9eacd4;
-  font-size: 0.92rem;
+  margin: 0;
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid rgba(58, 208, 255, 0.28);
+  background: linear-gradient(90deg, rgba(58, 208, 255, 0.12), rgba(184, 95, 255, 0.10));
+  color: #c8d4f5 !important;
+  font-size: 0.88rem;
+  letter-spacing: 0.01em;
 }
-.button, button.button, .button.primary {
-  border-radius: 8px !important;
+
+.landing-overlay {
+  background: rgba(7, 11, 22, 0.92) !important;
+}
+.landing-overlay h1, .landing-overlay p { color: #edf1ff !important; }
+
+/* Keep status colors readable on dark */
+.wip-badge { color: #070b16 !important; background: #fb923c !important; }
+
+.overview-action-panel,
+.overview-action-panel *,
+.department-admin-panel,
+.floating-inspector,
+.search-results-panel {
+  background: #162038 !important;
+  color: #edf1ff !important;
+  border-color: #3a4a72 !important;
 }

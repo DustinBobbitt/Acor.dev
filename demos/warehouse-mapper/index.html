@@ -61,6 +61,30 @@
 })();
 </script>
 
+
+<script>
+(() => {
+  const boot = async () => {
+    const user = document.getElementById("landingUserBtn");
+    if (user) {
+      user.click();
+      await new Promise((r) => setTimeout(r, 280));
+      const form = document.getElementById("landingDepartmentForm");
+      const submit = form && form.querySelector('button[type="submit"]');
+      if (submit && form && !form.classList.contains("hidden")) submit.click();
+      await new Promise((r) => setTimeout(r, 500));
+    }
+    const latest = document.getElementById("mapLatestBtn");
+    if (latest) latest.click();
+  };
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => setTimeout(boot, 250));
+  } else {
+    setTimeout(boot, 250);
+  }
+})();
+</script>
+
 </head>
 <body>
   <p class="demo-banner">Sanitized portfolio demo of the real product UI — mock fixtures only. No customer names, company logos, or live shop data.</p>

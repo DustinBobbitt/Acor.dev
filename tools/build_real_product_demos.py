@@ -23,41 +23,165 @@ if not MAPPING.exists():
     MAPPING = Path.home() / "Mapping tool"
 
 ACOR_THEME = """
-/* Acor portfolio overlay — brand shell for real product demos */
+/* Acor portfolio overlay — coherent dark product wells + readable type */
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
+
 :root {
   --bg: #070b16 !important;
+  --bg-soft: #0c1222 !important;
   --band: #0c1222 !important;
   --band-2: #121a30 !important;
+  --surface: #121a30 !important;
   --tile: #162038 !important;
   --tile-2: #1a2744 !important;
+  --panel: #121a30 !important;
+  --card: #162038 !important;
   --border: #3a4a72 !important;
   --text: #edf1ff !important;
-  --muted: #9eacd4 !important;
+  --text-muted: #b4c0e4 !important;
+  --muted: #b4c0e4 !important;
   --accent: #3ad0ff !important;
   --accent-2: #b85fff !important;
+  --primary: #3ad0ff !important;
+  --primary-light: rgba(58, 208, 255, 0.18) !important;
   --selected: #3ad0ff !important;
+  --topbar-bg: #0c1222 !important;
+  --topbar-text: #edf1ff !important;
+  --green-fill: rgba(74, 222, 128, 0.22) !important;
+  --green-dark: #4ade80 !important;
+  --white-fill: #1a2744 !important;
+  --orange-border: #fb923c !important;
+  --orange-light: rgba(251, 146, 60, 0.22) !important;
+  --wip-badge: #fb923c !important;
+  --danger: #f87171 !important;
+  --shadow: 0 12px 40px rgba(0, 0, 0, 0.45) !important;
   color-scheme: dark;
 }
-body {
+
+html, body {
   background: #070b16 !important;
   color: #edf1ff !important;
   font-family: "Plus Jakarta Sans", "Segoe UI", Arial, sans-serif !important;
 }
-.brand-name, .eyebrow, [class*="timberland"] {
-  /* company marks stripped in HTML; keep muted accents */
+
+/* Surfaces that product CSS still paints light */
+.topbar, header, .app-header, .landing-overlay,
+.job-panel, .detail-panel, .map-panel, .panel, .card, .modal, .modal-overlay .modal,
+.rack-grid-wrap, .search-results-panel, .floating-inspector,
+.suite-shell, .workspace, .metric, .metric-band, aside, main,
+.job-bubble, .day-group, .form-group input, .form-group select, .form-group textarea,
+input, select, textarea, table, .mdb-wizard-table, .completed-job {
+  background-color: #121a30 !important;
+  color: #edf1ff !important;
+  border-color: #3a4a72 !important;
 }
+
+.job-panel, .detail-panel, .map-panel, .panel, .card, .modal {
+  box-shadow: inset 0 0 0 1px rgba(58, 208, 255, 0.08) !important;
+}
+
+.job-bubble {
+  background: #1a2744 !important;
+  color: #edf1ff !important;
+  border: 1px solid #3a4a72 !important;
+}
+.job-bubble .job-bubble-name,
+.job-bubble-name, .job-bubble-customer, .day-label, .day-count,
+.job-panel-summary, .label, .hint, .task-note, .section-label,
+.brand-name, h1, h2, h3, h4, p, td, th, label, span, strong, output {
+  color: #edf1ff !important;
+}
+.job-bubble-customer, .task-note, .hint, .muted, .text-muted, .day-count {
+  color: #b4c0e4 !important;
+}
+.job-bubble.paint { background: rgba(74, 222, 128, 0.18) !important; }
+.job-bubble.wip { border-color: #fb923c !important; }
+.job-bubble.selected {
+  outline: 2px solid #3ad0ff !important;
+  background: rgba(58, 208, 255, 0.16) !important;
+}
+
+button, .button, .btn, .area-tab, .job-panel-tab, .table-action-btn {
+  color: #edf1ff !important;
+  border-color: #3a4a72 !important;
+  background: #1a2744 !important;
+}
+button.primary, .button.primary, #placeModeBtn, .button-primary,
+button[type="submit"] {
+  background: linear-gradient(135deg, #3ad0ff, #b85fff) !important;
+  color: #070b16 !important;
+  border: none !important;
+  font-weight: 700 !important;
+}
+.area-tab.active, .job-panel-tab.active, .button.active, .job-view-button.active {
+  background: rgba(58, 208, 255, 0.22) !important;
+  color: #edf1ff !important;
+  border-color: #3ad0ff !important;
+}
+
+input, select, textarea {
+  background: #0c1222 !important;
+  color: #edf1ff !important;
+  border: 1px solid #3a4a72 !important;
+}
+input::placeholder, textarea::placeholder { color: #8b9acc !important; }
+
+.map-scroll, #mapCanvas, #gridWrap, .rack-grid-wrap {
+  background: #0a1020 !important;
+}
+
 .demo-banner {
-  margin: 0 0 1rem;
-  padding: 0.75rem 1rem;
-  border: 1px solid rgba(58, 208, 255, 0.28);
-  border-radius: 12px;
-  background: rgba(58, 208, 255, 0.08);
-  color: #9eacd4;
-  font-size: 0.92rem;
+  margin: 0;
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid rgba(58, 208, 255, 0.28);
+  background: linear-gradient(90deg, rgba(58, 208, 255, 0.12), rgba(184, 95, 255, 0.10));
+  color: #c8d4f5 !important;
+  font-size: 0.88rem;
+  letter-spacing: 0.01em;
 }
-.button, button.button, .button.primary {
-  border-radius: 8px !important;
+
+.landing-overlay {
+  background: rgba(7, 11, 22, 0.92) !important;
 }
+.landing-overlay h1, .landing-overlay p { color: #edf1ff !important; }
+
+.overview-action-panel,
+.overview-action-panel *,
+.department-admin-panel,
+.floating-inspector,
+.search-results-panel {
+  background: #162038 !important;
+  color: #edf1ff !important;
+  border-color: #3a4a72 !important;
+}
+
+/* Keep status colors readable on dark */
+.wip-badge { color: #070b16 !important; background: #fb923c !important; }
+"""
+
+WAREHOUSE_AUTOLOGIN = """
+<script>
+(() => {
+  const boot = async () => {
+    const user = document.getElementById("landingUserBtn");
+    if (user) {
+      user.click();
+      await new Promise((r) => setTimeout(r, 280));
+      const form = document.getElementById("landingDepartmentForm");
+      const submit = form && form.querySelector('button[type="submit"]');
+      if (submit && form && !form.classList.contains("hidden")) submit.click();
+      await new Promise((r) => setTimeout(r, 500));
+    }
+    const latest = document.getElementById("mapLatestBtn");
+    if (latest) latest.click();
+  };
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => setTimeout(boot, 250));
+  } else {
+    setTimeout(boot, 250);
+  }
+})();
+</script>
 """
 
 BANNER = (
@@ -91,6 +215,8 @@ def strip_company(html: str) -> str:
     html = re.sub(r'href="/styles\.css"', 'href="styles.css"', html)
     html = re.sub(r'href="/static/styles\.css"', 'href="styles.css"', html)
     html = re.sub(r'src="/static/shared\.js"', 'src="shared.js"', html)
+    html = re.sub(r'src="/static/wood-usage/app\.js"', 'src="app.js"', html)
+    html = re.sub(r'src="/static/[^"]+/app\.js"', 'src="app.js"', html)
     html = re.sub(r'src="/app\.js"', 'src="app.js"', html)
     html = re.sub(r'src="/modules/', 'src="modules/', html)
     html = re.sub(r'href="/workspace\.css"', 'href="workspace.css"', html)
@@ -662,6 +788,8 @@ def build_wood_usage() -> None:
     html = inject_banner(html)
     # Remove desktop launch affordance noise
     html = html.replace("Open Desktop App", "Demo mode")
+    html = html.replace('src="/static/wood-usage/app.js"', 'src="app.js"')
+    html = html.replace('src="/static/shared.js"', 'src="shared.js"')
     write(dst / "index.html", html)
     write(dst / "acor-theme.css", ACOR_THEME)
     # Patch shared suite nav to demo-local links
@@ -745,11 +873,26 @@ def build_wood_usage() -> None:
                 "ok": True,
                 "jobs": jobs,
                 "displayed_count": len(jobs),
-                "counts": {},
+                "counts": {
+                    "all": len(jobs),
+                    "upcoming": sum(1 for j in jobs if j["stage"] == "Upcoming"),
+                    "in_cut": sum(1 for j in jobs if j["stage"] == "In cut"),
+                    "cut_complete": sum(1 for j in jobs if j["stage"] == "Cut complete"),
+                    "pricing_ready": sum(1 for j in jobs if j.get("pricing_ready")),
+                },
                 "source": {"refreshed_at": "2026-07-01T08:30:00"},
                 "evidence_note": "Sanitized portfolio fixture",
             },
-            "GET /api/wood-usage/forecast": {"ok": True, "days": 7, "items": []},
+            "GET /api/wood-usage/forecast": {
+                "ok": True,
+                "days": 7,
+                "items": [],
+                "pricing_standard": {
+                    "available": True,
+                    "pricing_standard_value": 2140.0,
+                    "rates": {"machine_hour": 85.0},
+                },
+            },
             "GET /api/wood-usage/find-similar": {
                 "ok": True,
                 "items": [
@@ -757,7 +900,23 @@ def build_wood_usage() -> None:
                     {"item_number": "DEMO-B36", "family": "base"},
                 ],
             },
-            "POST /api/wood-usage/calculate": calculate,
+            "POST /api/wood-usage/calculate": {
+                "ok": True,
+                "sku_count": 4,
+                "results": [
+                    {"sku": "B36[3]", "status": "found", "resolved_sku": "DEMO-B36", "pw05": 1.2, "pw075": 0.8},
+                    {"sku": "W3624[2]", "status": "found", "resolved_sku": "DEMO-W3624", "pw05": 0.6, "pw075": 0.4},
+                    {"sku": "CB33", "status": "found", "resolved_sku": "DEMO-CB33", "pw05": 0.9, "pw075": 0.5},
+                    {"sku": "UNKNOWN-99", "status": "missing", "resolved_sku": "", "pw05": 0, "pw075": 0},
+                ],
+                "totals": {"pw05": 2.7, "pw075": 1.7, "machine_min": 39, "found": 3, "pending": 0, "missing": 1},
+                "pricing_standard": {
+                    "available": True,
+                    "pricing_standard_value": 1840.0,
+                    "rates": {"machine_hour": 85.0},
+                },
+                "unknown": ["UNKNOWN-99"],
+            },
             "POST /api/wood-usage/export": {"ok": True, "path": "", "demo": True},
             "POST /api/launch-app": {"ok": False, "error": "Desktop launch disabled in portfolio demo."},
             "POST /api/open-path": {"ok": False, "error": "Path open disabled in portfolio demo."},
@@ -791,7 +950,7 @@ def build_warehouse_mapper() -> None:
     html = inject_head(
         html,
         ['<link rel="stylesheet" href="acor-theme.css">'],
-        [fetch_shim("fixtures.json")],
+        [fetch_shim("fixtures.json"), WAREHOUSE_AUTOLOGIN],
     )
     html = inject_banner(html)
     write(dst / "index.html", html)
@@ -821,6 +980,25 @@ def build_warehouse_mapper() -> None:
     map_data = scrub(map_data)
     items_data = scrub(items_data)
 
+    map_payload = {
+        "ok": True,
+        "loaded": True,
+        "current_path": "demo-bulk-storage",
+        "map": map_data,
+        "items": items_data,
+        "warehouse": map_data,
+    }
+    areas_list = map_data.get("areas") or ["Bulk Demo"]
+    layout_items = {
+        "ok": True,
+        "layout": map_data.get("layout") or {},
+        "areas": areas_list,
+        "rows": map_data.get("rows") or [],
+        "zones": map_data.get("zones") or [],
+        "null_spaces": map_data.get("null_spaces") or [],
+        "slotted_pallets": map_data.get("slotted_pallets") or [],
+        "movable_items": items_data if isinstance(items_data, list) else (items_data.get("items") or items_data.get("movable_items") or []),
+    }
     fixtures = {
         "default": {"ok": True, "demo": True},
         "routes": {
@@ -847,16 +1025,18 @@ def build_warehouse_mapper() -> None:
             },
             "GET /api/config": {
                 "ok": True,
-                "areas": map_data.get("areas") or ["Bulk Demo"],
+                "areas": areas_list,
                 "rows": map_data.get("rows") or [],
                 "zones": map_data.get("zones") or [],
                 "null_spaces": map_data.get("null_spaces") or [],
                 "layout": map_data.get("layout") or {},
                 "current_path": "demo-bulk-storage",
             },
+            "GET /api/areas": {"ok": True, "areas": areas_list},
+            "GET /api/layout-items": layout_items,
             "GET /api/departments": {
                 "ok": True,
-                "departments": [{"name": "Demo Dept", "areas": ["Bulk Demo"], "people": ["Operator A"]}],
+                "departments": [{"name": "Demo Dept", "areas": areas_list, "people": ["Operator A"]}],
                 "unassigned_people": [],
                 "auditors": [],
                 "people": ["Operator A"],
@@ -865,15 +1045,29 @@ def build_warehouse_mapper() -> None:
                 "ok": True,
                 "maps": [{"id": "demo-bulk", "name": "Demo Bulk Storage", "path": "demo-bulk-storage"}],
             },
+            "GET /api/file/maps": {
+                "ok": True,
+                "maps": [
+                    {
+                        "name": "Demo Bulk Storage",
+                        "path": "demo-bulk-storage",
+                        "modified_at": "2026-07-01T08:00:00",
+                    }
+                ],
+                "current_path": "demo-bulk-storage",
+            },
             "GET /api/warehouse": {
+                "ok": True,
                 "warehouse": map_data,
                 "slotted_pallets": map_data.get("slotted_pallets") or [],
-                "movable_items": items_data if isinstance(items_data, list) else (items_data.get("items") or items_data.get("movable_items") or []),
+                "movable_items": layout_items["movable_items"],
             },
             "GET /api/map": {"ok": True, "map": map_data, "items": items_data},
             "GET /api/audit/status": {"ok": True, "active": False, "sessions": []},
             "GET /api/asset-templates": {"ok": True, "templates": []},
-            "POST /api/map/load": {"ok": True, "map": map_data, "items": items_data},
+            "POST /api/map/load": map_payload,
+            "POST /api/file/load": map_payload,
+            "POST /api/file/load-latest": map_payload,
             "POST /api/auth/role-session": {
                 "ok": True,
                 "token": "demo-token",

@@ -210,7 +210,13 @@
         }
       ],
       "displayed_count": 12,
-      "counts": {},
+      "counts": {
+        "all": 12,
+        "upcoming": 4,
+        "in_cut": 4,
+        "cut_complete": 4,
+        "pricing_ready": 9
+      },
       "source": {
         "refreshed_at": "2026-07-01T08:30:00"
       },
@@ -219,7 +225,14 @@
     "GET /api/wood-usage/forecast": {
       "ok": true,
       "days": 7,
-      "items": []
+      "items": [],
+      "pricing_standard": {
+        "available": true,
+        "pricing_standard_value": 2140.0,
+        "rates": {
+          "machine_hour": 85.0
+        }
+      }
     },
     "GET /api/wood-usage/find-similar": {
       "ok": true,
@@ -236,35 +249,46 @@
     },
     "POST /api/wood-usage/calculate": {
       "ok": true,
-      "rows": [
+      "sku_count": 4,
+      "results": [
         {
-          "sku": "DEMO-B36",
-          "qty": 3,
+          "sku": "B36[3]",
+          "status": "found",
+          "resolved_sku": "DEMO-B36",
           "pw05": 1.2,
-          "pw075": 0.8,
-          "machine_min": 18
+          "pw075": 0.8
         },
         {
-          "sku": "DEMO-W3624",
-          "qty": 2,
+          "sku": "W3624[2]",
+          "status": "found",
+          "resolved_sku": "DEMO-W3624",
           "pw05": 0.6,
-          "pw075": 0.4,
-          "machine_min": 12
+          "pw075": 0.4
         },
         {
-          "sku": "DEMO-CB33",
-          "qty": 1,
+          "sku": "CB33",
+          "status": "found",
+          "resolved_sku": "DEMO-CB33",
           "pw05": 0.9,
-          "pw075": 0.5,
-          "machine_min": 9
+          "pw075": 0.5
+        },
+        {
+          "sku": "UNKNOWN-99",
+          "status": "missing",
+          "resolved_sku": "",
+          "pw05": 0,
+          "pw075": 0
         }
       ],
       "totals": {
         "pw05": 2.7,
         "pw075": 1.7,
-        "machine_min": 39
+        "machine_min": 39,
+        "found": 3,
+        "pending": 0,
+        "missing": 1
       },
-      "pricing": {
+      "pricing_standard": {
         "available": true,
         "pricing_standard_value": 1840.0,
         "rates": {
