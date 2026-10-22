@@ -16,7 +16,7 @@ source behavior, package evidence and external systems that were not demonstrate
 - `/work/station-handoff.html` — transactional station staging and rollback
 - `/work/warehouse-floor.html` — Warehouse Floor case study (fictional-warehouse screens and clips)
 - `/evidence/` — evidence labels, audit results and claim boundaries
-- `/archive/` — earlier desktop walkthroughs and experiments
+- `/archive/` — experiments (AI Prime, AI Gamer); older product walkthroughs were retired
 
 ## Validation
 
