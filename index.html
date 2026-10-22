@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261021a">
+  <link rel="stylesheet" href="styles.css?v=20261021b">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -49,10 +49,9 @@
         </button>
         <nav class="site-nav" id="site-nav" data-nav aria-label="Primary navigation">
           <a href="#work">Work</a>
-          <a href="#demos">Demos</a>
           <a href="#warehouse">Warehouse</a>
           <a href="evidence/">Evidence</a>
-          <a href="archive/">Archive</a>
+          <a href="archive/">Experiments</a>
           <a href="#about">About</a>
         </nav>
       </div>
@@ -69,12 +68,12 @@
               warehouse operations and reporting—with explicit validation at every boundary.
             </p>
             <p class="hero-note">
-              This portfolio separates tested source behavior, accepted packages, sanitized simulations and external
-              systems that were not demonstrated. The public examples use invented data only.
+              This portfolio separates tested source behavior, accepted packages and external systems that were not
+              demonstrated. Every screen and example shown here uses invented data.
             </p>
             <div class="hero-actions">
               <a class="button button-primary" href="work/geometry-to-cnc.html">See geometry to CNC</a>
-              <a class="button button-secondary" href="#demos">Try sanitized demos</a>
+              <a class="button button-secondary" href="work/warehouse-floor.html">See Warehouse Floor</a>
               <a class="button button-secondary" href="evidence/">View evidence</a>
             </div>
           </div>
@@ -144,54 +143,31 @@
         </div>
       </section>
 
-      <section class="section section-band" id="demos">
-        <div class="container">
-          <div class="section-heading reveal">
-            <p class="eyebrow">Interactive portfolio builds</p>
-            <h2>Useful slices of the workflow—not claims of a live factory connection.</h2>
-            <p>These static demos use invented fixtures and no backend login. They preserve recognizable interface and workflow patterns, but they do not contact an ERP, network share, printer, scanner or machine.</p>
-          </div>
-          <div class="demo-grid">
-            <article class="demo-card reveal">
-              <div class="demo-media"><img src="rsc/img/demo_cut_health.png" alt="Sanitized Cut Operations interface" loading="lazy"><span class="status-badge status-simulated">Sanitized simulation</span></div>
-              <div class="demo-copy"><h3>Cut Operations</h3><p>Explore planning, queue, packet, label and exception surfaces using an isolated fixture.</p><p class="demo-boundary">No ERP refresh, print action or CNC output leaves the browser demo.</p><a class="text-link" href="demos/cut-health/index.html">Open the interface →</a></div>
-            </article>
-            <article class="demo-card reveal">
-              <div class="demo-media"><img src="rsc/img/demo_pallet_locator.png" alt="Sanitized pallet locator map" loading="lazy"><span class="status-badge status-simulated">Sanitized simulation</span></div>
-              <div class="demo-copy"><h3>Pallet Locator</h3><p>Search invented jobs, place a pallet, move it and undo the move on a fictional map.</p><p class="demo-boundary">The map and placement records are demo-only and reset locally.</p><a class="text-link" href="demos/pallet-locator/index.html">Open the interface →</a></div>
-            </article>
-            <article class="demo-card reveal">
-              <div class="demo-media"><img src="rsc/img/demo_wood_usage.png" alt="Sanitized material and machine-time forecast interface" loading="lazy"><span class="status-badge status-simulated">Sanitized simulation</span></div>
-              <div class="demo-copy"><h3>Material and Machine-Time Forecast</h3><p>Try batch SKU input, material estimates, runtime projections and missing-catalog handling.</p><p class="demo-boundary">Values are illustrative and are not company pricing or production forecasts.</p><a class="text-link" href="demos/wood-usage/index.html">Open the interface →</a></div>
-            </article>
-          </div>
-          <div class="demo-roadmap-note reveal">
-            <span class="status-badge status-progress">Demo rebuild in progress</span>
-            <p>The next demo release will share one coherent synthetic production day across Cut, station, material and pallet views. The existing interfaces remain available while that guided story is rebuilt.</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="warehouse">
+      <section class="section section-band" id="warehouse">
         <div class="container warehouse-layout">
           <div class="warehouse-copy reveal">
-            <div class="card-topline warehouse-status"><span class="status-badge status-progress">Active development</span><span class="status-badge status-simulated">Older public slice</span></div>
+            <div class="card-topline warehouse-status"><span class="status-badge status-progress">Active development</span><span class="status-badge status-simulated">Shown with fictional data</span></div>
             <p class="eyebrow">Standalone product</p>
-            <h2>Warehouse Floor is much larger than the current map demo.</h2>
-            <p class="project-summary">A spatial operations system for mapping departments, racks, zones and pallets; finding stock; coordinating regular inventory and annual counts; and carrying reviewed layout changes across shared workstations.</p>
-            <p>The accessible repository already separates a User/Admin web workspace, a customer layout editor and a private publication boundary. The owner reports that even that source snapshot is behind current work, so the existing public demo is presented as an older simplified slice—not the full current product.</p>
-            <div class="project-actions"><a class="button button-primary" href="work/warehouse-floor.html">Read the capability overview</a><a class="button button-secondary" href="demos/warehouse-mapper/index.html">Open the simplified demo</a></div>
+            <h2>The whole warehouse on one map.</h2>
+            <p class="project-summary">Warehouse Floor draws a facility as one connected building—departments, walls, doors, racks and floor zones—and ties every count to the exact bay and level where the stock sits.</p>
+            <p>Layout changes go into a draft and only reach the working map after a review. Counting, pallet moves and stock search all happen on the same map, so nobody has to translate between a spreadsheet and the floor.</p>
+            <div class="project-actions"><a class="button button-primary" href="work/warehouse-floor.html">Read the case study</a></div>
           </div>
-          <div class="warehouse-capabilities reveal">
-            <article><span>01</span><div><strong>Facility model</strong><p>Buildings, departments, racks, zones, pallets and identity-preserving layout updates.</p></div></article>
-            <article><span>02</span><div><strong>Warehouse operations</strong><p>Stock search, product homes, placement, cross members, inventory and location detail.</p></div></article>
-            <article><span>03</span><div><strong>Annual count</strong><p>Teams, assignments, count/recount requests, management progress, review and paperwork.</p></div></article>
-            <article><span>04</span><div><strong>Shared custody</strong><p>LAN or SQL-backed collaboration, local backups, map-update reconciliation and offline boundaries.</p></div></article>
+          <div class="warehouse-visual reveal">
+            <figure class="wf-figure">
+              <img class="ui-shot" src="rsc/img/warehouse-floor/overview.png" width="1310" height="840" alt="Floor plan of a fictional warehouse with storage hall, receiving, assembly, shipping and support rooms, each holding labeled racks" loading="lazy">
+              <figcaption>A fictional five-department warehouse. Real facility data stays private.</figcaption>
+            </figure>
+            <div class="warehouse-capabilities">
+              <article><span>01</span><div><strong>Layout editor</strong><p>Move, rotate and add racks in a draft, with undo, redo and a plain-language review before anything is applied.</p></div></article>
+              <article><span>02</span><div><strong>Bay-by-bay counts</strong><p>Open a rack, record one or several products per bay, and keep "checked empty" separate from "not counted yet."</p></div></article>
+              <article><span>03</span><div><strong>Pallets and search</strong><p>Pallets carry their contents as they move across the floor; search jumps straight to the bay that holds an item.</p></div></article>
+            </div>
           </div>
         </div>
       </section>
 
-      <section class="section section-band" id="capabilities">
+      <section class="section" id="capabilities">
         <div class="container">
           <div class="section-heading reveal"><p class="eyebrow">Capability and maturity</p><h2>What is demonstrated—and what remains outside the browser.</h2></div>
           <div class="capability-table-wrap reveal">
@@ -211,7 +187,7 @@
         </div>
       </section>
 
-      <section class="section" id="tools">
+      <section class="section section-band" id="tools">
         <div class="container">
           <div class="section-heading reveal"><p class="eyebrow">Selected supporting work</p><h2>Smaller products with a clear place in the system.</h2></div>
           <div class="capability-grid">
@@ -222,7 +198,7 @@
         </div>
       </section>
 
-      <section class="section section-band" id="about">
+      <section class="section" id="about">
         <div class="container about-grid">
           <div class="about-copy reveal"><p class="eyebrow">About the work</p><h2>Software for the points where manufacturing handoffs usually become fragile.</h2><p>My work focuses on practical constraints: existing ERP behavior, mixed-age Windows machines, network interruptions, proprietary formats, operator adoption and the need to recover safely when an external dependency fails.</p></div>
           <div class="about-panels reveal"><article class="about-card"><h3>What this portfolio shows</h3><p>Inputs, transformations, outputs, refusal behavior and evidence—not only finished screens.</p></article><article class="about-card"><h3>What it does not claim</h3><p>A passing test or generated file is not automatically a safe physical cut or a live deployed integration.</p></article></div>

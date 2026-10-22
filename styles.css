@@ -475,15 +475,13 @@ code {
   line-height: 1.5;
 }
 
-.flagship-grid,
-.demo-grid {
+.flagship-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.15rem;
 }
 
-.flagship-card,
-.demo-card {
+.flagship-card {
   overflow: hidden;
   border: 1px solid var(--panel-border);
   border-radius: var(--radius-sm);
@@ -498,7 +496,6 @@ code {
 }
 
 .flagship-card h3,
-.demo-card h3,
 .warehouse-copy h2 {
   margin: 0.45rem 0 0.8rem;
   font-family: "Space Grotesk", sans-serif;
@@ -512,7 +509,6 @@ code {
 }
 
 .flagship-card > p:not(.panel-label),
-.demo-card p,
 .warehouse-copy > p,
 .warehouse-capabilities p {
   color: var(--muted);
@@ -552,58 +548,6 @@ code {
 .flagship-card .text-link {
   margin-top: auto;
   padding-top: 1.2rem;
-}
-
-.demo-media {
-  position: relative;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  background: #070b16;
-}
-
-.demo-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.84;
-}
-
-.demo-media .status-badge {
-  position: absolute;
-  left: 0.85rem;
-  bottom: 0.85rem;
-  backdrop-filter: blur(12px);
-}
-
-.demo-copy {
-  padding: 1.25rem;
-}
-
-.demo-copy h3 {
-  font-size: 1.2rem;
-}
-
-.demo-boundary {
-  min-height: 3rem;
-  color: var(--white-soft) !important;
-  font-size: 0.84rem;
-}
-
-.demo-roadmap-note {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 1.2rem;
-  padding: 1rem 1.2rem;
-  border: 1px dashed rgba(255, 200, 107, 0.32);
-  border-radius: var(--radius-sm);
-  background: rgba(255, 200, 107, 0.05);
-}
-
-.demo-roadmap-note p {
-  margin: 0;
-  color: var(--muted);
-  line-height: 1.55;
 }
 
 .warehouse-layout {
@@ -660,6 +604,79 @@ code {
 .warehouse-capabilities p {
   margin: 0.3rem 0 0;
   font-size: 0.9rem;
+}
+
+/* Warehouse Floor: screenshots, clips and story rows */
+.warehouse-visual {
+  display: grid;
+  gap: 1rem;
+}
+
+.wf-figure {
+  margin: 0;
+}
+
+.wf-figure .ui-shot {
+  display: block;
+  height: auto;
+  margin: 0;
+}
+
+.wf-figure figcaption {
+  margin-top: 0.65rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.wf-hero-figure {
+  margin-top: 2.25rem;
+}
+
+.wf-stories {
+  display: grid;
+  gap: 3.5rem;
+  margin-top: 2rem;
+}
+
+.wf-story {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 2.25rem;
+  align-items: center;
+}
+
+.wf-story:nth-child(even) {
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+}
+
+.wf-story:nth-child(even) .wf-story-copy {
+  order: 2;
+}
+
+.wf-step {
+  color: var(--cyan);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+}
+
+.wf-story-copy h3 {
+  margin: 0.5rem 0 0.9rem;
+  color: var(--text);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
+.wf-story-copy p {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.interior-footer .project-actions {
+  margin: 0;
 }
 
 .capability-table-wrap {
@@ -1513,7 +1530,7 @@ code {
   align-self: start;
 }
 
-/* Product wells: dark demo embeds framed in brand cyan→violet chrome */
+/* Product wells: screenshots and clips framed in brand cyan→violet chrome */
 .case-study-video,
 .ui-shot {
   width: 100%;
@@ -1612,13 +1629,18 @@ code {
   }
 
   .proof-grid,
-  .flagship-grid,
-  .demo-grid {
+  .flagship-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .warehouse-layout {
+  .warehouse-layout,
+  .wf-story,
+  .wf-story:nth-child(even) {
     grid-template-columns: 1fr;
+  }
+
+  .wf-story:nth-child(even) .wf-story-copy {
+    order: 0;
   }
 
   .case-flow {
@@ -1708,8 +1730,7 @@ code {
   }
 
   .proof-grid,
-  .flagship-grid,
-  .demo-grid {
+  .flagship-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1717,14 +1738,8 @@ code {
     min-height: auto;
   }
 
-  .flagship-card h3,
-  .demo-boundary {
+  .flagship-card h3 {
     min-height: 0;
-  }
-
-  .demo-roadmap-note {
-    align-items: flex-start;
-    flex-direction: column;
   }
 
   .warehouse-copy h2 {
