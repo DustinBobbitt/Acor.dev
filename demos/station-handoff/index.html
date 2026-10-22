@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Station Handoff Simulator | Acor.dev</title>
+  <meta name="description" content="A guided synthetic demonstration of verified station staging, backup, interrupted-copy rollback, and clean retry.">
+  <meta name="theme-color" content="#070b16">
+  <link rel="canonical" href="https://acor.dev/demos/station-handoff/">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../rsc/img/acor_favicon_32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css?v=20261021b">
+  <link rel="stylesheet" href="../shared/scenario.css?v=20261021b">
+</head>
+<body class="simulation-shell">
+  <a class="skip-link" href="#workspace">Skip to demonstration</a>
+  <header class="simulation-header"><div class="container simulation-nav"><a class="simulation-brand" href="../../"><img src="../../rsc/img/acor_transparent.png" alt=""><span>Acor.dev</span></a><nav class="simulation-links" aria-label="Demo navigation"><a href="../../work/station-handoff.html">Case study</a><a href="../../evidence/">Evidence</a><a href="../../#demos">All demos</a></nav></div></header>
+  <main>
+    <section class="simulation-hero"><div class="container"><p class="simulation-kicker">Guided public simulation · station custody</p><h1 class="simulation-title">Fail the copy. Keep the station intact.</h1><p class="simulation-lede">A station load is modeled as a transaction: verify the released source, preserve the active set, stage every expected file, verify the staged manifest, and only then commit. Force an interruption to see the prior set restored.</p><div class="simulation-notice" id="scenarioNotice">Loading the invented public fixture…</div></div></section>
+    <section class="container sim-main" id="workspace" aria-label="Station handoff simulation workspace">
+      <section class="sim-panel">
+        <div class="sim-panel-header"><div><h2 id="handoffTitle">Station handoff</h2><p id="handoffSummary">Loading scenario…</p></div><span class="status-badge status-simulated" id="handoffState">Simulation</span></div>
+        <div class="custody-grid">
+          <article class="custody-zone" id="sourceZone"><h3>Released source</h3><p>Immutable set and expected manifest.</p><ul class="custody-files" id="sourceFiles"></ul></article>
+          <article class="custody-zone" id="backupZone"><h3>Backup</h3><p>Prior active station state, retained before staging.</p><ul class="custody-files" id="backupFiles"></ul></article>
+          <article class="custody-zone" id="stagingZone"><h3>Staging</h3><p>Temporary destination; never treated as active.</p><ul class="custody-files" id="stagingFiles"></ul></article>
+          <article class="custody-zone" id="activeZone"><h3>Active station set</h3><p>What the station application may present to the operator.</p><ul class="custody-files" id="activeFiles"></ul></article>
+        </div>
+        <div class="simulation-actions">
+          <button class="sim-button sim-button-danger" id="failButton" type="button">Run interrupted load</button>
+          <button class="sim-button sim-button-primary" id="retryButton" type="button">Retry verified load</button>
+          <button class="sim-button" id="resetButton" type="button">Reset scenario</button>
+        </div>
+      </section>
+      <section class="sim-panel result-panel">
+        <article class="outcome-card"><h3>Custody result</h3><p class="outcome-copy" id="outcomeCopy">No load attempted. The station still presents its prior verified set.</p><ul class="artifact-list" id="manifestFacts"></ul></article>
+        <article class="ledger"><h3>Transaction ledger</h3><ol class="event-list" id="eventList" aria-live="polite"></ol></article>
+      </section>
+    </section>
+  </main>
+  <footer class="simulation-footer"><div class="container">Custody simulation only · it does not command, enable, start, or observe a physical controller cycle.</div></footer>
+  <script src="app.js"></script>
+</body>
+</html>

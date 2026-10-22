@@ -49,6 +49,7 @@
         </button>
         <nav class="site-nav" id="site-nav" data-nav aria-label="Primary navigation">
           <a href="#work">Work</a>
+          <a href="#demos">Demos</a>
           <a href="#warehouse">Warehouse</a>
           <a href="evidence/">Evidence</a>
           <a href="archive/">Experiments</a>
@@ -143,7 +144,44 @@
         </div>
       </section>
 
-      <section class="section section-band" id="warehouse">
+      <section class="section section-band" id="demos">
+        <div class="container">
+          <div class="section-heading reveal">
+            <p class="eyebrow">Evidence-driven interactive demonstrations</p>
+            <h2>Three workflow contracts you can exercise directly.</h2>
+            <p>Each demonstration uses the same invented production day and deterministic reset contract. They run entirely in the browser and cannot contact an ERP, network share, printer, scanner or machine.</p>
+          </div>
+          <div class="demo-grid">
+            <article class="demo-card reveal">
+              <div class="demo-media demo-media-process" role="img" aria-label="Guarded geometry pipeline ending in independent TAP and XPR outcomes">
+                <div class="mini-pipeline"><span>JOB</span><i></i><span>DXF</span><i></i><span>NEST</span><i></i><span>TAP</span><span>XPR</span></div>
+                <span class="status-badge status-simulated">Guided simulation</span>
+              </div>
+              <div class="demo-copy"><h3>Pipeline Explorer</h3><p>Advance a supported synthetic job through guarded geometry and two independent posts—or select the unsupported recipe and watch the whole set fail closed.</p><p class="demo-boundary">Every artifact and refusal is reconstructed from one deterministic public fixture.</p><a class="text-link" href="demos/pipeline-explorer/">Run the pipeline →</a></div>
+            </article>
+            <article class="demo-card reveal">
+              <div class="demo-media demo-media-custody" role="img" aria-label="Released programs moving through backup and staging to an active station set">
+                <div class="mini-custody"><span>RELEASED</span><i>→</i><span>BACKUP</span><i>→</i><span>STAGE</span><i>→</i><span>ACTIVE</span></div>
+                <span class="status-badge status-simulated">Guided simulation</span>
+              </div>
+              <div class="demo-copy"><h3>Station Handoff</h3><p>Force an interrupted file load, verify that the prior station set survives, then retry through manifest verification and commit.</p><p class="demo-boundary">Demonstrates file custody only; it never claims a physical controller cycle.</p><a class="text-link" href="demos/station-handoff/">Simulate the handoff →</a></div>
+            </article>
+            <article class="demo-card reveal">
+              <div class="demo-media demo-media-request" role="img" aria-label="Exact items becoming a frozen request and verified receipt">
+                <div class="mini-custody"><span>ITEMS</span><i>→</i><span>FREEZE</span><i>→</i><span>VERIFY</span><i>→</i><span>RECEIPT</span></div>
+                <span class="status-badge status-simulated">Guided simulation</span>
+              </div>
+              <div class="demo-copy"><h3>Exact Request and Receipt</h3><p>Freeze explicit job/item identities, trigger a stale-plan refusal, then reset and verify a receipt against the unchanged public fixture.</p><p class="demo-boundary">No production request or file leaves the browser.</p><a class="text-link" href="demos/request-receipt/">Trace the request →</a></div>
+            </article>
+          </div>
+          <div class="demo-roadmap-note reveal">
+            <span class="status-badge status-tested">Shared fixture live</span>
+            <p>The older Cut, pallet, material and warehouse-mapper browser replicas were retired. These three demonstrations remain because each exposes a specific, inspectable manufacturing contract instead of imitating a production screen.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="warehouse">
         <div class="container warehouse-layout">
           <div class="warehouse-copy reveal">
             <div class="card-topline warehouse-status"><span class="status-badge status-progress">Active development</span><span class="status-badge status-simulated">Shown with fictional data</span></div>
@@ -167,7 +205,7 @@
         </div>
       </section>
 
-      <section class="section" id="capabilities">
+      <section class="section section-band" id="capabilities">
         <div class="container">
           <div class="section-heading reveal"><p class="eyebrow">Capability and maturity</p><h2>What is demonstrated—and what remains outside the browser.</h2></div>
           <div class="capability-table-wrap reveal">
@@ -179,7 +217,7 @@
                 <tr><td>Omni TAP + Python XPR/NC</td><td><span class="status-badge status-tested">Source tested</span></td><td>Independent sibling outputs</td><td>No public physical cut claim</td></tr>
                 <tr><td>Station program custody</td><td><span class="status-badge status-package">Package evidenced</span></td><td>Simulated folder staging and rollback</td><td>Physical controllers uninspected</td></tr>
                 <tr><td>Part Studio</td><td><span class="status-badge status-package">Package evidenced</span></td><td>Hash-gated inspection story</td><td>Inspection only; no cut approval</td></tr>
-                <tr><td>AutoCAD and Fusion tooling</td><td><span class="status-badge status-experimental">Experimental</span></td><td>Architecture/transfer overview</td><td>Separate repository; host validation incomplete</td></tr>
+                <tr><td>Native bSolid program generation</td><td><span class="status-badge status-experimental">Generator evidenced</span></td><td>Corpus rules → template-derived parametric programs</td><td>Licensed template required; native-host acceptance and machine release remain external</td></tr>
               </tbody>
             </table>
           </div>
@@ -187,12 +225,12 @@
         </div>
       </section>
 
-      <section class="section section-band" id="tools">
+      <section class="section" id="tools">
         <div class="container">
           <div class="section-heading reveal"><p class="eyebrow">Selected supporting work</p><h2>Smaller products with a clear place in the system.</h2></div>
           <div class="capability-grid">
             <article class="capability-card reveal"><span class="status-badge status-shipped">Public release</span><h3>Rover</h3><p>A Windows utility for controlled CAM/CNC tool-name remapping across a file set, with dry-run preview and optional backups.</p><a class="text-link" href="https://github.com/DustinBobbitt/Rover" target="_blank" rel="noreferrer">View repository →</a></article>
-            <article class="capability-card reveal"><span class="status-badge status-package">Package evidenced</span><h3>Part Studio</h3><p>A hash-gated, inspection-only browser for a governed binary machining corpus. It opens temporary copies and leaves the source library unchanged.</p></article>
+            <article class="capability-card reveal"><span class="status-badge status-experimental">Generator evidenced</span><h3>Native bSolid generation</h3><p>A corpus-driven writer produces parametric <code>.bSolid</code> programs from an operator-authored template, verifies regenerated geometry and refuses machining rules it cannot reproduce exactly.</p></article>
             <article class="capability-card reveal"><span class="status-badge status-tested">Source tested</span><h3>Operational reporting</h3><p>Day briefs, end-of-day views, reconciliation and log viewers preserve the difference between ERP, station and controller evidence.</p></article>
           </div>
         </div>
