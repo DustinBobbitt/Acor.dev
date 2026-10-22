@@ -86,3 +86,14 @@ delayedLoopVideos.forEach((video) => {
     }, Number.isNaN(delay) ? 2500 : delay);
   });
 });
+
+// Short product clips autoplay muted. Visitors who ask for reduced motion get the
+// poster frame and player controls instead.
+const motionVideos = document.querySelectorAll("[data-motion-video]");
+if (motionVideos.length && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  motionVideos.forEach((video) => {
+    video.pause();
+    video.removeAttribute("autoplay");
+    video.controls = true;
+  });
+}

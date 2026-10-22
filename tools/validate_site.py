@@ -1,8 +1,7 @@
-"""Static checks for Acor.dev's public pages and sanitized fixtures."""
+"""Static checks for Acor.dev's public pages."""
 
 from __future__ import annotations
 
-import json
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
@@ -58,7 +57,7 @@ def main() -> int:
         text = page.read_text(encoding="utf-8")
         parser = PageParser()
         parser.feed(text)
-        if "demos" not in page.relative_to(ROOT).parts and parser.h1_count != 1:
+        if parser.h1_count != 1:
             errors.append(f"{page.relative_to(ROOT)}: expected one h1, found {parser.h1_count}")
         lowered = text.casefold()
         for claim in BANNED_CLAIMS:
@@ -68,12 +67,6 @@ def main() -> int:
             target = local_target(page, reference)
             if target is not None and not target.exists():
                 errors.append(f"{page.relative_to(ROOT)}: missing local target {reference!r}")
-
-    for fixture in sorted((ROOT / "demos").rglob("*.json")):
-        try:
-            json.loads(fixture.read_text(encoding="utf-8"))
-        except Exception as exc:  # pragma: no cover - diagnostics only
-            errors.append(f"{fixture.relative_to(ROOT)}: invalid JSON: {exc}")
 
     try:
         ElementTree.parse(ROOT / "sitemap.xml")
@@ -85,7 +78,7 @@ def main() -> int:
         for error in errors:
             print(f"- {error}")
         return 1
-    print(f"Static validation passed: {len(html_files)} HTML pages and sanitized JSON fixtures.")
+    print(f"Static validation passed: {len(html_files)} HTML pages.")
     return 0
 
 
