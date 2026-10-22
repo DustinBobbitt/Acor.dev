@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pipeline Explorer | Acor.dev</title>
+  <meta name="description" content="A guided synthetic demonstration of guarded geometry generation, canonical nesting, independent CNC posts, and fail-closed refusal behavior.">
+  <meta name="theme-color" content="#070b16">
+  <link rel="canonical" href="https://acor.dev/demos/pipeline-explorer/">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../rsc/img/acor_favicon_32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css?v=20261021b">
+  <link rel="stylesheet" href="../shared/scenario.css?v=20261021b">
+</head>
+<body class="simulation-shell">
+  <a class="skip-link" href="#workspace">Skip to demonstration</a>
+  <header class="simulation-header">
+    <div class="container simulation-nav">
+      <a class="simulation-brand" href="../../"><img src="../../rsc/img/acor_transparent.png" alt=""><span>Acor.dev</span></a>
+      <nav class="simulation-links" aria-label="Demo navigation"><a href="../../work/geometry-to-cnc.html">Case study</a><a href="../../evidence/">Evidence</a><a href="../../#demos">All demos</a></nav>
+    </div>
+  </header>
+  <main>
+    <section class="simulation-hero">
+      <div class="container">
+        <p class="simulation-kicker">Guided public simulation · geometry and CNC</p>
+        <h1 class="simulation-title">Watch a production set earn the right to exist.</h1>
+        <p class="simulation-lede">Choose a supported synthetic job or an intentionally unsupported recipe. Advance the same guarded path from source identity through atomic geometry, one canonical nest, and two independently validated controller formats.</p>
+        <div class="simulation-notice" id="scenarioNotice">Loading the invented public fixture…</div>
+      </div>
+    </section>
+    <section class="container simulation-workspace" id="workspace" aria-label="Pipeline simulation workspace">
+      <aside class="sim-panel">
+        <div class="sim-panel-header"><div><h2>Choose a job</h2><p>Two outcomes, one evidence contract.</p></div></div>
+        <div class="job-picker" id="jobPicker"></div>
+      </aside>
+      <div class="sim-main">
+        <section class="sim-panel">
+          <div class="sim-panel-header"><div><h2 id="selectedJob">Pipeline</h2><p id="selectedPurpose">Select a scenario.</p></div><span class="status-badge status-simulated" id="jobState">Simulation</span></div>
+          <div class="scenario-summary" id="scenarioSummary"></div>
+          <div class="pipeline-track" id="pipelineTrack" aria-live="polite"></div>
+          <div class="simulation-actions">
+            <button class="sim-button sim-button-primary" id="advanceButton" type="button">Advance one step</button>
+            <button class="sim-button" id="runButton" type="button">Run to outcome</button>
+            <button class="sim-button" id="resetButton" type="button">Reset selected job</button>
+          </div>
+        </section>
+        <section class="sim-panel result-panel">
+          <article class="outcome-card"><h3>Result and artifacts</h3><p class="outcome-copy" id="outcomeCopy">Nothing has been generated. Source identity exists, but no downstream state may be implied yet.</p><ul class="artifact-list" id="artifactList"></ul></article>
+          <article class="ledger"><h3>Deterministic event ledger</h3><ol class="event-list" id="eventList" aria-live="polite"></ol></article>
+        </section>
+      </div>
+    </section>
+  </main>
+  <footer class="simulation-footer"><div class="container">Static fixture only · no ERP, file share, CAD host, controller, printer, or machine connection.</div></footer>
+  <script src="app.js"></script>
+</body>
+</html>

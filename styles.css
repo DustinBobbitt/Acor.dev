@@ -475,13 +475,15 @@ code {
   line-height: 1.5;
 }
 
-.flagship-grid {
+.flagship-grid,
+.demo-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.15rem;
 }
 
-.flagship-card {
+.flagship-card,
+.demo-card {
   overflow: hidden;
   border: 1px solid var(--panel-border);
   border-radius: var(--radius-sm);
@@ -496,6 +498,7 @@ code {
 }
 
 .flagship-card h3,
+.demo-card h3,
 .warehouse-copy h2 {
   margin: 0.45rem 0 0.8rem;
   font-family: "Space Grotesk", sans-serif;
@@ -509,6 +512,7 @@ code {
 }
 
 .flagship-card > p:not(.panel-label),
+.demo-card p,
 .warehouse-copy > p,
 .warehouse-capabilities p {
   color: var(--muted);
@@ -548,6 +552,120 @@ code {
 .flagship-card .text-link {
   margin-top: auto;
   padding-top: 1.2rem;
+}
+
+.demo-media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #070b16;
+}
+
+.demo-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.84;
+}
+
+.demo-media-process,
+.demo-media-custody,
+.demo-media-request {
+  display: grid;
+  place-items: center;
+  padding: 1.3rem;
+  background:
+    radial-gradient(circle at 24% 28%, rgba(58, 208, 255, 0.2), transparent 35%),
+    radial-gradient(circle at 82% 72%, rgba(184, 95, 255, 0.2), transparent 38%),
+    #080d1a;
+}
+
+.mini-pipeline,
+.mini-custody {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  color: #c8f4ff;
+  font: 700 0.68rem/1 "Space Grotesk", sans-serif;
+  letter-spacing: 0.08em;
+}
+
+.mini-pipeline span,
+.mini-custody span {
+  display: grid;
+  min-width: 3rem;
+  min-height: 3rem;
+  place-items: center;
+  padding: 0.4rem;
+  border: 1px solid rgba(58, 208, 255, 0.34);
+  border-radius: 10px;
+  background: rgba(58, 208, 255, 0.08);
+}
+
+.mini-pipeline i {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--cyan), var(--violet));
+}
+
+.mini-pipeline span:nth-last-child(-n + 2) {
+  margin-left: 0.35rem;
+  border-color: rgba(184, 95, 255, 0.4);
+  background: rgba(184, 95, 255, 0.09);
+}
+
+.mini-custody {
+  justify-content: space-between;
+  gap: 0.35rem;
+}
+
+.mini-custody span {
+  min-width: 0;
+  flex: 1;
+  font-size: 0.58rem;
+}
+
+.mini-custody i {
+  color: var(--violet);
+  font-style: normal;
+}
+
+.demo-media .status-badge {
+  position: absolute;
+  left: 0.85rem;
+  bottom: 0.85rem;
+  backdrop-filter: blur(12px);
+}
+
+.demo-copy {
+  padding: 1.25rem;
+}
+
+.demo-copy h3 {
+  font-size: 1.2rem;
+}
+
+.demo-boundary {
+  min-height: 3rem;
+  color: var(--white-soft) !important;
+  font-size: 0.84rem;
+}
+
+.demo-roadmap-note {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.2rem;
+  padding: 1rem 1.2rem;
+  border: 1px dashed rgba(255, 200, 107, 0.32);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 200, 107, 0.05);
+}
+
+.demo-roadmap-note p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
 }
 
 .warehouse-layout {
@@ -831,6 +949,54 @@ code {
 
 .case-section {
   padding: 3.75rem 0;
+}
+
+.case-video-section {
+  padding: 1rem 0 4rem;
+}
+
+.case-video-frame {
+  overflow: hidden;
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius);
+  background: rgba(8, 13, 26, 0.9);
+  box-shadow: var(--shadow);
+}
+
+.case-video-copy {
+  display: grid;
+  grid-template-columns: auto 1fr minmax(240px, 0.75fr);
+  align-items: center;
+  gap: 1rem;
+  padding: 1.15rem 1.3rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.case-video-copy h2,
+.case-video-copy p {
+  margin: 0;
+}
+
+.case-video-copy h2 {
+  font: 700 1.15rem/1.25 "Space Grotesk", sans-serif;
+}
+
+.case-video-copy p {
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.case-video-frame video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #050914;
+}
+
+@media (max-width: 760px) {
+  .case-video-copy {
+    grid-template-columns: 1fr;
+  }
 }
 
 .case-grid {
@@ -1629,7 +1795,8 @@ code {
   }
 
   .proof-grid,
-  .flagship-grid {
+  .flagship-grid,
+  .demo-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -1730,7 +1897,8 @@ code {
   }
 
   .proof-grid,
-  .flagship-grid {
+  .flagship-grid,
+  .demo-grid {
     grid-template-columns: 1fr;
   }
 

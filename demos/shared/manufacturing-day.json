@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "scenario_id": "ACOR-PUBLIC-DAY-2026-07-14",
+  "scenario_date": "2026-07-14",
+  "notice": "Invented public demonstration data. No production identities, geometry, paths, programs, prices, or endpoints are included.",
+  "jobs": [
+    {
+      "job_id": "DEMO-1042",
+      "cabinet_count": 12,
+      "item_count": 3,
+      "material": "Maple demonstration panel",
+      "state": "eligible",
+      "purpose": "Normal job ready for guarded geometry and dual-format posting",
+      "items": ["CAB-1042-01", "CAB-1042-02", "CAB-1042-03"],
+      "pipeline": {
+        "recipe": "PUBLIC-RECT-BORE-ROUTE-V1",
+        "dxf_count": 18,
+        "sheet_count": 2,
+        "set_id": "SET-1042-A",
+        "plan_hash": "plan:5f2e9c1a",
+        "tap": {"status": "validated", "program_count": 2, "hash": "tap:0c31ad77"},
+        "xpr": {"status": "validated", "program_count": 2, "hash": "xpr:9bd012e4"}
+      },
+      "request": {
+        "request_id": "REQ-1042-01",
+        "requested_items": ["CAB-1042-01", "CAB-1042-02"],
+        "request_hash": "request:7d9b2401",
+        "frozen_input_hash": "input:3ce15a90",
+        "receipt_id": "RCPT-1042-01",
+        "receipt_hash": "receipt:51bf0ca6",
+        "artifact_count": 4,
+        "artifact_bytes": 28672
+      }
+    },
+    {
+      "job_id": "DEMO-1047",
+      "cabinet_count": 4,
+      "item_count": 1,
+      "material": "Paint-grade demonstration panel",
+      "state": "held_missing_mapping",
+      "purpose": "Missing catalog mapping must remain visible as a planning hold",
+      "items": ["CAB-1047-01"],
+      "hold_reason": "Public SKU DEMO-PG-77 has no approved material mapping"
+    },
+    {
+      "job_id": "DEMO-1051",
+      "cabinet_count": 9,
+      "item_count": 2,
+      "material": "Birch demonstration panel",
+      "state": "generated_awaiting_release",
+      "purpose": "Programs exist, but generation is not represented as release",
+      "items": ["CAB-1051-01", "CAB-1051-02"],
+      "set_id": "SET-1051-A"
+    },
+    {
+      "job_id": "DEMO-1054",
+      "cabinet_count": 7,
+      "item_count": 2,
+      "material": "Walnut demonstration panel",
+      "state": "released_awaiting_station_load",
+      "purpose": "Verified source set for the station custody simulation",
+      "items": ["CAB-1054-01", "CAB-1054-02"],
+      "set_id": "SET-1054-A",
+      "release_id": "REL-1054-01",
+      "source_manifest": {
+        "manifest_hash": "manifest:62e31bd0",
+        "program_count": 3,
+        "total_bytes": 18432,
+        "programs": [
+          {"name": "DEMO_1054_S01.tap", "bytes": 6144, "hash": "file:20b1a901"},
+          {"name": "DEMO_1054_S02.tap", "bytes": 7168, "hash": "file:bb39e245"},
+          {"name": "DEMO_1054_LABELS.json", "bytes": 5120, "hash": "file:68fd1cc8"}
+        ]
+      }
+    },
+    {
+      "job_id": "DEMO-1058",
+      "cabinet_count": 6,
+      "item_count": 2,
+      "material": "Oak demonstration panel",
+      "state": "cut_location_missing",
+      "purpose": "Completed work whose physical pallet location still needs evidence",
+      "items": ["CAB-1058-01", "CAB-1058-02"],
+      "pallet_id": "PAL-DEMO-58"
+    },
+    {
+      "job_id": "DEMO-1060",
+      "cabinet_count": 1,
+      "item_count": 1,
+      "material": "Maple demonstration panel",
+      "state": "recut_requested",
+      "purpose": "Explicit re-cut request kept separate from the original completion",
+      "items": ["CAB-1060-R1"],
+      "request_id": "REQ-1060-R1"
+    },
+    {
+      "job_id": "DEMO-1063",
+      "cabinet_count": 3,
+      "item_count": 1,
+      "material": "Birch demonstration panel",
+      "state": "blocked_unsupported_geometry",
+      "purpose": "Unknown active machining operation must fail closed",
+      "items": ["CAB-1063-01"],
+      "pipeline": {
+        "recipe": "PUBLIC-UNSUPPORTED-SPLINE-V1",
+        "unsupported_operation": "adaptive spline pocket",
+        "expected_stop": "recipe_preflight"
+      },
+      "hold_reason": "Active operation is not implemented; no partial DXF set may publish"
+    }
+  ],
+  "station": {
+    "station_id": "SIM-OMNI-01",
+    "active_before": {"set_id": "SET-1029-R12", "manifest_hash": "manifest:1ac44380", "program_count": 4},
+    "incoming_set_id": "SET-1054-A",
+    "interruption_after_program": 2
+  },
+  "expected": {
+    "job_count": 7,
+    "cabinet_count": 42,
+    "held_job_count": 2,
+    "eligible_cabinet_count": 12,
+    "generated_not_released_cabinet_count": 9,
+    "released_not_loaded_cabinet_count": 7,
+    "location_missing_cabinet_count": 6,
+    "recut_cabinet_count": 1
+  }
+}

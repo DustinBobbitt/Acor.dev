@@ -21,7 +21,7 @@
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
   <div class="page-shell">
-    <header class="site-header is-scrolled" data-header><div class="container nav-row"><a class="brand-mark" href="../" aria-label="Acor.dev home"><img src="../rsc/img/acor_transparent.png" alt=""><span>Acor.dev</span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle aria-label="Open navigation"><span></span><span></span><span></span></button><nav class="site-nav" id="site-nav" data-nav><a href="../#work">Work</a><a href="warehouse-floor.html">Warehouse</a><a href="../evidence/">Evidence</a><a href="../archive/">Experiments</a></nav></div></header>
+    <header class="site-header is-scrolled" data-header><div class="container nav-row"><a class="brand-mark" href="../" aria-label="Acor.dev home"><img src="../rsc/img/acor_transparent.png" alt=""><span>Acor.dev</span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle aria-label="Open navigation"><span></span><span></span><span></span></button><nav class="site-nav" id="site-nav" data-nav><a href="../#work">Work</a><a href="../#demos">Demos</a><a href="warehouse-floor.html">Warehouse</a><a href="../evidence/">Evidence</a><a href="../archive/">Experiments</a></nav></div></header>
     <main class="interior-main" id="main-content">
       <section class="interior-hero">
         <div class="container">
@@ -29,6 +29,7 @@
           <div class="interior-status-row"><span class="status-badge status-tested">Source tested</span><span class="status-badge status-simulated">Public example uses synthetic geometry</span></div>
           <h1 class="interior-title">One geometry set. One canonical nest. Two machine formats.</h1>
           <p class="interior-lede">The strongest part of this manufacturing suite is not a dashboard. It is a guarded transformation chain that interprets supported machining recipes, publishes complete geometry sets atomically and posts independent programs for two controller families.</p>
+          <div class="project-actions"><a class="button button-primary" href="../demos/pipeline-explorer/">Run the guided pipeline</a><a class="button button-secondary" href="#evidence">Read the evidence</a></div>
           <div class="case-flow" aria-label="Geometry to CNC pipeline">
             <article><span>01 · Input</span><strong>Production definition</strong><small>Selected cabinet rows, part definitions and construction recipes.</small></article>
             <article><span>02 · Guard</span><strong>Recipe preflight</strong><small>Every active operation must match an implemented, captured form.</small></article>
@@ -39,7 +40,9 @@
         </div>
       </section>
 
-      <section class="case-section section-band">
+      <section class="case-video-section"><div class="container"><div class="case-video-frame"><div class="case-video-copy"><span class="status-badge status-simulated">30-second guided clip</span><h2>Supported path and guarded refusal</h2><p>Recorded from the same deterministic public demo linked above. Captions are embedded; no production data or desktop context is present.</p></div><video controls muted playsinline preload="metadata" aria-label="Guided geometry pipeline demonstration"><source src="../rsc/media/geometry_pipeline_guided.webm" type="video/webm">Your browser does not support embedded WebM video.</video></div></div></section>
+
+      <section class="case-section section-band" id="evidence">
         <div class="container case-grid">
           <article class="case-copy">
             <p class="eyebrow">The manufacturing problem</p>
@@ -54,13 +57,13 @@
             <p>The direct post reads the DXF set, expands quantities, separates saw-owned parts, groups material and thickness, and produces canonical sheets. Both machine-format emitters receive that same sheet definition. TAP is not renamed into XPR, and imported TAP is not treated as convertible production truth.</p>
             <p>Each format records its own outcome. TAP may succeed while XPR is unavailable, or the reverse. The manifest preserves the distinction so downstream release logic can select only a verified format.</p>
 
-            <h3>What the public demonstration will show</h3>
+            <h3>What the public demonstration shows</h3>
             <ol>
-              <li>A newly authored synthetic part with supported outline, bore and route operations.</li>
-              <li>Successful atomic DXF generation and a visual geometry preview.</li>
-              <li>One canonical sheet definition feeding two separate posts.</li>
-              <li>Independent hashes, program lists and format status.</li>
-              <li>A second part with an unsupported operation being refused before publication.</li>
+              <li>An invented job with supported outline, bore and route operations.</li>
+              <li>Atomic DXF publication represented as a distinct recorded state.</li>
+              <li>One canonical sheet definition feeding two separate format outcomes.</li>
+              <li>Independent hashes, program counts and validation status.</li>
+              <li>A second recipe with an unsupported active operation refused before publication.</li>
             </ol>
           </article>
 
