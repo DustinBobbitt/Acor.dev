@@ -14,16 +14,27 @@ if (header) {
 }
 
 if (navToggle && nav) {
-  navToggle.addEventListener("click", () => {
-    const isOpen = nav.classList.toggle("is-open");
+  const setNavState = (isOpen) => {
+    nav.classList.toggle("is-open", isOpen);
     navToggle.setAttribute("aria-expanded", String(isOpen));
+    navToggle.setAttribute("aria-label", isOpen ? "Close navigation" : "Open navigation");
+  };
+
+  navToggle.addEventListener("click", () => {
+    setNavState(!nav.classList.contains("is-open"));
   });
 
   nav.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", () => {
-      nav.classList.remove("is-open");
-      navToggle.setAttribute("aria-expanded", "false");
+      setNavState(false);
     });
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && nav.classList.contains("is-open")) {
+      setNavState(false);
+      navToggle.focus();
+    }
   });
 }
 
@@ -75,3 +86,14 @@ delayedLoopVideos.forEach((video) => {
     }, Number.isNaN(delay) ? 2500 : delay);
   });
 });
+
+// Short product clips autoplay muted. Visitors who ask for reduced motion get the
+// poster frame and player controls instead.
+const motionVideos = document.querySelectorAll("[data-motion-video]");
+if (motionVideos.length && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  motionVideos.forEach((video) => {
+    video.pause();
+    video.removeAttribute("autoplay");
+    video.controls = true;
+  });
+}

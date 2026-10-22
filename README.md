@@ -1,24 +1,33 @@
 # Acor.dev portfolio site
 
-Sanitized manufacturing portfolio: live web demos plus write-ups for operations tools and the CAD/CNC file-generation pipeline (AutoCAD plugin, Fusion catalog generator, parametric DXF, nesting MDB, TAP/XPR, Nest Load).
+Evidence-backed manufacturing software portfolio covering production planning,
+guarded geometry generation, independent CNC posts, station custody, warehouse
+operations and reporting.
 
-Interactive demos use mock data only — no customer names, company logos, live databases, or shop file paths.
+The site has no live demos. Case studies use screenshots and short recordings
+made with invented data; none of them connect to an ERP, network share, printer,
+scanner, controller or production database. Each case study distinguishes tested
+source behavior, package evidence and external systems that were not demonstrated.
 
-| Demo | Path | What you can do |
-|------|------|-----------------|
-| Cut operations | `demos/cut-health/` | Queue, packets, labels, backlog |
-| Pallet locator | `demos/pallet-locator/` | Search jobs, click map, place / undo |
-| Wood usage | `demos/wood-usage/` | SKU calculate, forecast list, CSV export |
-| Warehouse mapper | `demos/warehouse-mapper/` | Rack map, bay counts, DEMO-* SKU search |
+## Information architecture
+
+- `/work/geometry-to-cnc.html` — guarded recipe/DXF/nesting/TAP/XPR case study
+- `/work/production-traceability.html` — exact request, frozen plan and receipt
+- `/work/station-handoff.html` — transactional station staging and rollback
+- `/work/warehouse-floor.html` — Warehouse Floor case study (fictional-warehouse screens and clips)
+- `/evidence/` — evidence labels, audit results and claim boundaries
+- `/archive/` — experiments (AI Prime, AI Gamer); older product walkthroughs were retired
+
+## Validation
+
+Run the static page, link and claim checks before publication:
+
+```powershell
+python -B .\tools\validate_site.py
+```
 
 ## Media
 
-Regenerate interactive walkthroughs (Playwright + ffmpeg):
-
-```powershell
-$env:Path = [System.Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [System.Environment]::GetEnvironmentVariable('Path','User')
-python .\tools\record_demo_walkthroughs.py
-python .\tools\make_demo_reel.py
-```
-
-Requires `ffmpeg` on PATH (install with `winget install Gyan.FFmpeg`).
+Warehouse Floor images and clips live in `rsc/img/warehouse-floor/` and
+`rsc/media/warehouse-floor/`. They were captured from a fictional facility with
+synthetic inventory; never replace them with captures of a real building.

@@ -3,762 +3,216 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Acor.dev | Web-Based Workflow Tools Portfolio</title>
-  <meta
-    name="description"
-    content="Acor.dev is a portfolio of manufacturing software: web operations tools, machine-ready file generation, and AutoCAD and Fusion plugins that turn parametric geometry into production programs."
-  >
+  <title>Acor.dev | Manufacturing Software and CNC Systems</title>
+  <meta name="description" content="Evidence-backed manufacturing software for production planning, geometry generation, CNC posting, station handoff, warehouse operations and reporting.">
   <meta name="theme-color" content="#070b16">
-  <meta property="og:title" content="Acor.dev | Web-Based Workflow Tools Portfolio">
-  <meta
-    property="og:description"
-    content="Web operations tools plus a CAD/CNC pipeline that generates machine-ready files, with plugins for AutoCAD and Fusion."
-  >
+  <meta property="og:title" content="Acor.dev | Manufacturing Software and CNC Systems">
+  <meta property="og:description" content="Manufacturing systems that turn job data and geometry into traceable production artifacts—with explicit validation at every boundary.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="rsc/img/acor_social_1200x630.png">
+  <meta property="og:url" content="https://acor.dev/">
+  <meta property="og:image" content="https://acor.dev/rsc/img/acor_social_1200x630.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Acor.dev | Manufacturing Software and CNC Systems">
+  <meta name="twitter:description" content="Production planning, geometry, CNC generation, station custody and warehouse operations—presented with evidence and clear boundaries.">
+  <meta name="twitter:image" content="https://acor.dev/rsc/img/acor_social_1200x630.png">
+  <link rel="canonical" href="https://acor.dev/">
   <link rel="icon" type="image/png" sizes="32x32" href="rsc/img/acor_favicon_32.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
-    rel="stylesheet"
-  >
-  <link rel="stylesheet" href="styles.css?v=20260922h">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=20261021b">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Dustin Bobbitt",
+    "url": "https://acor.dev/",
+    "sameAs": [
+      "https://github.com/DustinBobbitt",
+      "https://www.linkedin.com/in/dustin-bobbitt-10b29b3b9/"
+    ],
+    "knowsAbout": ["Manufacturing software", "CNC programming", "Production operations", "Warehouse systems", "CAD automation"]
+  }
+  </script>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <div class="page-shell">
     <header class="site-header" data-header>
       <div class="container nav-row">
         <a class="brand-mark" href="#top" aria-label="Acor.dev home">
-          <img src="rsc/img/acor_transparent.png" alt="Acor.dev logo">
+          <img src="rsc/img/acor_transparent.png" alt="">
           <span>Acor.dev</span>
         </a>
-
-        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
-          <span></span>
-          <span></span>
-          <span></span>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle aria-label="Open navigation">
+          <span></span><span></span><span></span>
         </button>
-
-        <nav class="site-nav" id="site-nav" data-nav>
-          <a href="#suite">Suite</a>
-          <a href="#demos">Demos</a>
-          <a href="#operations">Operations</a>
-          <a href="#pipeline">CAD / CNC</a>
-          <a href="#tools">Tools</a>
+        <nav class="site-nav" id="site-nav" data-nav aria-label="Primary navigation">
+          <a href="#work">Work</a>
+          <a href="#warehouse">Warehouse</a>
+          <a href="evidence/">Evidence</a>
+          <a href="archive/">Experiments</a>
           <a href="#about">About</a>
-          <a href="#contact">Contact</a>
         </nav>
       </div>
     </header>
 
-    <main id="top">
-      <section class="hero section">
-        <div class="container hero-grid">
+    <main id="main-content">
+      <section class="hero section" id="top">
+        <div class="container hero-grid hero-grid-evidence">
           <div class="hero-copy reveal">
-            <p class="eyebrow">Web-based workflow tools for manufacturing</p>
-            <h1>I build software that fixes real-world workflow problems.</h1>
+            <p class="eyebrow">Manufacturing software · geometry · CNC · operations</p>
+            <h1>Job data in. Traceable production files out.</h1>
             <p class="hero-lead">
-              I design and build a connected suite for cabinet production: shared department dashboards, reporting,
-              labeling, forecasting, and machine telemetry &mdash; plus a CAD/CNC pipeline that
-              <strong>generates machine-ready files</strong> and plugs into AutoCAD and Fusion.
+              I build systems for production planning, geometry generation, CNC posting, machine-station handoff,
+              warehouse operations and reporting—with explicit validation at every boundary.
             </p>
-            <p class="hero-lead">
-              That generation layer is easy to undersell and hard to replace: parametric DXFs, catalog builds, nesting
-              batches, program translation, and one-touch mill load. The shop tools started as desktop utilities and
-              now run as clean browser landings. Everything shown here is sanitized: mock data only, no customer or
-              company records.
+            <p class="hero-note">
+              This portfolio separates tested source behavior, accepted packages and external systems that were not
+              demonstrated. Every screen and example shown here uses invented data.
             </p>
-
             <div class="hero-actions">
-              <a class="button button-primary" href="#demos">Watch the demos</a>
-              <a class="button button-secondary" href="#pipeline">CAD plugins &amp; file generation</a>
-              <a class="button button-secondary" href="demos/warehouse-mapper/index.html" target="_blank" rel="noreferrer">Open warehouse mapper</a>
-            </div>
-
-            <div class="hero-metrics">
-              <article class="metric-card">
-                <span class="metric-label">Focus</span>
-                <strong>Manufacturing and operations</strong>
-              </article>
-              <article class="metric-card">
-                <span class="metric-label">File generation</span>
-                <strong>Machine-ready DXF, MDB, nests, NC</strong>
-              </article>
-              <article class="metric-card">
-                <span class="metric-label">CAD plugins</span>
-                <strong>AutoCAD insert + Fusion catalog</strong>
-              </article>
+              <a class="button button-primary" href="work/geometry-to-cnc.html">See geometry to CNC</a>
+              <a class="button button-secondary" href="work/warehouse-floor.html">See Warehouse Floor</a>
+              <a class="button button-secondary" href="evidence/">View evidence</a>
             </div>
           </div>
 
-          <div class="hero-visual reveal">
-            <div class="hero-stage">
-              <div class="hero-stage-glow"></div>
-              <video
-                class="brand-video"
-                src="rsc/media/Acor_Logo_Reveal_0BgADd1u.mp4"
-                poster="rsc/img/acor_social_1200x630.png"
-                autoplay
-                muted
-                playsinline
-                preload="metadata"
-                data-delayed-loop="2500"
-              ></video>
+          <div class="system-map reveal" aria-label="Manufacturing information flow">
+            <div class="system-map-heading">
+              <span class="status-badge status-tested">Source tested</span>
+              <p>One controlled information chain</p>
             </div>
-
-            <div class="signal-card">
-              <p class="signal-label">Site direction</p>
-              <p class="signal-title">Now web-based</p>
-              <p class="signal-text">
-                The suite runs as clean browser landings. This site shows the current web interface directly, with the
-                earlier desktop versions kept below only for historical context.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section section-band" id="work">
-        <div class="container">
-          <div class="section-heading reveal">
-            <p class="eyebrow">What this site is for</p>
-            <h2>A portfolio of practical software, not a startup pitch.</h2>
-            <p>
-              Instead of explaining these tools from memory in an interview, I can show the problem, the current web
-              interface, an interactive demo, and the reasoning behind it.
-            </p>
-          </div>
-
-          <div class="capability-grid">
-            <article class="capability-card reveal">
-              <h3>Live Web Demos</h3>
-              <p>
-                The real product UIs for cut operations, pallet locating, wood-usage forecasting, and warehouse
-                mapping — customer data stripped, fixtures only, no backend login.
-              </p>
-            </article>
-            <article class="capability-card reveal">
-              <h3>Machine-ready file generation</h3>
-              <p>
-                Not just dashboards: the suite writes the files production actually runs — DXF, PDF drawings, Fusion
-                catalog builds, nesting MDBs, TAP/XPR programs — with AutoCAD and Fusion plugins in the loop.
-              </p>
-            </article>
-            <article class="capability-card reveal">
-              <h3>Case Studies</h3>
-              <p>Longer write-ups dig into constraints, adoption, UI tradeoffs, and implementation decisions.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="section section-band" id="demos">
-        <div class="container">
-          <div class="section-heading reveal">
-            <p class="eyebrow">Try them live</p>
-            <h2>Four real product UIs. Sanitized fixtures. No login.</h2>
-            <p>
-              Click through the same tools the floor uses — Cut Operations, Pallet Locator, Wood Usage, and Warehouse Mapper —
-              with customer data stripped and Acor branding applied. Every video below is a real click-through of that UI.
-            </p>
-          </div>
-
-          <div class="hero-visual reveal" style="margin-bottom: 1.75rem;">
-            <video
-              class="ui-shot"
-              controls
-              autoplay
-              muted
-              loop
-              playsinline
-              poster="rsc/img/demo_cut_health.png"
-              aria-label="Interactive montage of portfolio demos"
-            >
-              <source src="rsc/media/portfolio_demo_montage.mp4" type="video/mp4">
-            </video>
-            <p class="signal-text" style="margin-top: 0.75rem;">
-              Recorded click-throughs of the live demos — not a slideshow of stills. Open any card below to use the tools yourself.
-            </p>
-          </div>
-
-          <div class="module-library-grid">
-            <article class="detail-card case-study-media-card reveal">
-              <p class="panel-label">Live demo</p>
-              <h3>Cut operations</h3>
-              <video class="ui-shot" muted loop playsinline autoplay poster="rsc/img/demo_cut_health.png">
-                <source src="rsc/media/demo_cut_health_walkthrough.mp4" type="video/mp4">
-              </video>
-              <p>Queue, packets, labels, backlog, and morning checklist in one landing.</p>
-              <p><a class="text-link" href="demos/cut-health/index.html" target="_blank" rel="noreferrer">Open demo &rarr;</a></p>
-            </article>
-            <article class="detail-card case-study-media-card reveal">
-              <p class="panel-label">Live demo</p>
-              <h3>Pallet locator map</h3>
-              <video class="ui-shot" muted loop playsinline autoplay poster="rsc/img/demo_pallet_locator.png">
-                <source src="rsc/media/demo_pallet_locator_walkthrough.mp4" type="video/mp4">
-              </video>
-              <p>Search jobs, place pallets on racks, undo moves — the floor map made clickable.</p>
-              <p><a class="text-link" href="demos/pallet-locator/index.html" target="_blank" rel="noreferrer">Open demo &rarr;</a></p>
-            </article>
-            <article class="detail-card case-study-media-card reveal">
-              <p class="panel-label">Live demo</p>
-              <h3>Wood usage &amp; forecast</h3>
-              <video class="ui-shot" muted loop playsinline autoplay poster="rsc/img/demo_wood_usage.png">
-                <source src="rsc/media/demo_wood_usage_walkthrough.mp4" type="video/mp4">
-              </video>
-              <p>Batch SKU calculate, sheet and machine-time totals, and a readiness forecast list.</p>
-              <p><a class="text-link" href="demos/wood-usage/index.html" target="_blank" rel="noreferrer">Open demo &rarr;</a></p>
-            </article>
-            <article class="detail-card case-study-media-card reveal">
-              <p class="panel-label">Live demo</p>
-              <h3>Warehouse mapper</h3>
-              <video class="ui-shot" muted loop playsinline autoplay poster="rsc/img/demo_warehouse_mapper.png">
-                <source src="rsc/media/demo_warehouse_mapper_walkthrough.mp4" type="video/mp4">
-              </video>
-              <p>
-                Rack-faithful floor map with bay-level counting and SKU search — a sanitized slice of the warehouse
-                mapping tool.
-              </p>
-              <p><a class="text-link" href="demos/warehouse-mapper/index.html" target="_blank" rel="noreferrer">Open demo &rarr;</a></p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="suite">
-        <div class="container project-layout">
-          <div class="project-copy reveal">
-            <p class="eyebrow">Featured project</p>
-            <h2>Web-based production suite</h2>
-            <p class="project-summary">
-              A connected set of browser-based department dashboards that replaced the older desktop tools with one
-              cleaner, faster operational surface.
-            </p>
-            <p>
-              The suite ties the cut floor together: a live production queue, output and backlog metrics, operator
-              packet review and generation, pallet labeling, end-of-day and morning paperwork, and request tracking,
-              all from a single web landing that a supervisor or operator can open on any machine.
-            </p>
-            <p>
-              A deliberate design choice was visual familiarity. The layout stays close to the ERP the floor already
-              knew, which lowered training cost and made adoption on the floor much easier.
-            </p>
-
-            <div class="project-tags">
-              <span>Web UI</span>
-              <span>Local-first data</span>
-              <span>ERP-aligned layout</span>
-              <span>Department dashboards</span>
-              <span>Sanitized demo</span>
-            </div>
-
-            <div class="project-actions">
-              <a class="button button-primary" href="demos/cut-health/index.html" target="_blank" rel="noreferrer">Open the live web demo</a>
-              <a class="link-pill" href="#operations">See operations tools</a>
-            </div>
-
-            <div class="project-points">
-              <article>
-                <h3>Clickable, not just a video</h3>
-                <p>The demo below the buttons is the real web interface running on mock data, so the workflow can be explored directly in the browser.</p>
-              </article>
-              <article>
-                <h3>Connected departments</h3>
-                <p>Queue, output, labels, packets, and reporting share one flow, so handoffs stay clear and data stays consistent.</p>
-              </article>
-              <article>
-                <h3>Smart nest split</h3>
-                <p>
-                  Machine-required parts nest first; hand cuts fill leftover sheet; only the remainder hits the saw
-                  paperwork.
-                  <a class="text-link" href="#nest-split">How that works &rarr;</a>
-                </p>
-              </article>
-            </div>
-          </div>
-
-          <aside class="project-panel reveal">
-            <div class="panel-card">
-              <p class="panel-label">Current web interface</p>
-              <h3>Cut operations dashboard</h3>
-              <img
-                class="ui-shot"
-                src="rsc/img/demo_cut_health.png"
-                alt="Sanitized web dashboard showing live output metrics, backlog, and a production queue"
-                loading="lazy"
-              >
-              <p>
-                Live queue, output trend, backlog against a firm-date goal, and pallet-label status in one view.
-                This is the current browser UI, not a mockup, shown with mock data.
-              </p>
-              <a class="text-link" href="demos/cut-health/index.html" target="_blank" rel="noreferrer">Open it live &rarr;</a>
-            </div>
-          </aside>
-        </div>
-      </section>
-
-      <section class="section section-band" id="operations">
-        <div class="container">
-          <div class="section-heading reveal">
-            <p class="eyebrow">Operations and reporting</p>
-            <h2>The tools that produce the paperwork the floor actually runs on.</h2>
-            <p>
-              These are the day-to-day capabilities inside the suite: what gets generated, printed, located, and
-              forecast. Screens shown are the current web UI with sanitized data.
-            </p>
-          </div>
-
-          <div class="module-library-grid">
-            <article class="detail-card case-study-media-card reveal">
-              <p class="panel-label">Report generation</p>
-              <h3>Operator packets and department papers</h3>
-              <img
-                class="ui-shot"
-                src="rsc/img/suite_web_packet.png"
-                alt="Sanitized production packet review dialog listing cabinets and cut parts per job"
-                loading="lazy"
-              >
-              <p>
-                One review-and-generate flow builds operator production packets from the live queue: selectable jobs,
-                per-cabinet part lists, and a machine profile. The same reporting layer produces end-of-day cut reports,
-                morning papers and a cut-day brief, production-queue paperwork, and pallet batch sheets.
-              </p>
-              <p>
-                Output is standardized for print and export so the floor gets consistent documents instead of ad-hoc
-                spreadsheets.
-              </p>
-            </article>
-
-            <article class="detail-card case-study-media-card reveal">
-              <p class="panel-label">Standardized labels</p>
-              <h3>Barcode and pallet labeling</h3>
-              <img
-                class="ui-shot"
-                src="rsc/img/suite_web_labels.png"
-                alt="Sanitized pallet labels dialog with jobs ready to print and recently printed tabs"
-                loading="lazy"
-              >
-              <p>
-                A ready-to-print and recently-printed queue drives standardized pallet labels, with reprints tracked by
-                count and timestamp. Item labels carry scannable Code&nbsp;128 barcodes generated from the item number,
-                alongside pallet tape labels and locator gap labels.
-              </p>
-              <p>
-                Standard label formats mean the same barcode reads the same way everywhere it is scanned downstream.
-              </p>
-            </article>
-
-            <article class="detail-card case-study-media-card reveal">
-              <p class="panel-label">Pallet locator</p>
-              <h3>Find a pallet by job, on a map</h3>
-              <img
-                class="ui-shot"
-                src="rsc/img/demo_pallet_locator.png"
-                alt="Sanitized pallet locator map with racks, job list, and selected pallet detail"
-                loading="lazy"
-              >
-              <p>
-                A lightweight web tool that models the warehouse (areas, aisles, racks, locations) on an interactive
-                canvas map. Users browse upcoming jobs, search by job ID, and see a pallet's last known location.
-                Placing or moving a pallet records the spot with undo and mixed-pallet support.
-              </p>
-              <p>
-                It follows how people actually search on the floor, by job and physical layout, which removes a lot of
-                walking and guesswork.
-              </p>
-              <p>
-                <a class="text-link" href="demos/pallet-locator/index.html" target="_blank" rel="noreferrer">Open the live map demo &rarr;</a>
-              </p>
-            </article>
-
-            <article class="detail-card case-study-media-card reveal">
-              <p class="panel-label">Price and capacity forecasting</p>
-              <h3>Wood usage, cost, and machine time</h3>
-              <img
-                class="ui-shot"
-                src="rsc/img/demo_wood_usage.png"
-                alt="Sanitized wood usage calculator with SKU batch results and forecast totals"
-                loading="lazy"
-              >
-              <p>
-                A calculator that accepts direct input or CSV-style SKU lists and uses a product catalog to estimate
-                sheet material usage, material and machine cost, expected runtime, and readiness across upcoming jobs.
-              </p>
-              <p>
-                Unknown products are flagged for catalog follow-up. Reports export to CSV so estimating stays repeatable
-                instead of living in one-off spreadsheets.
-              </p>
-              <p>
-                <a class="text-link" href="demos/wood-usage/index.html" target="_blank" rel="noreferrer">Open the live forecast demo &rarr;</a>
-              </p>
-            </article>
-          </div>
-
-          <article class="pipeline-spotlight nest-split-spotlight reveal" id="nest-split">
-            <p class="panel-label">Nesting insight</p>
-            <h3>Machine parts first. Hand cuts fill the leftover sheet. The saw only gets what is left.</h3>
-            <p>
-              Some cabinet parts have to run on the CNC. Others are ordinary rectangles that can be cut by hand on a
-              saw &mdash; we call those <strong>hand cuts</strong>. Early on the split was absolute: everything
-              machined stayed on the machine, and every hand cut went to the saw. That was simple, and it left a lot of
-              usable sheet as scrap.
-            </p>
-            <p>
-              The nesting approach I built flips the order of decisions. Nest the parts that
-              <em>must</em> be machined first. Then, with the remaining open rectangles on those sheets, fill what fits
-              with hand cuts. Whatever still does not fit is what the saw paperwork lists. The operator is not asked to
-              cut items that already nested on the router.
-            </p>
-            <ol class="nest-split-steps">
-              <li>
-                <strong>Must-machine work</strong>
-                <span>Parts that need CNC geometry nest onto sheet first.</span>
+            <ol class="system-map-flow">
+              <li><span>01</span><strong>Job intake</strong><small>validated snapshot + identity</small></li>
+              <li><span>02</span><strong>Production plan</strong><small>claims, capacity + exact selection</small></li>
+              <li><span>03</span><strong>Geometry</strong><small>recipe preflight + atomic DXF set</small></li>
+              <li class="system-map-branch">
+                <span>04</span><strong>Canonical nest</strong><small>one layout, independent posts</small>
+                <div class="branch-formats"><b>TAP</b><b>XPR / NC</b></div>
               </li>
-              <li>
-                <strong>Residual fill</strong>
-                <span>Hand cuts that fit the leftover material ride along on the same nests.</span>
-              </li>
-              <li>
-                <strong>Saw remainder + paperwork</strong>
-                <span>Only the un-nested hand cuts land on the beam-saw lists and operator packet sheets.</span>
-              </li>
+              <li><span>05</span><strong>Station custody</strong><small>verify, back up, stage + roll back</small></li>
             </ol>
-            <p class="nest-split-note">
-              It is not magic utilization software &mdash; it is a practical routing rule with matching outputs:
-              nests, handcut companion files, and packet pages that stay consistent with each other.
-            </p>
-          </article>
+            <p class="system-map-boundary">Generation ≠ release ≠ load ≠ machine run ≠ completion</p>
+          </div>
         </div>
       </section>
 
-      <section class="section" id="pipeline">
+      <section class="proof-strip section-band" aria-label="Evidence summary">
+        <div class="container proof-grid">
+          <article><strong>327</strong><span>targeted manufacturing tests passed in the October 21 audit</span></article>
+          <article><strong>2 formats</strong><span>posted independently from one canonical sheet definition</span></article>
+          <article><strong>Fail closed</strong><span>unsupported active geometry blocks output instead of being guessed</span></article>
+          <article><strong>Recoverable</strong><span>station staging uses identity checks, backup and rollback</span></article>
+        </div>
+      </section>
+
+      <section class="section" id="work">
         <div class="container">
           <div class="section-heading reveal">
-            <p class="eyebrow">CAD and CNC pipeline</p>
-            <h2>We generate the machine-ready files — and plug into AutoCAD and Fusion to do it.</h2>
-            <p>
-              Dashboards are only half the story. The generation side of the suite turns parametric cabinet geometry
-              into files the shop can open, nest, load, and cut: DXFs, drawing PDFs, Fusion catalog builds, nesting
-              MDBs, translated NC programs, and released nest sets. AutoCAD and Fusion are not screenshots of someone
-              else&rsquo;s CAD work — they are first-class plugin targets in the same pipeline.
-            </p>
+            <p class="eyebrow">Flagship work</p>
+            <h2>Three manufacturing problems, shown through their evidence.</h2>
+            <p>These case studies focus on transformation, custody and refusal behavior—not just interface screenshots.</p>
           </div>
-
-          <article class="pipeline-spotlight reveal">
-            <p class="panel-label">What gets written</p>
-            <h3>Machine-ready outputs, not mockups</h3>
-            <p>
-              Production starts with files that already match how the floor runs. The tools below author those files
-              from shared rules and dimensions, then hand them to CAM, the mill overlay, or the operator station.
-            </p>
-            <ul class="output-chip-list" aria-label="Generated file types">
-              <li>Parametric DXF</li>
-              <li>Corpus PDF plots</li>
-              <li>Fusion catalog builds</li>
-              <li>Nesting MDB batches</li>
-              <li>Hand-cut residual fill</li>
-              <li>TAP &harr; XPR / NC</li>
-              <li>Released nest sheets</li>
-              <li>One-touch mill load</li>
-            </ul>
-          </article>
-
-          <div class="capability-grid pipeline-plugin-grid">
-            <article class="capability-card capability-card-emphasis reveal">
-              <p class="panel-label">Plugin</p>
-              <h3>AutoCAD plugin</h3>
-              <p>
-                In-AutoCAD command (<code>TLINSERT</code>) inserts a parametric cabinet part as a live block and plots
-                corpus drawings to PDF. Packaged as a versioned ApplicationPlugins bundle across AutoCAD 2022&ndash;2026 —
-                install once, use it like a native command.
-              </p>
+          <div class="flagship-grid">
+            <article class="flagship-card reveal">
+              <div class="card-topline"><span class="status-badge status-tested">Source tested</span><span class="card-index">01</span></div>
+              <p class="panel-label">Geometry and CNC</p>
+              <h3>One geometry set. One canonical nest. Two machine formats.</h3>
+              <p>Supported Access/recipe inputs become an atomic DXF set, then one nested definition feeds independent Omni/Fanuc TAP and Syntec XPR/NC posts. Unsupported operations stop the set before publication.</p>
+              <ul class="evidence-list"><li>Whole-set recipe preflight</li><li>Independent format outcomes</li><li>Artifact hashes and provenance</li></ul>
+              <a class="text-link" href="work/geometry-to-cnc.html">Read the case study →</a>
             </article>
-            <article class="capability-card capability-card-emphasis reveal">
-              <p class="panel-label">Plugin</p>
-              <h3>Fusion 360 catalog generator</h3>
-              <p>
-                A Fusion script that builds construction and customer views of cabinets from the same geometry rules.
-                Over 1,300 products in the catalog resolve from source-backed definitions — not hand-drawn one-offs.
-              </p>
+            <article class="flagship-card reveal">
+              <div class="card-topline"><span class="status-badge status-tested">Source tested</span><span class="card-index">02</span></div>
+              <p class="panel-label">Production traceability</p>
+              <h3>An exact request becomes a frozen plan and verified receipt.</h3>
+              <p>Production requests select explicit job and item identities, capture a plan hash, reject stale or duplicate intent, and verify each generated artifact before recording the result.</p>
+              <ul class="evidence-list"><li>Exact PO + item identity</li><li>Duplicate and re-cut controls</li><li>Receipt hashes and file sizes</li></ul>
+              <a class="text-link" href="work/production-traceability.html">Read the case study →</a>
             </article>
-            <article class="capability-card capability-card-emphasis reveal">
-              <p class="panel-label">Generator</p>
-              <h3>Parametric DXF generator</h3>
-              <p>
-                A desktop dialog (and scriptable CLI) that takes a part family and live dimensions and writes a
-                machine-ready DXF. No CAD seat required for the batch path — useful when engineering needs files faster
-                than opening a full drawing session.
-              </p>
+            <article class="flagship-card reveal">
+              <div class="card-topline"><span class="status-badge status-package">Package evidenced</span><span class="card-index">03</span></div>
+              <p class="panel-label">Station handoff</p>
+              <h3>Programs move to a station as a transaction, not a loose file copy.</h3>
+              <p>Station applications keep source identity, stage complete sets, preserve the previous local state and roll back an interrupted load. Operators remain in control of the physical machine cycle.</p>
+              <ul class="evidence-list"><li>Backup and transactional staging</li><li>Local-first status evidence</li><li>Read-only controller observations</li></ul>
+              <a class="text-link" href="work/station-handoff.html">Read the case study →</a>
             </article>
           </div>
+        </div>
+      </section>
 
+      <section class="section section-band" id="warehouse">
+        <div class="container warehouse-layout">
+          <div class="warehouse-copy reveal">
+            <div class="card-topline warehouse-status"><span class="status-badge status-progress">Active development</span><span class="status-badge status-simulated">Shown with fictional data</span></div>
+            <p class="eyebrow">Standalone product</p>
+            <h2>The whole warehouse on one map.</h2>
+            <p class="project-summary">Warehouse Floor draws a facility as one connected building—departments, walls, doors, racks and floor zones—and ties every count to the exact bay and level where the stock sits.</p>
+            <p>Layout changes go into a draft and only reach the working map after a review. Counting, pallet moves and stock search all happen on the same map, so nobody has to translate between a spreadsheet and the floor.</p>
+            <div class="project-actions"><a class="button button-primary" href="work/warehouse-floor.html">Read the case study</a></div>
+          </div>
+          <div class="warehouse-visual reveal">
+            <figure class="wf-figure">
+              <img class="ui-shot" src="rsc/img/warehouse-floor/overview.png" width="1310" height="840" alt="Floor plan of a fictional warehouse with storage hall, receiving, assembly, shipping and support rooms, each holding labeled racks" loading="lazy">
+              <figcaption>A fictional five-department warehouse. Real facility data stays private.</figcaption>
+            </figure>
+            <div class="warehouse-capabilities">
+              <article><span>01</span><div><strong>Layout editor</strong><p>Move, rotate and add racks in a draft, with undo, redo and a plain-language review before anything is applied.</p></div></article>
+              <article><span>02</span><div><strong>Bay-by-bay counts</strong><p>Open a rack, record one or several products per bay, and keep "checked empty" separate from "not counted yet."</p></div></article>
+              <article><span>03</span><div><strong>Pallets and search</strong><p>Pallets carry their contents as they move across the floor; search jumps straight to the bay that holds an item.</p></div></article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="capabilities">
+        <div class="container">
+          <div class="section-heading reveal"><p class="eyebrow">Capability and maturity</p><h2>What is demonstrated—and what remains outside the browser.</h2></div>
+          <div class="capability-table-wrap reveal">
+            <table class="capability-table">
+              <thead><tr><th>Capability</th><th>Evidence</th><th>Public presentation</th><th>Boundary</th></tr></thead>
+              <tbody>
+                <tr><td>ERP snapshot and queue history</td><td><span class="status-badge status-tested">Source tested</span></td><td>Synthetic input and offline-fallback story</td><td>Live ERP not connected</td></tr>
+                <tr><td>MDB → DXF → canonical nesting</td><td><span class="status-badge status-tested">Source tested</span></td><td>Flagship geometry case study</td><td>Supported recipe subset only</td></tr>
+                <tr><td>Omni TAP + Python XPR/NC</td><td><span class="status-badge status-tested">Source tested</span></td><td>Independent sibling outputs</td><td>No public physical cut claim</td></tr>
+                <tr><td>Station program custody</td><td><span class="status-badge status-package">Package evidenced</span></td><td>Simulated folder staging and rollback</td><td>Physical controllers uninspected</td></tr>
+                <tr><td>Part Studio</td><td><span class="status-badge status-package">Package evidenced</span></td><td>Hash-gated inspection story</td><td>Inspection only; no cut approval</td></tr>
+                <tr><td>AutoCAD and Fusion tooling</td><td><span class="status-badge status-experimental">Experimental</span></td><td>Architecture/transfer overview</td><td>Separate repository; host validation incomplete</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="matrix-link reveal"><a class="text-link" href="evidence/">Read the evidence model and testing boundaries →</a></p>
+        </div>
+      </section>
+
+      <section class="section section-band" id="tools">
+        <div class="container">
+          <div class="section-heading reveal"><p class="eyebrow">Selected supporting work</p><h2>Smaller products with a clear place in the system.</h2></div>
           <div class="capability-grid">
-            <article class="capability-card reveal">
-              <h3>MDB batch generation</h3>
-              <p>
-                Generates the Access-format part and grid batches the CAM/nesting path consumes, with title-cased parts,
-                stable cabinet grid numbering, and construction mapping &mdash; including the handcut companion when
-                residual fill leaves saw work.
-              </p>
-            </article>
-            <article class="capability-card reveal">
-              <h3>TAP / XPR translation</h3>
-              <p>A safety-bounded converter between metric Syntec XPR/NC programs and inch Selexx TAP programs, with SHA-256 provenance, verified tool mappings, and hard blocks on ambiguous input.</p>
-            </article>
-            <article class="capability-card reveal">
-              <h3>Nest Load mill overlay</h3>
-              <p>A controller overlay that adds a one-touch working-file load on the CNC control, staging nests into the mill's daily folders without touching machine networking.</p>
-            </article>
-            <article class="capability-card reveal">
-              <h3>Machine telemetry</h3>
-              <p>A read-only agent that observes CNC state (program, cycle status, part count) and publishes a durable JSON/JSONL contract the dashboards and reports read. It never controls the machine.</p>
-            </article>
-            <article class="capability-card reveal">
-              <h3>EnRoute production bridge</h3>
-              <p>Watches the CAM preview output, turns each post into cabinet-numbered nest sheets, and publishes one complete released set for the operator station.</p>
-            </article>
-            <article class="capability-card reveal">
-              <h3>Omni cut station</h3>
-              <p>The CNC operator application for a set-based cutting workflow, with a resilient production queue that falls back to local or USB sources when the network share is down.</p>
-            </article>
-            <article class="capability-card reveal">
-              <h3>ICN reconcile</h3>
-              <p>A barcode-scanning utility that resolves scans against the live cut snapshot and regroups the results into an ERP-style, drag-to-group table.</p>
-            </article>
+            <article class="capability-card reveal"><span class="status-badge status-shipped">Public release</span><h3>Rover</h3><p>A Windows utility for controlled CAM/CNC tool-name remapping across a file set, with dry-run preview and optional backups.</p><a class="text-link" href="https://github.com/DustinBobbitt/Rover" target="_blank" rel="noreferrer">View repository →</a></article>
+            <article class="capability-card reveal"><span class="status-badge status-package">Package evidenced</span><h3>Part Studio</h3><p>A hash-gated, inspection-only browser for a governed binary machining corpus. It opens temporary copies and leaves the source library unchanged.</p></article>
+            <article class="capability-card reveal"><span class="status-badge status-tested">Source tested</span><h3>Operational reporting</h3><p>Day briefs, end-of-day views, reconciliation and log viewers preserve the difference between ERP, station and controller evidence.</p></article>
           </div>
         </div>
       </section>
 
-      <section class="section section-band" id="legacy">
-        <div class="container">
-          <div class="section-heading reveal">
-            <p class="eyebrow">Earlier desktop walkthroughs</p>
-            <h2>The previous desktop generation, kept for context.</h2>
-            <p>
-              These narrated clips show the earlier desktop (EXE) versions of the modules. The suite has since moved to
-              the web-based interface shown above, so treat these as historical background rather than the current UI.
-              A full narrated cut walkthrough is on the
-              <a class="text-link" href="https://www.youtube.com/playlist?list=PLHLiLzUs0r0KpQiV1YQyvLJedHtoh72y0" target="_blank" rel="noreferrer">YouTube playlist</a>.
-            </p>
-          </div>
-
-          <div class="module-library-grid">
-            <article class="detail-card case-study-media-card reveal">
-              <p class="panel-label">Legacy desktop demo</p>
-              <h3>Cut module walkthrough</h3>
-              <iframe
-                class="case-study-video"
-                src="https://www.youtube-nocookie.com/embed/o8_cQmBh3_0?rel=0&modestbranding=1"
-                title="Cut module narrated demo (legacy desktop version)"
-                loading="lazy"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen
-              ></iframe>
-              <p>
-                The deepest walkthrough: department landing, Quick Generate, MDB export for machine components, workbook
-                views, grouped hand cuts, end-of-day material reporting, labels, restock handling, and PO filtering.
-              </p>
-            </article>
-
-            <article class="detail-card case-study-media-card reveal">
-              <p class="panel-label">Legacy desktop demo</p>
-              <h3>Custom module</h3>
-              <iframe
-                class="case-study-video"
-                src="https://www.youtube-nocookie.com/embed/5z0O5618aE4?rel=0&modestbranding=1"
-                title="Custom module demo (legacy desktop version)"
-                loading="lazy"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen
-              ></iframe>
-              <p>
-                Turns a large data set into a workable view with quick filters for frames, doors, drawers, and headers,
-                plus style and color management, label printing, and a report manager for panel and rail cuts.
-              </p>
-            </article>
-
-            <article class="detail-card case-study-media-card reveal">
-              <p class="panel-label">Legacy desktop demo</p>
-              <h3>Wood usage calculator</h3>
-              <iframe
-                class="case-study-video"
-                src="https://www.youtube-nocookie.com/embed/eVGMelImyRM?rel=0&modestbranding=1"
-                title="Wood usage calculator demo (legacy desktop version)"
-                loading="lazy"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen
-              ></iframe>
-              <p>
-                Direct input or CSV order lists produce dimensions, material usage, optional pricing and cost, machine
-                runtime, and daily capacity, with unknown items logged for admin follow-up.
-              </p>
-            </article>
-
-            <article class="detail-card case-study-media-card reveal">
-              <p class="panel-label">Legacy desktop demo</p>
-              <h3>Warehouse mapper and inventory verification</h3>
-              <iframe
-                class="case-study-video"
-                src="https://www.youtube-nocookie.com/embed/x7xRgk4TORU?rel=0&modestbranding=1"
-                title="Warehouse mapper and inventory verification demo (legacy prototype)"
-                loading="lazy"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen
-              ></iframe>
-              <p>
-                A prototype that models warehouse structure, generates a visual layout with standardized location IDs,
-                and supports confirmed or blind picking counts to catch discrepancies during normal work. The current
-                interactive map experience is in the
-                <a class="text-link" href="demos/warehouse-mapper/index.html" target="_blank" rel="noreferrer">warehouse mapper demo</a>
-                and the
-                <a class="text-link" href="demos/pallet-locator/index.html" target="_blank" rel="noreferrer">pallet locator demo</a>.
-              </p>
-            </article>
-
-            <article class="detail-card case-study-media-card reveal">
-              <p class="panel-label">Legacy desktop demo</p>
-              <h3>Administrator application</h3>
-              <iframe
-                class="case-study-video"
-                src="https://www.youtube-nocookie.com/embed/Qw7NLjyMtIU?rel=0&modestbranding=1"
-                title="Administrator application demo (legacy desktop version)"
-                loading="lazy"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen
-              ></iframe>
-              <p>
-                The central control layer: SQL queries and processing rules updated in one place, tool launching,
-                database review, backups and rollbacks with password encryption, and a bug and feature work queue.
-              </p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="tools">
-        <div class="container">
-          <div class="section-heading reveal">
-            <p class="eyebrow">Secondary projects and utilities</p>
-            <h2>Smaller tools and early wins that round out the range.</h2>
-            <p>
-              Not everything is a full suite module. These are standalone utilities and developer tooling, including the
-              tool that started the portfolio.
-            </p>
-          </div>
-
-          <div class="secondary-project-grid">
-            <article class="detail-card secondary-project-card reveal">
-              <p class="panel-label">Standalone utility</p>
-              <h3>Rover</h3>
-              <p>
-                A Windows desktop utility for moving CAM/CNC jobs between machines when tool names do not line up. It
-                scans files, extracts unique tool identifiers, and applies a saved old-to-new mapping across a whole
-                file set, with dry-run preview and optional backups.
-              </p>
-              <div class="project-tags">
-                <span>C# / .NET 8</span>
-                <span>WinForms</span>
-                <span>Bulk remapping</span>
-              </div>
-              <div class="project-actions">
-                <a class="link-pill" href="https://github.com/DustinBobbitt/Rover/releases/tag/v1.0.0" target="_blank" rel="noreferrer">Rover release</a>
-                <a class="link-pill" href="https://github.com/DustinBobbitt/Rover" target="_blank" rel="noreferrer">GitHub</a>
-              </div>
-              <p class="secondary-project-note">
-                An early win and the first public tool here. It is small next to the suite above, but it is real,
-                shipped, and still useful.
-              </p>
-            </article>
-
-            <article class="detail-card secondary-project-card reveal">
-              <p class="panel-label">Developer tooling</p>
-              <h3>AI Prime</h3>
-              <p>
-                A repo-local CLI for structured AI collaboration: durable project truth, session handoff state,
-                append-only logs, and contract-style planning, with a local contract wizard and no external AI API
-                dependency.
-              </p>
-              <div class="project-tags">
-                <span>Node CLI</span>
-                <span>Repo-local tooling</span>
-                <span>No external API</span>
-              </div>
-              <a class="text-link" href="https://github.com/DustinBobbitt/AI-Prime" target="_blank" rel="noreferrer">View AI Prime repository &rarr;</a>
-            </article>
-
-            <article class="detail-card secondary-project-card reveal">
-              <p class="panel-label">Experimental R&amp;D</p>
-              <h3>AI Gamer</h3>
-              <p>
-                An early experimental system exploring multi-domain meta-learning and transferable reasoning patterns.
-                Presented as exploratory engineering work and technical range, not a polished product.
-              </p>
-              <div class="project-tags">
-                <span>Python</span>
-                <span>Meta-learning</span>
-                <span>Experimental</span>
-              </div>
-              <a class="text-link" href="https://github.com/DustinBobbitt/AI-gamer" target="_blank" rel="noreferrer">View AI Gamer repository &rarr;</a>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="section section-band" id="about">
+      <section class="section" id="about">
         <div class="container about-grid">
-          <div class="about-copy reveal">
-            <p class="eyebrow">About the work</p>
-            <h2>Most of my work sits at the intersection of manufacturing and software.</h2>
-            <p>
-              I tend to work on problems where inefficiency shows up in practical ways: slower output, repetitive manual
-              work, unnecessary mistakes, or handoff issues between departments.
-            </p>
-            <p>
-              That usually means building tools that are clear, useful, and easy to adopt inside environments that
-              already have established systems and habits, and, lately, moving those tools to a cleaner web-based
-              interface.
-            </p>
-          </div>
-
-          <div class="about-panels reveal">
-            <article class="about-card">
-              <h3>What to expect here</h3>
-              <p>Real tools, real constraints, and case studies that explain why the implementation looks the way it does.</p>
-            </article>
-            <article class="about-card">
-              <h3>Portfolio structure</h3>
-              <p>The web suite and live demos lead; machine-ready file generation and CAD plugins follow; earlier desktop clips stay for context.</p>
-            </article>
-          </div>
+          <div class="about-copy reveal"><p class="eyebrow">About the work</p><h2>Software for the points where manufacturing handoffs usually become fragile.</h2><p>My work focuses on practical constraints: existing ERP behavior, mixed-age Windows machines, network interruptions, proprietary formats, operator adoption and the need to recover safely when an external dependency fails.</p></div>
+          <div class="about-panels reveal"><article class="about-card"><h3>What this portfolio shows</h3><p>Inputs, transformations, outputs, refusal behavior and evidence—not only finished screens.</p></article><article class="about-card"><h3>What it does not claim</h3><p>A passing test or generated file is not automatically a safe physical cut or a live deployed integration.</p></article></div>
         </div>
       </section>
     </main>
 
     <footer class="site-footer section" id="contact">
       <div class="container footer-grid">
-        <div class="footer-copy reveal">
-          <p class="eyebrow">Contact</p>
-          <h2>Interested in practical automation or internal tooling?</h2>
-          <p>
-            For collaboration, technical discussion, or interview follow-up, use the profile link below.
-          </p>
-        </div>
-
-        <div class="footer-actions reveal">
-          <a class="link-pill" href="https://github.com/DustinBobbitt" target="_blank" rel="noreferrer">GitHub profile</a>
-          <a class="link-pill" href="https://www.linkedin.com/in/dustin-bobbitt-10b29b3b9/" target="_blank" rel="noreferrer">LinkedIn profile</a>
-          <a class="link-pill" href="mailto:dustin@acor.dev">dustin@acor.dev</a>
-        </div>
+        <div class="footer-copy reveal"><p class="eyebrow">Contact</p><h2>Interested in manufacturing systems, internal tooling or technical collaboration?</h2><p>Use the links here for project discussion, interview follow-up or engineering collaboration.</p></div>
+        <div class="footer-actions reveal"><a class="link-pill" href="https://github.com/DustinBobbitt" target="_blank" rel="noreferrer">GitHub</a><a class="link-pill" href="https://www.linkedin.com/in/dustin-bobbitt-10b29b3b9/" target="_blank" rel="noreferrer">LinkedIn</a><a class="link-pill" href="mailto:dustin@acor.dev">dustin@acor.dev</a></div>
       </div>
     </footer>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>
