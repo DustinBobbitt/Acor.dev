@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geometry to CNC | Acor.dev</title>
+  <meta name="description" content="How a guarded manufacturing pipeline turns supported recipe data into atomic DXF geometry, one canonical nest and independently validated TAP and XPR/NC programs.">
+  <meta name="theme-color" content="#070b16">
+  <meta property="og:title" content="Geometry to CNC | Acor.dev">
+  <meta property="og:description" content="One geometry set, one canonical nest and two independently validated CNC formats.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://acor.dev/work/geometry-to-cnc.html">
+  <meta property="og:image" content="https://acor.dev/rsc/img/acor_social_1200x630.png">
+  <link rel="canonical" href="https://acor.dev/work/geometry-to-cnc.html">
+  <link rel="icon" type="image/png" sizes="32x32" href="../rsc/img/acor_favicon_32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css?v=20261021a">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div class="page-shell">
+    <header class="site-header is-scrolled" data-header><div class="container nav-row"><a class="brand-mark" href="../" aria-label="Acor.dev home"><img src="../rsc/img/acor_transparent.png" alt=""><span>Acor.dev</span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle aria-label="Open navigation"><span></span><span></span><span></span></button><nav class="site-nav" id="site-nav" data-nav><a href="../#work">Work</a><a href="../#demos">Demos</a><a href="warehouse-floor.html">Warehouse</a><a href="../evidence/">Evidence</a><a href="../archive/">Archive</a></nav></div></header>
+    <main class="interior-main" id="main-content">
+      <section class="interior-hero">
+        <div class="container">
+          <div class="breadcrumbs"><a href="../">Home</a><span>Work</span><span>Geometry to CNC</span></div>
+          <div class="interior-status-row"><span class="status-badge status-tested">Source tested</span><span class="status-badge status-simulated">Public example uses synthetic geometry</span></div>
+          <h1 class="interior-title">One geometry set. One canonical nest. Two machine formats.</h1>
+          <p class="interior-lede">The strongest part of this manufacturing suite is not a dashboard. It is a guarded transformation chain that interprets supported machining recipes, publishes complete geometry sets atomically and posts independent programs for two controller families.</p>
+          <div class="case-flow" aria-label="Geometry to CNC pipeline">
+            <article><span>01 · Input</span><strong>Production definition</strong><small>Selected cabinet rows, part definitions and construction recipes.</small></article>
+            <article><span>02 · Guard</span><strong>Recipe preflight</strong><small>Every active operation must match an implemented, captured form.</small></article>
+            <article><span>03 · Geometry</span><strong>Atomic DXF set</strong><small>Outlines, bores and routes stage before the complete set replaces output.</small></article>
+            <article><span>04 · Layout</span><strong>Canonical sheets</strong><small>Quantity, material and thickness feed one shared nesting definition.</small></article>
+            <article><span>05 · Posts</span><strong>TAP + XPR/NC</strong><small>Each format validates and reports its own success or failure.</small></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="case-section section-band">
+        <div class="container case-grid">
+          <article class="case-copy">
+            <p class="eyebrow">The manufacturing problem</p>
+            <h2>Geometry cannot be “close enough.”</h2>
+            <p>Cabinet part rows carry dimensions and references to machining recipes. Those recipes can describe outlines, mirrored parts, bores, line bores, pockets and routes. A generator that guesses an unfamiliar operation can produce a syntactically valid file that is physically wrong.</p>
+            <p>The implementation therefore treats recipe support as an admission gate. Known, captured forms are resolved explicitly. An unknown reference or unsupported active operation refuses the set before it reaches the published output directory.</p>
+
+            <h3>Atomic geometry publication</h3>
+            <p>All expected DXFs are generated into staging. Only a complete, validated set replaces the prior output. A failure in one part cannot leave a directory that looks complete but silently omits machining.</p>
+
+            <h3>One layout, independent programs</h3>
+            <p>The direct post reads the DXF set, expands quantities, separates saw-owned parts, groups material and thickness, and produces canonical sheets. Both machine-format emitters receive that same sheet definition. TAP is not renamed into XPR, and imported TAP is not treated as convertible production truth.</p>
+            <p>Each format records its own outcome. TAP may succeed while XPR is unavailable, or the reverse. The manifest preserves the distinction so downstream release logic can select only a verified format.</p>
+
+            <h3>What the public demonstration will show</h3>
+            <ol>
+              <li>A newly authored synthetic part with supported outline, bore and route operations.</li>
+              <li>Successful atomic DXF generation and a visual geometry preview.</li>
+              <li>One canonical sheet definition feeding two separate posts.</li>
+              <li>Independent hashes, program lists and format status.</li>
+              <li>A second part with an unsupported operation being refused before publication.</li>
+            </ol>
+          </article>
+
+          <aside class="case-aside">
+            <article class="evidence-card"><span class="status-badge status-tested">Evidence</span><h3>What was inspected</h3><ul><li>Recipe handlers and refusal paths</li><li>Atomic set staging</li><li>Direct TAP nesting/post pipeline</li><li>Python XPR/NC post pipeline</li><li>Dual-format outcome tests</li></ul></article>
+            <article class="boundary-card"><span class="status-badge status-progress">Boundary</span><h3>What this does not prove</h3><p>Source tests and generated programs do not establish tooling, hold-down, collision clearance, controller acceptance or dimensional quality on a physical machine.</p></article>
+            <article class="scenario-card"><span>PUBLIC-SAFE PLAN</span><h3>Purpose-built geometry only</h3><p>No production cabinet dimensions, recipes, tools, feeds, speeds or machine programs will be used in the public walkthrough.</p></article>
+          </aside>
+        </div>
+      </section>
+    </main>
+    <footer class="interior-footer"><div class="container"><p>Next: exact production identity and receipts.</p><a class="button button-secondary" href="production-traceability.html">Production traceability →</a></div></footer>
+  </div>
+  <script src="../script.js"></script>
+</body>
+</html>

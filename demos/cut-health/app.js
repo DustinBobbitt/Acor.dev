@@ -11128,7 +11128,7 @@ function renderSmartBatchPlan(plan) {
     </h3>
     <table class="mdb-wizard-table" id="smartPlanJobsTable"><thead><tr><th>Job</th><th>Date</th><th>Cabinets</th></tr></thead><tbody>`;
   pickedJobs.forEach((job) => {
-    html += `<tr><td>${escapeHtml(job.po_number)}</td><td>${escapeHtml(job.firm_date || '')}</td><td>${Number(job.cab_count) || 0}</td></tr>`;
+    html += `<tr><td>${escapeHtml(job.po_number)}</td><td>${escapeHtml(job.firm_date || '')}</td><td>${Number(job.cab_count ?? job.cabinet_count) || 0}</td></tr>`;
   });
   html += `</tbody></table>
     <button id="smartPlanJobsToggle" class="button secondary compact row-collapse-toggle" type="button" aria-expanded="false" hidden></button>

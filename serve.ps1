@@ -1,11 +1,15 @@
+param(
+  [int]$Port = 8000
+)
+
 $ErrorActionPreference = "Stop"
 
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $listener = [System.Net.HttpListener]::new()
-$listener.Prefixes.Add("http://localhost:8000/")
+$listener.Prefixes.Add("http://localhost:$Port/")
 $listener.Start()
 
-Write-Host "Serving $root at http://localhost:8000/"
+Write-Host "Serving $root at http://localhost:$Port/"
 
 $mimeTypes = @{
   ".css"  = "text/css"
@@ -20,6 +24,7 @@ $mimeTypes = @{
   ".svg"  = "image/svg+xml"
   ".txt"  = "text/plain; charset=utf-8"
   ".webp" = "image/webp"
+  ".xml"  = "application/xml; charset=utf-8"
 }
 
 try {
@@ -34,7 +39,11 @@ try {
     $safePath = $requestPath.Replace("/", "\")
     $fullPath = [System.IO.Path]::GetFullPath((Join-Path $root $safePath))
 
-    if (-not $fullPath.StartsWith($root, [System.StringComparison]::OrdinalIgnoreCase) -or -not (Test-Path $fullPath -PathType Leaf)) {
+    if (Test-Path -LiteralPath $fullPath -PathType Container) {
+      $fullPath = [System.IO.Path]::GetFullPath((Join-Path $fullPath "index.html"))
+    }
+
+    if (-not $fullPath.StartsWith($root, [System.StringComparison]::OrdinalIgnoreCase) -or -not (Test-Path -LiteralPath $fullPath -PathType Leaf)) {
       $context.Response.StatusCode = 404
       $buffer = [System.Text.Encoding]::UTF8.GetBytes("Not found")
       $context.Response.OutputStream.Write($buffer, 0, $buffer.Length)
