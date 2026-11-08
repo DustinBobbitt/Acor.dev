@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Acor.dev — Manufacturing systems, shown through the work</title>
+<meta name="description" content="An evidence-led look at manufacturing software, CNC workflows, production handoff and warehouse operations.">
+<link rel="icon" href="../../rsc/img/acor_favicon_32.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="#top"><img src="../../rsc/img/acor_transparent.png" alt="Acor"><span>Acor.dev</span></a>
+  <nav><a href="#production">Production</a><a href="#applications">Applications</a><a href="#operations">Operations</a><a href="#warehouse">Warehouse</a><a href="#evidence">Evidence</a></nav>
+</header>
+<main id="top">
+  <section class="hero wrap">
+    <div class="hero-copy">
+      <p class="eyebrow">Manufacturing software · CNC · production operations</p>
+      <h1>Manufacturing systems you can <em>experience.</em></h1>
+      <p class="lede">A connected set of tools that prepares production work, carries it to the station, records what happened, and helps people find what comes next.</p>
+      <p class="boundary">Built to work beside an existing ERP and machine controllers. People still release the work, operate the machines, and make the decisions.</p>
+      <a class="link" href="#production">Follow a production day <span>↓</span></a>
+    </div>
+    <figure class="hero-proof">
+      <video controls playsinline preload="metadata" poster="../../rsc/img/rover_visual_demo_cover.jpg">
+        <source src="../../rsc/media/rover_visual_demo.mp4" type="video/mp4">
+      </video>
+      <figcaption>Recorded demonstration from the repository · Rover visual demo</figcaption>
+    </figure>
+  </section>
+
+  <section class="intro-band">
+    <div class="wrap band-inner"><p class="eyebrow">One connected production story</p><p class="band-copy">Follow the information as it becomes <strong>manufacturing requirements, machine-ready work, station records, and operational visibility.</strong></p></div>
+  </section>
+
+  <section class="section wrap" id="production">
+    <div class="section-head"><p class="eyebrow">01 / Production journey</p><h2>One order. A chain of real work.</h2><p>This is a guided explanation of the workflow, supported by captures and recordings from the actual applications. It is not a claim that every tool is one integrated application.</p></div>
+    <div class="journey">
+      <article><span class="num">01</span><h3>Prepare the work</h3><p>Orders become explicit cabinet and component requirements before anything is released to a machine.</p><figure><img src="../../rsc/img/suite_web_dashboard.png" alt="Actual suite web dashboard screenshot"><figcaption>Actual suite screen · dashboard</figcaption></figure></article>
+      <article><span class="num">02</span><h3>Generate and validate</h3><p>Geometry and manufacturing outputs are prepared with defined checks. Unsupported or incomplete inputs should be stopped, not guessed.</p><figure><video controls playsinline preload="metadata"><source src="../../rsc/media/geometry_pipeline_guided.webm" type="video/webm"></video><figcaption>Recorded workflow · geometry pipeline</figcaption></figure></article>
+      <article><span class="num">03</span><h3>Prepare machine work</h3><p>The production flow distinguishes the TAP and XPR/NC outputs. The saw receives its own remainder paperwork.</p><figure><img src="../../rsc/img/suite_web_packet.png" alt="Actual suite packet screenshot"><figcaption>Actual suite screen · production packet</figcaption></figure></article>
+      <article><span class="num">04</span><h3>Carry it to the station</h3><p>Operators see released work and record their progress. The application prepares and presents the work; the operator and controller run the machine.</p><figure><video controls playsinline preload="metadata"><source src="../../rsc/media/station_handoff_guided.webm" type="video/webm"></video><figcaption>Recorded workflow · station handoff</figcaption></figure></article>
+    </div>
+  </section>
+
+  <section class="section dark" id="smart-batch">
+    <div class="wrap">
+      <div class="section-head"><p class="eyebrow">02 / Smart Batch</p><h2>Use the sheet more completely. Keep the machining requirements intact.</h2><p>Smart Batch is the centerpiece of the cutting story. The public example is deliberately small and consistent across the workflow.</p></div>
+      <div class="batch-facts">
+        <div><strong>2</strong><span>sheets</span></div><div><strong>3</strong><span>hand-cut parts absorbed</span></div><div><strong>5</strong><span>parts remaining for the saw</span></div>
+      </div>
+      <p class="note">These are the plan's demonstration figures, not a material-savings claim. Machined parts lock first; eligible hand-cut parts use only available gaps; anything that does not fit remains on the saw list. Cabinet bottoms remain router-required.</p>
+      <p class="evidence-caveat"><strong>Visual evidence boundary:</strong> this first pass does not substitute a decorative nest drawing for a verified production nest. The current branch's SVG rectangle illustration is not presented as a real DXF or machine nest. The actual nest visualization will be added only from a verified source artifact or capture.</p>
+    </div>
+  </section>
+
+  <section class="section wrap" id="applications">
+    <div class="section-head"><p class="eyebrow">03 / Applications</p><h2>Different tools. Distinct jobs.</h2><p>The screenshots below are direct repository assets. Each application keeps its own purpose and visual identity.</p></div>
+    <div class="evidence-grid">
+      <figure><img src="../../rsc/img/suite_web_dashboard.png" alt="Actual suite dashboard"><figcaption><strong>Production overview</strong><span>Actual application capture</span></figcaption></figure>
+      <figure><img src="../../rsc/img/suite_web_labels.png" alt="Actual suite labels screen"><figcaption><strong>Labels and identification</strong><span>Actual application capture</span></figcaption></figure>
+      <figure><img src="../../rsc/img/suite_web_packet.png" alt="Actual suite packet screen"><figcaption><strong>Production paperwork</strong><span>Actual application capture</span></figcaption></figure>
+    </div>
+  </section>
+
+  <section class="section dark" id="operations">
+    <div class="wrap">
+      <div class="section-head"><p class="eyebrow">04 / Operational visibility</p><h2>What production records make visible.</h2><p>Sheets and estimated machine time inform purchasing and labor planning. Machine observations and operator confirmations remain separate records and may disagree. A cost standard is not a selling price.</p></div>
+      <div class="two-media">
+        <figure><video controls playsinline preload="metadata"><source src="../../rsc/media/geometry_pipeline_guided.webm" type="video/webm"></video><figcaption>Recorded production workflow</figcaption></figure>
+        <figure><img src="../../rsc/img/suite_web_labels.png" alt="Actual labels application screen"><figcaption>Actual suite capture · labels and records</figcaption></figure>
+      </div>
+      <p class="note">Offline continuity is two separate capabilities: department status can move through saved workbook packages, while Cut can prepare local machine packets when the share is unavailable. Neither is represented as an automatic ERP write-back.</p>
+    </div>
+  </section>
+
+  <section class="section wrap" id="warehouse">
+    <div class="section-head"><p class="eyebrow">05 / Warehouse Floor</p><h2>From locating today's cut work to understanding the building.</h2><p>Cut Pallet Locator is the existing production capability. Warehouse Floor extends the location idea across an invented facility. The integration between them is intended, not claimed as complete.</p></div>
+    <div class="warehouse-feature">
+      <figure class="warehouse-main"><img src="../../rsc/img/warehouse-floor/overview.png" alt="Actual Warehouse Floor overview screenshot"><figcaption>Actual Mapping tool capture · facility overview</figcaption></figure>
+      <div class="warehouse-side">
+        <figure><img src="../../rsc/img/warehouse-floor/rack-count.png" alt="Actual Warehouse Floor rack count screen"><figcaption>Actual capture · rack count</figcaption></figure>
+        <figure><img src="../../rsc/img/warehouse-floor/search.png" alt="Actual Warehouse Floor search screen"><figcaption>Actual capture · search</figcaption></figure>
+      </div>
+    </div>
+    <div class="clips">
+      <figure><video controls playsinline preload="metadata"><source src="../../rsc/media/warehouse-floor/counting.mp4" type="video/mp4"></video><figcaption>Recorded Mapping tool interaction · counting</figcaption></figure>
+      <figure><video controls playsinline preload="metadata"><source src="../../rsc/media/warehouse-floor/find-and-move.mp4" type="video/mp4"></video><figcaption>Recorded Mapping tool interaction · find and move</figcaption></figure>
+      <figure><video controls playsinline preload="metadata"><source src="../../rsc/media/warehouse-floor/layout-edit.mp4" type="video/mp4"></video><figcaption>Recorded Mapping tool interaction · layout editing</figcaption></figure>
+    </div>
+    <p class="note">Northline is the fictional facility used for the public demonstration. The final interactive walkthrough still requires approval of its department shapes and names.</p>
+  </section>
+
+  <section class="section dark" id="evidence">
+    <div class="wrap">
+      <div class="section-head"><p class="eyebrow">06 / Evidence and boundaries</p><h2>Show what exists. Label what is proposed.</h2><p>The site distinguishes tested behavior, recorded application evidence, simulated demonstration data, work in progress, and future direction.</p></div>
+      <div class="rules"><p><strong>People remain in control.</strong> Operators and controllers run machines. Supervisors release and hold work. Leadership sets selling prices.</p><p><strong>No fictional proof.</strong> No invented screenshots, lookalike machinery, misleading composites, employer data, prices, or dollar totals.</p><p><strong>One shop day.</strong> The production story uses the shared demonstration jobs and preserves the difference between generated, released, station-visible, loaded, observed, confirmed, and pallet-ready.</p></div>
+    </div>
+  </section>
+</main>
+<footer class="footer"><div class="wrap"><img src="../../rsc/img/acor_transparent.png" alt=""><span>Acor.dev · Prototype review build</span><span>Not the public production homepage</span></div></footer>
+</body></html>
