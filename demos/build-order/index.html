@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Build an order | Acor.dev</title>
+  <meta name="description" content="Choose three fictional cabinets and walk the order from machine files to a nested sheet and the saw list.">
+  <meta name="theme-color" content="#070b16">
+  <link rel="canonical" href="https://acor.dev/demos/build-order/">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../rsc/img/acor_favicon_32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css?v=20261108a">
+  <link rel="stylesheet" href="app.css?v=20261108f">
+</head>
+<body>
+  <a class="skip-link" href="#order">Skip to the order</a>
+  <div class="page-shell">
+    <header class="site-header" data-header>
+      <div class="container nav-row">
+        <a class="brand-mark" href="../../" aria-label="Acor.dev home">
+          <img src="../../rsc/img/acor_transparent.png" alt="">
+          <span>Acor.dev</span>
+        </a>
+        <nav class="site-nav" aria-label="Demo navigation">
+          <a href="../../#work">The work</a>
+          <a href="../../evidence/">Evidence</a>
+        </nav>
+      </div>
+    </header>
+    <main class="section" id="order">
+      <div class="container walk">
+        <div class="walk-top">
+          <p class="eyebrow">One order</p>
+          <h1>Build an order. Watch it become production.</h1>
+          <p class="walk-qty" data-qty>Nothing selected</p>
+        </div>
+        <div class="walk-body">
+          <aside class="walk-order" aria-label="Cabinets">
+            <div data-products></div>
+            <p class="walk-hint">Grain stays along the length. A side is not turned to make it fit.</p>
+          </aside>
+          <section class="walk-stage" aria-live="polite">
+            <p class="walk-step" data-step-label>Choose the cabinets</p>
+            <div data-view></div>
+            <div class="walk-nav">
+              <button type="button" data-back disabled>Back</button>
+              <button type="button" data-next>Next</button>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="../../script.js"></script>
+  <script src="app.js?v=20261108h"></script>
+</body>
+</html>

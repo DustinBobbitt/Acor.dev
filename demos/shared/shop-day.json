@@ -1,0 +1,95 @@
+{
+  "schema": "acor.shop-day.v2",
+  "date_label": "July 14",
+  "batch": {
+    "job_id": "DEMO-1042",
+    "cabinets": 12,
+    "sheets": 2,
+    "absorbed": 3,
+    "remaining": 5
+  },
+  "jobs": [
+    {
+      "id": "DEMO-1042",
+      "cabinets": 12,
+      "sheets": 2,
+      "hours": 3.5,
+      "status": "Generated, held until assigned",
+      "note": "Missing nothing. Waiting for a person to release it.",
+      "released": false,
+      "station_visible": false
+    },
+    {
+      "id": "DEMO-1047",
+      "cabinets": 4,
+      "sheets": 0,
+      "hours": 0,
+      "status": "Held",
+      "note": "No approved material mapping.",
+      "released": false,
+      "station_visible": false
+    },
+    {
+      "id": "DEMO-1054",
+      "cabinets": 7,
+      "sheets": 3,
+      "hours": 2,
+      "status": "On the station",
+      "note": "One sheet is confirmed. The job is not finished.",
+      "released": true,
+      "station_visible": true
+    },
+    {
+      "id": "DEMO-1058",
+      "cabinets": 6,
+      "sheets": 2,
+      "hours": 1.5,
+      "status": "Cut, waiting for a pallet",
+      "note": "The build line does not have a place for it yet.",
+      "released": true,
+      "station_visible": false
+    }
+  ],
+  "sheets": [
+    {"id": "DEMO-1042-S01", "job": "DEMO-1042", "machine": "Python", "tap": "DEMO-1042-S01.tap", "xpr": "DEMO-1042-S01.xpr", "ran": false, "observed": 0, "confirmed": false},
+    {"id": "DEMO-1042-S02", "job": "DEMO-1042", "machine": "Python", "tap": "DEMO-1042-S02.tap", "xpr": "DEMO-1042-S02.xpr", "ran": false, "observed": 0, "confirmed": false},
+    {"id": "DEMO-1054-S01", "job": "DEMO-1054", "machine": "Omni", "tap": "DEMO-1054-S01.tap", "xpr": "DEMO-1054-S01.xpr", "ran": false, "observed": 1, "confirmed": false},
+    {"id": "DEMO-1054-S02", "job": "DEMO-1054", "machine": "Python", "tap": "DEMO-1054-S02.tap", "xpr": "DEMO-1054-S02.xpr", "ran": true, "observed": 1, "confirmed": true},
+    {"id": "DEMO-1054-S03", "job": "DEMO-1054", "machine": "Python", "tap": "DEMO-1054-S03.tap", "xpr": "DEMO-1054-S03.xpr", "ran": false, "observed": 0, "confirmed": false}
+  ],
+  "absorbed_parts": [
+    {"item": "Base 24", "part": "Rail", "qty": 1},
+    {"item": "Wall 30", "part": "Nailer", "qty": 1},
+    {"item": "Base 24", "part": "Toe kick", "qty": 1}
+  ],
+  "handcuts": [
+    {"item": "Base 24", "part": "Nailer", "qty": 2},
+    {"item": "Base 24", "part": "Stretcher", "qty": 2},
+    {"item": "Base 24", "part": "Toe kick", "qty": 1}
+  ],
+  "forecast": {
+    "sheets": 14,
+    "hours": 6.5,
+    "source": "Recent machine pace"
+  },
+  "departments": [
+    {"id": "warehouse", "name": "Warehouse", "progress": "Received", "delivery": "In"},
+    {"id": "cutting", "name": "Cutting", "progress": "Received", "delivery": "In"},
+    {"id": "breakdown", "name": "Breakdown", "progress": "Missing", "delivery": "Out"},
+    {"id": "sanding", "name": "Sanding", "progress": "Received", "delivery": "In"},
+    {"id": "paint", "name": "Paint", "progress": "STALE", "delivery": "In"},
+    {"id": "custom_assembly", "name": "Custom assembly", "progress": "Received", "delivery": "In"},
+    {"id": "packing", "name": "Packing", "progress": "Received", "delivery": "In"}
+  ],
+  "pallets": [
+    {"id": "P-14", "job": "DEMO-1058", "area": "", "placed": false},
+    {"id": "P-15", "job": "DEMO-1054", "area": "Cut", "placed": true}
+  ],
+  "recovery": [],
+  "areas": ["Cut", "Build line", "Staging"],
+  "share_up": true,
+  "desktop": [],
+  "conflict": false,
+  "round": 1,
+  "round_note": "Breakdown is missing. That does not stop the round."
+}

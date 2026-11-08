@@ -114,6 +114,44 @@ def validate_shared_scenario(errors: list[str]) -> None:
         errors.append("demos/shared/manufacturing-day.json: DEMO-1054 byte total does not reconcile")
 
 
+def validate_shop_day(errors: list[str]) -> None:
+    fixture = ROOT / "demos" / "shared" / "shop-day.json"
+    try:
+        day = json.loads(fixture.read_text(encoding="utf-8"))
+    except Exception as exc:  # pragma: no cover - diagnostics only
+        errors.append(f"demos/shared/shop-day.json: invalid shop day: {exc}")
+        return
+    batch = day.get("batch", {})
+    if batch.get("sheets") != 2 or batch.get("absorbed") != 3 or batch.get("remaining") != 5:
+        errors.append("demos/shared/shop-day.json: the public batch is 2 sheets, 3 absorbed, 5 remaining")
+    hand_qty = sum(int(row.get("qty", 0)) for row in day.get("handcuts", []))
+    absorbed_qty = sum(int(row.get("qty", 0)) for row in day.get("absorbed_parts", []))
+    if hand_qty != batch.get("remaining") or absorbed_qty != batch.get("absorbed"):
+        errors.append("demos/shared/shop-day.json: hand-cut quantities do not match the batch")
+    job_ids = {job.get("id") for job in day.get("jobs", [])}
+    for job_id in ("DEMO-1042", "DEMO-1047", "DEMO-1054", "DEMO-1058"):
+        if job_id not in job_ids:
+            errors.append(f"demos/shared/shop-day.json: missing {job_id}")
+    if any(part.get("part") == "Bottom" for part in day.get("handcuts", [])):
+        errors.append("demos/shared/shop-day.json: bottoms stay off the saw list")
+    homepage = (ROOT / "index.html").read_text(encoding="utf-8")
+    if "demos/warehouse-floor/" not in homepage:
+        errors.append("index.html: homepage must reserve the warehouse slot")
+    if not (ROOT / "demos" / "warehouse-floor" / "README.md").exists():
+        errors.append("demos/warehouse-floor/README.md: drop contract is missing")
+
+
+def validate_public_limits(pages: list[Path], errors: list[str]) -> None:
+    banned = ("autonomous factory", "selling-price engine", "timberland", "\\\\")
+    for page in pages:
+        lowered = page.read_text(encoding="utf-8").casefold()
+        for claim in banned:
+            if claim in lowered:
+                errors.append(f"{page.relative_to(ROOT)}: public limit remains: {claim!r}")
+        if "$" in lowered:
+            errors.append(f"{page.relative_to(ROOT)}: dollar amount is not public")
+
+
 def main() -> int:
     errors: list[str] = []
     html_files = sorted(ROOT.rglob("*.html"))
@@ -139,6 +177,8 @@ def main() -> int:
             errors.append(f"{fixture.relative_to(ROOT)}: invalid JSON: {exc}")
 
     validate_shared_scenario(errors)
+    validate_shop_day(errors)
+    validate_public_limits(html_files, errors)
 
     try:
         ElementTree.parse(ROOT / "sitemap.xml")

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cut Pricing | Acor.dev</title>
+  <meta name="description" content="Cut Pricing for the same four invented jobs. Sheets, hours, and status. No prices and no rates.">
+  <link rel="canonical" href="https://acor.dev/demos/pricing/">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../rsc/img/acor_favicon_32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css?v=20261108s">
+  <link rel="stylesheet" href="../shared/apps.css?v=20261108s">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div class="page-shell">
+    <header class="site-header" data-header>
+      <div class="container nav-row">
+        <a class="brand-mark" href="../../" aria-label="Acor.dev home"><img src="../../rsc/img/acor_transparent.png" alt=""><span>Acor.dev</span></a>
+        <nav class="site-nav" aria-label="Primary navigation"><a href="../../#apps">Apps</a><a href="../wood/">Wood Usage</a><a href="../../evidence/">Evidence</a></nav>
+      </div>
+    </header>
+    <main class="section app-page" id="main-content">
+      <div class="container">
+        <p class="eyebrow">Manufacturing standard</p>
+        <h1>Cut Pricing</h1>
+        <div class="app-frame">
+          <div class="app-bar"><strong>Cut Pricing</strong><span>Sheets and time. A tighter nest does not change the standard. Not a selling price.</span></div>
+          <div class="app-main">
+            <table class="app-table" data-jobs></table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="../../script.js"></script>
+  <script src="../shared/shop.js"></script>
+  <script>
+    AcorShop.open(function (shop) {
+      document.querySelector("[data-jobs]").innerHTML = "<tr><th>Job</th><th>Cabinets</th><th>Sheets</th><th>Hours</th><th>Status</th></tr>" + shop.day.jobs.map(function (job) {
+        return "<tr><td>" + job.id + "</td><td>" + job.cabinets + "</td><td>" + job.sheets + "</td><td>" + job.hours + "</td><td>" + job.status + "</td></tr>";
+      }).join("");
+    });
+  </script>
+</body>
+</html>

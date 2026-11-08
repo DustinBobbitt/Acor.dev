@@ -1,0 +1,129 @@
+.stream {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #10151c;
+  overflow: hidden;
+}
+
+.stream-bar,
+.stream-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.75rem 1rem;
+}
+
+.stream-bar {
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.stream-bar strong,
+.stream-stage h2 {
+  color: var(--text);
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 500;
+}
+
+.stream-stage {
+  min-height: 22rem;
+  padding: 1rem 1rem 0.25rem;
+}
+
+.stream-stage h2 {
+  margin: 0 0 0.8rem;
+  font-size: 1.35rem;
+}
+
+.stream button,
+.lane button,
+.cut-tools button {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  padding: 0.4rem 0.7rem;
+  cursor: pointer;
+}
+
+.stream-nav button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.sheets {
+  display: flex;
+  gap: 0.8rem;
+  align-items: flex-start;
+}
+
+.sheets svg {
+  width: 9.5rem;
+  height: 19rem;
+  background: #c8c8c8;
+  border-radius: 2px;
+}
+
+.sheets rect.machine { fill: #ead9bf; stroke: #c2b39a; stroke-width: 0.15; }
+.sheets line.groove { stroke: #8d3a32; stroke-width: 0.35; }
+.sheets rect.hand {
+  fill: #d7ddd4;
+  stroke: #9aada4;
+  stroke-width: 0.15;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+.stream.settled rect.hand { opacity: 1; transform: none; }
+
+.saw {
+  min-width: 12rem;
+}
+
+.saw div,
+.file-row,
+.job-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.panel {
+  padding: 0.8rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.panel h3 {
+  margin: 0 0 0.5rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.big {
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheets rect.hand { opacity: 1; transform: none; transition: none; }
+}
+
+@media (max-width: 800px) {
+  .sheets { overflow-x: auto; }
+  .two { grid-template-columns: 1fr; }
+}

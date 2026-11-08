@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Department status | Acor.dev</title>
+  <meta name="description" content="Two separate outage tools on one invented day: department status on a saved workbook, and a recovery list a person keys back. Cut packets stay on the Cut page.">
+  <link rel="canonical" href="https://acor.dev/demos/shop-floor/">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../rsc/img/acor_favicon_32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css?v=20261108s">
+  <link rel="stylesheet" href="../shared/apps.css?v=20261108s">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div class="page-shell">
+    <header class="site-header" data-header>
+      <div class="container nav-row">
+        <a class="brand-mark" href="../../" aria-label="Acor.dev home"><img src="../../rsc/img/acor_transparent.png" alt=""><span>Acor.dev</span></a>
+        <nav class="site-nav" aria-label="Primary navigation"><a href="../../#apps">Apps</a><a href="../cut/">Cut desktop</a><a href="../../evidence/">Evidence</a></nav>
+      </div>
+    </header>
+    <main class="section app-page" id="main-content">
+      <div class="container">
+        <p class="eyebrow">When the network is down</p>
+        <h1>Department status</h1>
+        <div class="app-frame" data-app>
+          <div class="app-bar">
+            <strong>Shop Floor Orchestrator</strong>
+            <div class="segment">
+              <button type="button" data-act="view" data-view="rotation">Rotation</button>
+              <button type="button" data-act="view" data-view="floor">Department</button>
+            </div>
+          </div>
+          <div class="app-main">
+            <p data-summary></p>
+            <div data-panel></div>
+            <div class="app-actions" style="margin-top:0.8rem">
+              <button class="app-btn" type="button" data-act="push">Push</button>
+              <button class="app-btn" type="button" data-act="pull">Pull</button>
+              <button class="app-btn primary" type="button" data-act="advance">Advance round</button>
+              <button class="app-btn" type="button" data-act="move">Advance one item</button>
+              <button class="app-btn" type="button" data-act="conflict">Record a conflict</button>
+              <button class="app-btn" type="button" data-act="reset">Reset day</button>
+            </div>
+            <h2 style="margin-top:1rem">Reconciliation queue</h2>
+            <div data-recovery></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="../../script.js"></script>
+  <script src="../shared/shop.js"></script>
+  <script src="floor.js?v=20261108s"></script>
+</body>
+</html>
