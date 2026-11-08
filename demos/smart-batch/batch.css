@@ -1,0 +1,178 @@
+.nest-app {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  background: #12161c;
+  color: #e7e2d8;
+  overflow: hidden;
+}
+
+.nest-bar,
+.nest-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.72rem 0.95rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.01em;
+}
+
+.nest-bar {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  color: #b7b1a6;
+}
+
+.nest-bar strong {
+  color: #f3efe6;
+  font-weight: 650;
+  letter-spacing: 0;
+}
+
+.nest-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(190px, 0.72fr);
+  gap: 0.85rem;
+  padding: 0.85rem;
+  align-items: stretch;
+}
+
+.nest-canvas {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.35), transparent 28%),
+    #e4dccb;
+  border-radius: 8px;
+  padding: 0.45rem;
+}
+
+.nest-canvas svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.sheet-face {
+  fill: #efe7d8;
+  stroke: #cfc4b0;
+  stroke-width: 1;
+}
+
+.machine-part rect,
+.machine-part path {
+  fill: #d7c6a6;
+  stroke: #8d7b62;
+  stroke-width: 1.25;
+}
+
+.handcut-fit rect,
+.handcut-fit path {
+  fill: #c5cfc8;
+  stroke: #6f7d76;
+  stroke-width: 1.25;
+}
+
+.part-label,
+.part-note {
+  fill: #3c3428;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.machine-part,
+.handcut-fit,
+.paper-row {
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+
+.nest-app[data-step="1"] .machine-part,
+.nest-app[data-step="2"] .machine-part,
+.nest-app[data-step="3"] .machine-part,
+.nest-app[data-step="4"] .machine-part,
+.nest-app[data-step="3"] .handcut-fit,
+.nest-app[data-step="4"] .handcut-fit,
+.nest-app[data-step="4"] .paper-row {
+  opacity: 1;
+}
+
+.saw-sheet {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 0.95rem 0.95rem 0.8rem;
+  border-radius: 8px;
+  background: #f6f1e7;
+  color: #2c261e;
+}
+
+.saw-sheet header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid #ddd4c4;
+}
+
+.saw-sheet header strong {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+}
+
+.saw-sheet header span,
+.saw-sheet p {
+  margin: 0;
+  color: #6d6458;
+  font-size: 0.75rem;
+}
+
+.paper-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.75rem;
+  padding: 0.48rem 0;
+  border-bottom: 1px solid #ece4d6;
+  font-size: 0.86rem;
+}
+
+.paper-row span {
+  font-variant-numeric: tabular-nums;
+  color: #6d6458;
+}
+
+.nest-status {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  color: #b7b1a6;
+}
+
+.nest-status button {
+  border: 0;
+  background: transparent;
+  color: #f3efe6;
+  font: inherit;
+  cursor: pointer;
+  padding: 0;
+}
+
+.nest-status button:hover {
+  color: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .machine-part,
+  .handcut-fit,
+  .paper-row {
+    transition: none;
+  }
+}
+
+@media (max-width: 800px) {
+  .nest-body {
+    grid-template-columns: 1fr;
+  }
+
+  .saw-sheet {
+    min-height: 0;
+  }
+}
