@@ -1,93 +1,612 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="dark" />
+<link rel="icon" href="rsc/img/revamp/acor-logo.png" />
 <title>Acor.dev — Manufacturing systems, shown through the work</title>
-<meta name="description" content="An evidence-led look at manufacturing software, CNC workflows, production handoff and warehouse operations.">
-<link rel="icon" href="rsc/img/acor_favicon_32.png">
-<link rel="stylesheet" href="styles.css">
+<meta name="description" content="Manufacturing systems you can experience. A connected set of tools that prepares production work, carries it to the station, records what happened, and helps people find what comes next." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#060A13; --bg2:#090F1B; --panel:#0B1322; --panel2:#0E1830;
+  --ink:#EDF1F8; --mut:#9DACC4; --mut2:#7286A3;
+  --line:rgba(148,178,225,.16); --line2:rgba(148,178,225,.28);
+  --cyan:#3EC6EC; --cyan-hi:#8FE3FA; --cyan-deep:#0E7FA8;
+  --amber:#E8B34B;
+  --radius:14px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Sora",system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{color:inherit}
+::selection{background:var(--cyan);color:#04121C}
+.mono{font-family:"IBM Plex Mono",monospace}
+.wrap{width:min(1240px,100% - 40px);margin-inline:auto}
+@media(min-width:760px){.wrap{width:min(1240px,100% - 72px)}}
+
+/* ambient background: faint blueprint grid + one cyan bloom, top only */
+.ambient{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(900px 480px at 78% -120px, rgba(62,198,236,.13), transparent 65%),
+    radial-gradient(700px 420px at -120px 30%, rgba(62,198,236,.05), transparent 60%),
+    var(--bg);}
+.ambient::after{content:"";position:absolute;inset:0;
+  background-image:linear-gradient(rgba(148,178,225,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(148,178,225,.045) 1px,transparent 1px);
+  background-size:56px 56px;
+  -webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.9),transparent 55%);
+          mask-image:linear-gradient(180deg,rgba(0,0,0,.9),transparent 55%);}
+
+/* progress + nav */
+#progress{position:fixed;top:0;left:0;height:2px;background:var(--cyan);width:0;z-index:70}
+nav{position:fixed;inset:0 0 auto 0;z-index:60;background:rgba(6,10,19,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;gap:18px;padding:13px 0}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;font-weight:700;font-size:18px;letter-spacing:-.01em}
+.brand img{width:34px;height:34px;object-fit:contain}
+.nav-links{display:none;margin-left:auto;gap:30px}
+@media(min-width:860px){.nav-links{display:flex}}
+.nav-links a{text-decoration:none;color:var(--mut);font-size:14.5px;font-weight:500;padding:6px 2px;border-bottom:2px solid transparent}
+.nav-links a:hover{color:var(--ink)}
+.nav-links a.active{color:var(--cyan-hi);border-bottom-color:var(--cyan)}
+.nav-badge{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan-hi);border:1px solid rgba(62,198,236,.4);border-radius:999px;padding:7px 12px;white-space:nowrap}
+@media(min-width:860px){.nav-badge{margin-left:0}}
+
+/* HERO — live CNC background: the cut runs behind the whole stage */
+.hero{padding:148px 0 76px;position:relative;overflow:hidden;background:var(--bg)}
+@media(min-width:900px){.hero{padding-top:172px}}
+.hero .wrap{position:relative;z-index:2}
+.hero-bg{position:absolute;inset:-6% 0;z-index:0;pointer-events:none;will-change:transform;
+  --bit-ox:.72;--bit-oy:.5;--bit-fx:.685;--bit-fy:.785}
+@media(max-width:760px){.hero-bg{--bit-ox:.66;--bit-oy:.34}}
+.hero-bg-media{position:absolute;inset:0;overflow:hidden}
+.hero-bg-media img{width:100%;height:100%;object-fit:cover;object-position:72% 50%;
+  animation:heroDrift 46s ease-in-out infinite alternate}
+@media(max-width:760px){.hero-bg-media img{object-position:66% 34%}}
+@keyframes heroDrift{from{transform:scale(1.03) translate(0,0)}to{transform:scale(1.13) translate(-1.6%,-2.2%)}}
+.hero-bit-glow{position:absolute;width:360px;height:360px;left:70%;top:78%;
+  transform:translate(-50%,-50%);border-radius:50%;
+  background:radial-gradient(circle,rgba(255,178,84,.5),rgba(232,179,75,.15) 40%,transparent 68%);
+  mix-blend-mode:screen;animation:bitPulse 2.4s ease-in-out infinite alternate}
+@keyframes bitPulse{from{opacity:.5}to{opacity:1}}
+#heroSparks{position:absolute;inset:0;width:100%;height:100%}
+.hero-shade{position:absolute;inset:0;background:
+  linear-gradient(90deg,rgba(6,10,19,.88) 0%,rgba(6,10,19,.6) 34%,rgba(6,10,19,.16) 62%,rgba(6,10,19,.32) 100%),
+  linear-gradient(180deg,rgba(6,10,19,.74) 0%,rgba(6,10,19,.05) 26%,rgba(6,10,19,.05) 52%,rgba(6,10,19,.9) 88%,var(--bg) 100%)}
+@media(max-width:760px){.hero-shade{background:
+  linear-gradient(90deg,rgba(6,10,19,.85),rgba(6,10,19,.55)),
+  linear-gradient(180deg,rgba(6,10,19,.78) 0%,rgba(6,10,19,.28) 38%,rgba(6,10,19,.34) 60%,rgba(6,10,19,.94) 90%,var(--bg) 100%)}}
+@media (prefers-reduced-motion:reduce){
+  .hero-bg-media img{animation:none;transform:scale(1.04)}
+  .hero-bit-glow{animation:none;opacity:.8}
+}
+.hero-grid{display:grid;gap:52px;align-items:start}
+@media(min-width:1020px){.hero-grid{grid-template-columns:1.08fr .92fr;gap:64px}}
+.kicker{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);margin:0}
+h1{margin:22px 0 0;font-size:clamp(46px,7.2vw,84px);line-height:1.02;font-weight:800;letter-spacing:-.03em}
+h1 .cy{color:var(--cyan)}
+.hero-sub{margin:28px 0 0;font-size:clamp(17px,2vw,20px);line-height:1.65;color:#C7D2E4;max-width:560px}
+.callout{margin:30px 0 0;border-left:2px solid var(--cyan);padding:4px 0 4px 20px;color:var(--mut);font-size:15.5px;line-height:1.65;max-width:540px}
+.hero-cta{display:inline-flex;align-items:center;gap:10px;margin-top:36px;text-decoration:none;font-weight:700;font-size:16px;color:var(--cyan-hi)}
+.hero-cta .arr{display:inline-flex;width:34px;height:34px;border-radius:50%;border:1px solid rgba(62,198,236,.5);align-items:center;justify-content:center;transition:transform .35s cubic-bezier(.2,.8,.2,1),background .35s}
+.hero-cta:hover .arr{transform:translateY(4px);background:rgba(62,198,236,.14)}
+@media (prefers-reduced-motion:reduce){.hero-cta .arr{transition:none}}
+
+/* hero screenshot */
+.shot{border:1px solid var(--line2);border-radius:var(--radius);overflow:hidden;background:var(--panel)}
+.shot .bar{display:flex;align-items:center;gap:7px;padding:10px 14px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02)}
+.shot .bar i{width:9px;height:9px;border-radius:50%;background:#2A3856;display:block}
+.shot .bar span{margin-left:8px;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut2)}
+.shot img{width:100%}
+.shot figcaption{padding:13px 16px;font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.06em;color:var(--mut);border-top:1px solid var(--line);background:rgba(255,255,255,.015)}
+.hero-shot{box-shadow:0 40px 90px -30px rgba(0,0,0,.75),0 0 0 1px rgba(62,198,236,.06),0 0 90px -30px rgba(62,198,236,.35)}
+.hero-shot .crop{height:520px;overflow:hidden;position:relative}
+@media(max-width:640px){.hero-shot .crop{height:430px}}
+.hero-shot .crop img{height:100%;object-fit:cover;object-position:top center}
+.hero-shot .crop::after{content:"";position:absolute;inset:auto 0 0 0;height:90px;background:linear-gradient(180deg,transparent,rgba(6,10,19,.55))}
+
+/* entrance */
+.rise{opacity:0;transform:translateY(26px);animation:riseIn .8s cubic-bezier(.2,.8,.2,1) forwards}
+.rise.d1{animation-delay:.08s}.rise.d2{animation-delay:.16s}.rise.d3{animation-delay:.26s}
+@keyframes riseIn{to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.rise{opacity:1;transform:none;animation:none}}
+
+/* flow strip */
+.flow{margin-top:76px;border-block:1px solid var(--line);padding:26px 18px 30px;background:rgba(6,10,19,.52);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.flow-label{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mut2);margin:0 0 18px}
+.flow-track{display:flex;flex-wrap:wrap;align-items:center;gap:12px 14px}
+.flow-node{font-weight:700;font-size:clamp(15px,2vw,19px);letter-spacing:-.01em;display:flex;align-items:center;gap:12px}
+.flow-node .n{font-family:"IBM Plex Mono",monospace;font-size:11px;color:#04121C;background:var(--cyan);border-radius:6px;padding:4px 7px;font-weight:600}
+.flow-arrow{color:var(--cyan);font-size:18px;line-height:1}
+
+/* story band */
+.story{background:var(--bg2);border-block:1px solid var(--line);padding:64px 0;margin-top:0}
+.story-grid{display:grid;gap:18px}
+@media(min-width:900px){.story-grid{grid-template-columns:300px 1fr;gap:56px;align-items:start}}
+.story p.big{margin:0;font-size:clamp(24px,3.4vw,36px);line-height:1.32;font-weight:600;letter-spacing:-.015em;max-width:820px}
+.story p.big b{color:var(--cyan-hi);font-weight:700}
+
+/* sections */
+section{padding:104px 0}
+@media(min-width:900px){section{padding:136px 0}}
+section + section{border-top:1px solid var(--line)}
+.sec-k{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);margin:0}
+h2{margin:18px 0 0;font-size:clamp(36px,5.4vw,60px);line-height:1.05;font-weight:800;letter-spacing:-.028em;max-width:820px}
+.sec-lede{margin:22px 0 0;color:var(--mut);font-size:17px;line-height:1.7;max-width:720px}
+.note{border-left:2px solid var(--cyan);padding:4px 0 4px 20px;color:var(--mut);font-size:15px;line-height:1.7}
+.note.amber{border-left-color:var(--amber)}
+.note.amber b{color:var(--amber)}
+
+/* reveal on scroll */
+.reveal{opacity:1}
+.reveal.pre{opacity:0;transform:translateY(24px)}
+.reveal.in{transition:opacity .7s cubic-bezier(.2,.8,.2,1),transform .7s cubic-bezier(.2,.8,.2,1);opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal.pre{opacity:1;transform:none}.reveal.in{transition:none}}
+
+/* journey */
+.journey{display:grid;gap:16px;margin-top:52px}
+@media(min-width:700px){.journey{grid-template-columns:1fr 1fr}}
+@media(min-width:1080px){.journey{grid-template-columns:repeat(4,1fr)}}
+.jcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:border-color .3s,transform .3s}
+.jcard:hover{border-color:rgba(62,198,236,.45);transform:translateY(-4px)}
+@media (prefers-reduced-motion:reduce){.jcard{transition:none}.jcard:hover{transform:none}}
+.jcard .top{padding:24px 22px 0}
+.jcard .no{font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600;color:var(--cyan)}
+.jcard h3{margin:12px 0 10px;font-size:20px;font-weight:700;letter-spacing:-.015em;line-height:1.2}
+.jcard p{margin:0;color:var(--mut);font-size:14.5px;line-height:1.65}
+.jcard figure{margin:auto 22px 22px;padding-top:22px}
+.jcard figure .frame{border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.jcard figure img{width:100%;height:190px;object-fit:cover;object-position:top center}
+.jcard figcaption{margin-top:10px;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--mut2);line-height:1.5}
+
+/* smart batch stats */
+.stats{display:grid;gap:16px;margin-top:52px}
+@media(min-width:760px){.stats{grid-template-columns:repeat(3,1fr)}}
+.stat{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:var(--radius);padding:34px 30px 30px}
+.stat .num{font-size:clamp(58px,7vw,84px);font-weight:800;letter-spacing:-.04em;line-height:1;color:var(--cyan)}
+.stat .lbl{margin-top:14px;color:#C7D2E4;font-size:16px;font-weight:600}
+.sb-notes{display:grid;gap:22px;margin-top:40px;max-width:880px}
+
+/* applications */
+.apps{display:grid;gap:16px;margin-top:52px}
+@media(min-width:820px){.apps{grid-template-columns:repeat(3,1fr)}}
+.acard{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;transition:border-color .3s,transform .3s}
+.acard:hover{border-color:rgba(62,198,236,.45);transform:translateY(-4px)}
+@media (prefers-reduced-motion:reduce){.acard{transition:none}.acard:hover{transform:none}}
+.acard .crop{height:300px;overflow:hidden;background:#0A0F1B}
+.acard .crop img{width:100%;height:100%;object-fit:cover;object-position:top center}
+.acard .meta{padding:18px 20px 20px;border-top:1px solid var(--line)}
+.acard .meta b{display:block;font-size:16.5px;font-weight:700}
+.acard .meta span{display:block;margin-top:4px;font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--mut2)}
+
+/* two-up captures */
+.duo{display:grid;gap:16px;margin-top:52px}
+@media(min-width:860px){.duo{grid-template-columns:1fr 1fr}}
+.duo .crop{height:340px;overflow:hidden}
+.duo .crop img{width:100%;height:100%;object-fit:cover;object-position:top center}
+
+/* warehouse */
+.wh-grid{display:grid;gap:16px;margin-top:52px}
+@media(min-width:960px){.wh-grid{grid-template-columns:1.55fr 1fr}}
+.wh-side{display:grid;gap:16px}
+.wh-main .crop{height:100%;min-height:340px;overflow:hidden}
+.wh-main .crop img{width:100%;height:100%;object-fit:cover;object-position:center}
+.wh-side .crop{height:196px;overflow:hidden}
+.wh-side .crop img{width:100%;height:100%;object-fit:cover;object-position:top center}
+
+/* evidence */
+.principles{display:grid;gap:16px;margin-top:52px}
+@media(min-width:860px){.principles{grid-template-columns:repeat(3,1fr)}}
+.pr{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:30px 28px 34px}
+.pr h3{margin:0 0 12px;font-size:19px;font-weight:700;letter-spacing:-.01em}
+.pr h3 .dot{color:var(--cyan)}
+.pr p{margin:0;color:var(--mut);font-size:15px;line-height:1.7}
+
+/* footer */
+footer{border-top:1px solid var(--line);background:var(--bg2);padding:44px 0 52px}
+.foot-in{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
+.foot-brand{display:flex;align-items:center;gap:11px;color:var(--mut);font-size:14px}
+.foot-brand img{width:28px;height:28px;object-fit:contain}
+.foot-right{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.08em;color:var(--mut2);text-transform:uppercase}
+</style>
 </head>
-<body>
-<header class="top">
-  <a class="brand" href="#top"><img src="rsc/img/acor_transparent.png" alt="Acor"><span>Acor.dev</span></a>
-  <nav><a href="#production">Production</a><a href="#applications">Applications</a><a href="#operations">Operations</a><a href="#warehouse">Warehouse</a><a href="#evidence">Evidence</a></nav>
+<body id="top">
+<div class="ambient" aria-hidden="true"></div>
+<div id="progress" aria-hidden="true"></div>
+
+<nav aria-label="Main">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top"><img src="rsc/img/revamp/acor-logo.png" alt="" />Acor.dev</a>
+    <div class="nav-links">
+      <a href="#production" data-nav="production">Production</a>
+      <a href="#applications" data-nav="applications">Applications</a>
+      <a href="#operations" data-nav="operations">Operations</a>
+      <a href="#warehouse" data-nav="warehouse">Warehouse</a>
+      <a href="#evidence" data-nav="evidence">Evidence</a>
+    </div>
+    <span class="nav-badge">Prototype review build</span>
+  </div>
+</nav>
+
+<!-- HERO — unchanged words, on a live CNC background -->
+<header class="hero">
+  <div class="hero-bg" id="heroBg" aria-hidden="true">
+    <div class="hero-bg-media"><img id="heroBgImg" src="rsc/img/revamp/hero-cnc.jpg" alt="" /></div>
+    <div class="hero-bit-glow" id="heroBitGlow"></div>
+    <canvas id="heroSparks"></canvas>
+    <div class="hero-shade"></div>
+  </div>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <p class="kicker rise">Manufacturing software · CNC · Production operations</p>
+        <h1 class="rise d1">Manufacturing systems you can <span class="cy">experience.</span></h1>
+        <p class="hero-sub rise d2">A connected set of tools that prepares production work, carries it to the station, records what happened, and helps people find what comes next.</p>
+        <p class="callout rise d2">Built to work beside an existing ERP and machine controllers. People still release the work, operate the machines, and make the decisions.</p>
+        <a class="hero-cta rise d3" href="#production">Follow a production day <span class="arr" aria-hidden="true">↓</span></a>
+      </div>
+      <figure class="shot hero-shot rise d2" style="margin:0">
+        <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>Cut Operations Health — live queue</span></div>
+        <div class="crop"><img src="rsc/img/revamp/suite-dashboard.png" alt="Actual suite web dashboard screenshot" /></div>
+        <figcaption>Actual application capture · production overview</figcaption>
+      </figure>
+    </div>
+
+    <div class="flow reveal" aria-label="One connected production story">
+      <p class="flow-label">One connected production story</p>
+      <div class="flow-track">
+        <span class="flow-node"><span class="n">01</span>Manufacturing requirements</span><span class="flow-arrow" aria-hidden="true">→</span>
+        <span class="flow-node"><span class="n">02</span>Machine-ready work</span><span class="flow-arrow" aria-hidden="true">→</span>
+        <span class="flow-node"><span class="n">03</span>Station records</span><span class="flow-arrow" aria-hidden="true">→</span>
+        <span class="flow-node"><span class="n">04</span>Operational visibility</span>
+      </div>
+    </div>
+  </div>
 </header>
-<main id="top">
-  <section class="hero wrap">
-    <div class="hero-copy">
-      <p class="eyebrow">Manufacturing software · CNC · production operations</p>
-      <h1>Manufacturing systems you can <em>experience.</em></h1>
-      <p class="lede">A connected set of tools that prepares production work, carries it to the station, records what happened, and helps people find what comes next.</p>
-      <p class="boundary">Built to work beside an existing ERP and machine controllers. People still release the work, operate the machines, and make the decisions.</p>
-      <a class="link" href="#production">Follow a production day <span>↓</span></a>
-    </div>
-    <figure class="hero-proof"><img src="rsc/img/suite_web_dashboard.png" alt="Actual suite web dashboard screenshot"><figcaption>Actual application capture · production overview</figcaption></figure>
-  </section>
 
-  <section class="intro-band">
-    <div class="wrap band-inner"><p class="eyebrow">One connected production story</p><p class="band-copy">Follow the information as it becomes <strong>manufacturing requirements, machine-ready work, station records, and operational visibility.</strong></p></div>
-  </section>
+<div class="story">
+  <div class="wrap story-grid reveal">
+    <p class="kicker" style="padding-top:10px">One connected<br/>production story</p>
+    <p class="big">Follow the information as it becomes <b>manufacturing requirements</b>, <b>machine-ready work</b>, <b>station records</b>, and <b>operational visibility</b>.</p>
+  </div>
+</div>
 
-  <section class="section wrap" id="production">
-    <div class="section-head"><p class="eyebrow">01 / Production journey</p><h2>One order. A chain of real work.</h2><p>This is a guided explanation of the workflow, supported by actual application captures. It is not a claim that every tool is one integrated application.</p></div>
+<main>
+<!-- 01 / PRODUCTION JOURNEY -->
+<section id="production">
+  <div class="wrap">
+    <p class="sec-k reveal">01 / Production journey</p>
+    <h2 class="reveal">One order. A chain of real work.</h2>
+    <p class="sec-lede reveal">This is a guided explanation of the workflow, supported by actual application captures. It is not a claim that every tool is one integrated application.</p>
+
     <div class="journey">
-      <article><span class="num">01</span><h3>Prepare the work</h3><p>Orders become explicit cabinet and component requirements before anything is released to a machine.</p><figure><img src="rsc/img/suite_web_dashboard.png" alt="Actual suite web dashboard screenshot"><figcaption>Actual suite screen · dashboard</figcaption></figure></article>
-      <article><span class="num">02</span><h3>Generate and validate</h3><p>Geometry and manufacturing outputs are prepared with defined checks. Unsupported or incomplete inputs should be stopped, not guessed.</p><figure><img src="rsc/img/suite_web_packet.png" alt="Actual suite production packet screenshot"><figcaption>Actual application capture · production packet</figcaption></figure></article>
-      <article><span class="num">03</span><h3>Prepare machine work</h3><p>The production flow distinguishes the TAP and XPR/NC outputs. The saw receives its own remainder paperwork.</p><figure><img src="rsc/img/suite_web_packet.png" alt="Actual suite packet screenshot"><figcaption>Actual suite screen · production packet</figcaption></figure></article>
-      <article><span class="num">04</span><h3>Carry it to the station</h3><p>Operators see released work and record their progress. The application prepares and presents the work; the operator and controller run the machine.</p><figure><img src="rsc/img/suite_web_labels.png" alt="Actual suite labels and identification screen"><figcaption>Actual application capture · labels and identification</figcaption></figure></article>
+      <article class="jcard reveal">
+        <div class="top"><span class="no">01</span><h3>Prepare the work</h3><p>Orders become explicit cabinet and component requirements before anything is released to a machine.</p></div>
+        <figure><div class="frame"><img src="rsc/img/revamp/suite-dashboard.png" alt="Actual suite web dashboard screenshot" loading="lazy" /></div><figcaption>Actual suite screen · dashboard</figcaption></figure>
+      </article>
+      <article class="jcard reveal">
+        <div class="top"><span class="no">02</span><h3>Generate and validate</h3><p>Geometry and manufacturing outputs are prepared with defined checks. Unsupported or incomplete inputs should be stopped, not guessed.</p></div>
+        <figure><div class="frame"><img src="rsc/img/revamp/suite-production-packet.png" alt="Actual suite production packet screenshot" loading="lazy" /></div><figcaption>Actual application capture · production packet</figcaption></figure>
+      </article>
+      <article class="jcard reveal">
+        <div class="top"><span class="no">03</span><h3>Prepare machine work</h3><p>The production flow distinguishes the TAP and XPR/NC outputs. The saw receives its own remainder paperwork.</p></div>
+        <figure><div class="frame"><img src="rsc/img/revamp/suite-production-packet.png" alt="Actual suite packet screenshot" loading="lazy" /></div><figcaption>Actual suite screen · production packet</figcaption></figure>
+      </article>
+      <article class="jcard reveal">
+        <div class="top"><span class="no">04</span><h3>Carry it to the station</h3><p>Operators see released work and record their progress. The application prepares and presents the work; the operator and controller run the machine.</p></div>
+        <figure><div class="frame"><img src="rsc/img/revamp/suite-labels.png" alt="Actual suite labels and identification screen" loading="lazy" /></div><figcaption>Actual application capture · labels and identification</figcaption></figure>
+      </article>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="section dark" id="smart-batch">
-    <div class="wrap">
-      <div class="section-head"><p class="eyebrow">02 / Smart Batch</p><h2>Use the sheet more completely. Keep the machining requirements intact.</h2><p>Smart Batch is the centerpiece of the cutting story. The public example is deliberately small and consistent across the workflow.</p></div>
-      <div class="batch-facts">
-        <div><strong>2</strong><span>sheets</span></div><div><strong>3</strong><span>hand-cut parts absorbed</span></div><div><strong>5</strong><span>parts remaining for the saw</span></div>
+<!-- 02 / SMART BATCH -->
+<section id="smart-batch">
+  <div class="wrap">
+    <p class="sec-k reveal">02 / Smart Batch</p>
+    <h2 class="reveal">Use the sheet more completely. Keep the machining requirements intact.</h2>
+    <p class="sec-lede reveal">Smart Batch is the centerpiece of the cutting story. The public example is deliberately small and consistent across the workflow.</p>
+
+    <div class="stats">
+      <div class="stat reveal"><div class="num" data-count="2">2</div><div class="lbl">sheets</div></div>
+      <div class="stat reveal"><div class="num" data-count="3">3</div><div class="lbl">hand-cut parts absorbed</div></div>
+      <div class="stat reveal"><div class="num" data-count="5">5</div><div class="lbl">parts remaining for the saw</div></div>
+    </div>
+
+    <div class="sb-notes">
+      <p class="note reveal" style="margin:0">These are the plan's demonstration figures, not a material-savings claim. Machined parts lock first; eligible hand-cut parts use only available gaps; anything that does not fit remains on the saw list. Cabinet bottoms remain router-required.</p>
+      <p class="note amber reveal" style="margin:0"><b>Visual evidence boundary:</b> this first pass does not substitute a decorative nest drawing for a verified production nest. The current branch's SVG rectangle illustration is not presented as a real DXF or machine nest. The actual nest visualization will be added only from a verified source artifact or capture.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 03 / APPLICATIONS -->
+<section id="applications">
+  <div class="wrap">
+    <p class="sec-k reveal">03 / Applications</p>
+    <h2 class="reveal">Different tools. Distinct jobs.</h2>
+    <p class="sec-lede reveal">The screenshots below are direct repository assets. Each application keeps its own purpose and visual identity.</p>
+
+    <div class="apps">
+      <article class="acard reveal">
+        <div class="crop"><img src="rsc/img/revamp/suite-dashboard.png" alt="Actual suite dashboard" loading="lazy" /></div>
+        <div class="meta"><b>Production overview</b><span>Actual application capture</span></div>
+      </article>
+      <article class="acard reveal">
+        <div class="crop"><img src="rsc/img/revamp/suite-labels.png" alt="Actual suite labels screen" loading="lazy" /></div>
+        <div class="meta"><b>Labels and identification</b><span>Actual application capture</span></div>
+      </article>
+      <article class="acard reveal">
+        <div class="crop"><img src="rsc/img/revamp/suite-production-packet.png" alt="Actual suite packet screen" loading="lazy" /></div>
+        <div class="meta"><b>Production paperwork</b><span>Actual application capture</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 04 / OPERATIONAL VISIBILITY -->
+<section id="operations">
+  <div class="wrap">
+    <p class="sec-k reveal">04 / Operational visibility</p>
+    <h2 class="reveal">What production records make visible.</h2>
+    <p class="sec-lede reveal">Sheets and estimated machine time inform purchasing and labor planning. Machine observations and operator confirmations remain separate records and may disagree. A cost standard is not a selling price.</p>
+
+    <div class="duo">
+      <figure class="shot reveal" style="margin:0">
+        <div class="crop"><img src="rsc/img/revamp/suite-dashboard.png" alt="Actual suite dashboard screenshot" loading="lazy" /></div>
+        <figcaption>Actual suite capture · production overview</figcaption>
+      </figure>
+      <figure class="shot reveal" style="margin:0">
+        <div class="crop"><img src="rsc/img/revamp/suite-labels.png" alt="Actual labels application screen" loading="lazy" /></div>
+        <figcaption>Actual suite capture · labels and records</figcaption>
+      </figure>
+    </div>
+
+    <p class="note reveal" style="margin:40px 0 0;max-width:880px">Offline continuity is two separate capabilities: department status can move through saved workbook packages, while Cut can prepare local machine packets when the share is unavailable. Neither is represented as an automatic ERP write-back.</p>
+  </div>
+</section>
+
+<!-- 05 / WAREHOUSE FLOOR -->
+<section id="warehouse">
+  <div class="wrap">
+    <p class="sec-k reveal">05 / Warehouse Floor</p>
+    <h2 class="reveal">From locating today's cut work to understanding the building.</h2>
+    <p class="sec-lede reveal">Cut Pallet Locator is the existing production capability. Warehouse Floor extends the location idea across an invented facility. The integration between them is intended, not claimed as complete.</p>
+
+    <div class="wh-grid">
+      <figure class="shot wh-main reveal" style="margin:0">
+        <div class="crop"><img src="rsc/img/revamp/warehouse-overview.png" alt="Actual Warehouse Floor overview screenshot" loading="lazy" /></div>
+        <figcaption>Actual Mapping tool capture · facility overview</figcaption>
+      </figure>
+      <div class="wh-side">
+        <figure class="shot reveal" style="margin:0">
+          <div class="crop"><img src="rsc/img/revamp/warehouse-rack-count.png" alt="Actual Warehouse Floor rack count screen" loading="lazy" /></div>
+          <figcaption>Actual capture · rack count</figcaption>
+        </figure>
+        <figure class="shot reveal" style="margin:0">
+          <div class="crop"><img src="rsc/img/revamp/warehouse-search.png" alt="Actual Warehouse Floor search screen" loading="lazy" /></div>
+          <figcaption>Actual capture · search</figcaption>
+        </figure>
       </div>
-      <p class="note">These are the plan's demonstration figures, not a material-savings claim. Machined parts lock first; eligible hand-cut parts use only available gaps; anything that does not fit remains on the saw list. Cabinet bottoms remain router-required.</p>
-      <p class="evidence-caveat"><strong>Visual evidence boundary:</strong> this first pass does not substitute a decorative nest drawing for a verified production nest. The current branch's SVG rectangle illustration is not presented as a real DXF or machine nest. The actual nest visualization will be added only from a verified source artifact or capture.</p>
     </div>
-  </section>
 
-  <section class="section wrap" id="applications">
-    <div class="section-head"><p class="eyebrow">03 / Applications</p><h2>Different tools. Distinct jobs.</h2><p>The screenshots below are direct repository assets. Each application keeps its own purpose and visual identity.</p></div>
-    <div class="evidence-grid">
-      <figure><img src="rsc/img/suite_web_dashboard.png" alt="Actual suite dashboard"><figcaption><strong>Production overview</strong><span>Actual application capture</span></figcaption></figure>
-      <figure><img src="rsc/img/suite_web_labels.png" alt="Actual suite labels screen"><figcaption><strong>Labels and identification</strong><span>Actual application capture</span></figcaption></figure>
-      <figure><img src="rsc/img/suite_web_packet.png" alt="Actual suite packet screen"><figcaption><strong>Production paperwork</strong><span>Actual application capture</span></figcaption></figure>
-    </div>
-  </section>
+    <p class="note reveal" style="margin:40px 0 0;max-width:880px">Northline is the fictional facility used for the public demonstration. The final interactive walkthrough still requires approval of its department shapes and names.</p>
+  </div>
+</section>
 
-  <section class="section dark" id="operations">
-    <div class="wrap">
-      <div class="section-head"><p class="eyebrow">04 / Operational visibility</p><h2>What production records make visible.</h2><p>Sheets and estimated machine time inform purchasing and labor planning. Machine observations and operator confirmations remain separate records and may disagree. A cost standard is not a selling price.</p></div>
-      <div class="two-media">
-        <figure><img src="rsc/img/suite_web_dashboard.png" alt="Actual suite dashboard screenshot"><figcaption>Actual suite capture · production overview</figcaption></figure>
-        <figure><img src="rsc/img/suite_web_labels.png" alt="Actual labels application screen"><figcaption>Actual suite capture · labels and records</figcaption></figure>
-      </div>
-      <p class="note">Offline continuity is two separate capabilities: department status can move through saved workbook packages, while Cut can prepare local machine packets when the share is unavailable. Neither is represented as an automatic ERP write-back.</p>
-    </div>
-  </section>
+<!-- 06 / EVIDENCE AND BOUNDARIES -->
+<section id="evidence">
+  <div class="wrap">
+    <p class="sec-k reveal">06 / Evidence and boundaries</p>
+    <h2 class="reveal">Show what exists. Label what is proposed.</h2>
+    <p class="sec-lede reveal">The site distinguishes tested behavior, recorded application evidence, simulated demonstration data, work in progress, and future direction.</p>
 
-  <section class="section wrap" id="warehouse">
-    <div class="section-head"><p class="eyebrow">05 / Warehouse Floor</p><h2>From locating today's cut work to understanding the building.</h2><p>Cut Pallet Locator is the existing production capability. Warehouse Floor extends the location idea across an invented facility. The integration between them is intended, not claimed as complete.</p></div>
-    <div class="warehouse-feature">
-      <figure class="warehouse-main"><img src="rsc/img/warehouse-floor/overview.png" alt="Actual Warehouse Floor overview screenshot"><figcaption>Actual Mapping tool capture · facility overview</figcaption></figure>
-      <div class="warehouse-side">
-        <figure><img src="rsc/img/warehouse-floor/rack-count.png" alt="Actual Warehouse Floor rack count screen"><figcaption>Actual capture · rack count</figcaption></figure>
-        <figure><img src="rsc/img/warehouse-floor/search.png" alt="Actual Warehouse Floor search screen"><figcaption>Actual capture · search</figcaption></figure>
-      </div>
+    <div class="principles">
+      <article class="pr reveal"><h3>People remain in control<span class="dot">.</span></h3><p>Operators and controllers run machines. Supervisors release and hold work. Leadership sets selling prices.</p></article>
+      <article class="pr reveal"><h3>No fictional proof<span class="dot">.</span></h3><p>No invented screenshots, lookalike machinery, misleading composites, employer data, prices, or dollar totals.</p></article>
+      <article class="pr reveal"><h3>One shop day<span class="dot">.</span></h3><p>The production story uses the shared demonstration jobs and preserves the difference between generated, released, station-visible, loaded, observed, confirmed, and pallet-ready.</p></article>
     </div>
-    <p class="note">Northline is the fictional facility used for the public demonstration. The final interactive walkthrough still requires approval of its department shapes and names.</p>
-  </section>
-
-  <section class="section dark" id="evidence">
-    <div class="wrap">
-      <div class="section-head"><p class="eyebrow">06 / Evidence and boundaries</p><h2>Show what exists. Label what is proposed.</h2><p>The site distinguishes tested behavior, recorded application evidence, simulated demonstration data, work in progress, and future direction.</p></div>
-      <div class="rules"><p><strong>People remain in control.</strong> Operators and controllers run machines. Supervisors release and hold work. Leadership sets selling prices.</p><p><strong>No fictional proof.</strong> No invented screenshots, lookalike machinery, misleading composites, employer data, prices, or dollar totals.</p><p><strong>One shop day.</strong> The production story uses the shared demonstration jobs and preserves the difference between generated, released, station-visible, loaded, observed, confirmed, and pallet-ready.</p></div>
-    </div>
-  </section>
+  </div>
+</section>
 </main>
-<footer class="footer"><div class="wrap"><img src="rsc/img/acor_transparent.png" alt=""><span>Acor.dev · Prototype review build</span><span>Not the public production homepage</span></div></footer>
-</body></html>
+
+<footer>
+  <div class="wrap foot-in">
+    <div class="foot-brand"><img src="rsc/img/revamp/acor-logo.png" alt="" />Acor.dev · Prototype review build</div>
+    <span class="foot-right">Not the public production homepage</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* scroll progress */
+var prog = document.getElementById("progress");
+function onScroll(){
+  var h = document.documentElement;
+  var max = h.scrollHeight - h.clientHeight;
+  prog.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + "%";
+}
+document.addEventListener("scroll", onScroll, {passive:true}); onScroll();
+
+/* reveal on scroll (progressive enhancement: content is visible without JS) */
+if("IntersectionObserver" in window && !reduced){
+  var els = document.querySelectorAll(".reveal");
+  els.forEach(function(el){ el.classList.add("pre"); });
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.remove("pre"); e.target.classList.add("in"); io.unobserve(e.target); } });
+  }, {threshold:.1});
+  els.forEach(function(el){ io.observe(el); });
+}
+
+/* Smart Batch count-up (figures are the site's own demonstration numbers) */
+function countUp(el){
+  var target = parseInt(el.getAttribute("data-count"), 10);
+  if(reduced || isNaN(target)){ el.textContent = target; return; }
+  var start = null, dur = 700;
+  function step(ts){
+    if(!start) start = ts;
+    var p = Math.min(1, (ts - start) / dur);
+    el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
+    if(p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+if("IntersectionObserver" in window){
+  var cio = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ countUp(e.target); cio.unobserve(e.target); } });
+  }, {threshold:.5});
+  document.querySelectorAll("[data-count]").forEach(function(el){ cio.observe(el); });
+}
+
+/* nav active section */
+var links = {};
+document.querySelectorAll("[data-nav]").forEach(function(a){ links[a.getAttribute("data-nav")] = a; });
+if("IntersectionObserver" in window){
+  var nio = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(e.isIntersecting){
+        Object.keys(links).forEach(function(k){ links[k].classList.remove("active"); });
+        var a = links[e.target.id];
+        if(a) a.classList.add("active");
+      }
+    });
+  }, {rootMargin:"-38% 0px -55% 0px"});
+  ["production","applications","operations","warehouse","evidence"].forEach(function(id){
+    var s = document.getElementById(id);
+    if(s) nio.observe(s);
+  });
+}
+
+/* ————— Live hero background: drifting cut, bit glow, sparks & dust —————
+   The CNC photograph stays put for reduced-motion users; everyone else gets
+   a slow push-in, scroll parallax, a pulsing glow at the bit, and embers
+   that rise off the cut point (computed from the photo's real geometry so
+   the sparks stay on the bit at any viewport size). */
+var hero = document.querySelector(".hero");
+var heroBg = document.getElementById("heroBg");
+var heroImg = document.getElementById("heroBgImg");
+var heroGlow = document.getElementById("heroBitGlow");
+var heroCanvas = document.getElementById("heroSparks");
+if(hero && heroBg && heroImg && heroCanvas){
+  var bitX = 0, bitY = 0; /* bit position, CSS px inside hero-bg */
+
+  function placeBit(){
+    var r = heroBg.getBoundingClientRect();
+    if(!heroImg.naturalWidth || r.width === 0) return;
+    var cs = getComputedStyle(heroBg);
+    var ox = parseFloat(cs.getPropertyValue("--bit-ox")) || .72;
+    var oy = parseFloat(cs.getPropertyValue("--bit-oy")) || .5;
+    var fx = parseFloat(cs.getPropertyValue("--bit-fx")) || .685;
+    var fy = parseFloat(cs.getPropertyValue("--bit-fy")) || .785;
+    var scale = Math.max(r.width / heroImg.naturalWidth, r.height / heroImg.naturalHeight);
+    var rw = heroImg.naturalWidth * scale, rh = heroImg.naturalHeight * scale;
+    bitX = (r.width - rw) * ox + rw * fx;
+    bitY = (r.height - rh) * oy + rh * fy;
+    heroGlow.style.left = bitX + "px";
+    heroGlow.style.top = bitY + "px";
+  }
+  if(heroImg.complete) placeBit();
+  heroImg.addEventListener("load", placeBit);
+
+  if(!reduced){
+    /* parallax: the shop drifts slower than the page */
+    var ticking = false;
+    function parallax(){
+      ticking = false;
+      var max = hero.offsetHeight * .05;
+      var y = Math.min(Math.max(window.scrollY * .22, 0), max);
+      heroBg.style.transform = "translateY(" + y + "px)";
+    }
+    document.addEventListener("scroll", function(){
+      if(!ticking){ ticking = true; requestAnimationFrame(parallax); }
+    }, {passive:true});
+    parallax();
+
+    /* sparks + ambient dust */
+    var ctx = heroCanvas.getContext("2d");
+    var W = 0, H = 0, parts = [], running = false, heroVisible = true, last = 0, spawnAcc = 0;
+    function sizeCanvas(){
+      var r = heroBg.getBoundingClientRect();
+      var dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      W = r.width; H = r.height;
+      heroCanvas.width = Math.round(W * dpr);
+      heroCanvas.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      placeBit();
+    }
+    function ember(){
+      var a = Math.random() * Math.PI - Math.PI * .85; /* up, biased left */
+      var sp = .4 + Math.random() * 1.7;
+      return { kind:0, x:bitX + (Math.random() - .5) * 6, y:bitY + (Math.random() - .5) * 3,
+        vx:Math.cos(a) * sp - .25, vy:-Math.abs(Math.sin(a)) * sp - .3,
+        life:0, ttl:.7 + Math.random() * 1.4, size:.8 + Math.random() * 1.7,
+        hue: 28 + Math.random() * 18 };
+    }
+    function mote(){
+      return { kind:1, x:Math.random() * W, y:Math.random() * H,
+        vx:(Math.random() - .5) * .12, vy:-.04 - Math.random() * .1,
+        life:0, ttl:6 + Math.random() * 8, size:.7 + Math.random() * 1.4,
+        tw:Math.random() * Math.PI * 2 };
+    }
+    function frame(ts){
+      if(!running) return;
+      var dt = Math.min(.05, (ts - last) / 1000 || 0); last = ts;
+      spawnAcc += dt * 30;
+      while(spawnAcc >= 1){ spawnAcc -= 1; if(parts.length < 110) parts.push(ember()); }
+      if(parts.length < 130 && Math.random() < .25) parts.push(mote());
+      ctx.clearRect(0, 0, W, H);
+      parts = parts.filter(function(p){ return p.life < p.ttl; });
+      parts.forEach(function(p){
+        p.life += dt;
+        var t = p.life / p.ttl;
+        if(p.kind === 0){
+          p.vy -= .35 * dt; p.vx *= (1 - .4 * dt);
+          p.x += p.vx * 60 * dt; p.y += p.vy * 60 * dt;
+          var flick = .55 + .45 * Math.sin(ts * .02 + p.ttl * 40);
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, 6.2832);
+          ctx.fillStyle = "hsla(" + p.hue + ",100%," + (58 + 14 * flick) + "%," + ((1 - t) * .9) + ")";
+          ctx.fill();
+        } else {
+          p.x += p.vx * 60 * dt; p.y += p.vy * 60 * dt;
+          if(p.y < -4){ p.y = H + 4; } if(p.x < -4){ p.x = W + 4; } if(p.x > W + 4){ p.x = -4; }
+          var a = Math.sin(Math.min(1, t) * Math.PI) * (.05 + .1 * (0.5 + 0.5 * Math.sin(ts * .001 + p.tw)));
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, 6.2832);
+          ctx.fillStyle = "rgba(168,216,240," + a + ")";
+          ctx.fill();
+        }
+      });
+      requestAnimationFrame(frame);
+    }
+    function startStop(){
+      var should = heroVisible && !document.hidden;
+      if(should && !running){ running = true; last = performance.now(); requestAnimationFrame(frame); }
+      if(!should) running = false;
+    }
+    if("IntersectionObserver" in window){
+      new IntersectionObserver(function(es){
+        es.forEach(function(e){ heroVisible = e.isIntersecting; });
+        startStop();
+      }, {threshold:0}).observe(hero);
+    }
+    document.addEventListener("visibilitychange", startStop);
+    window.addEventListener("resize", sizeCanvas);
+    sizeCanvas();
+    startStop();
+  } else {
+    window.addEventListener("resize", placeBit);
+  }
+}
+})();
+</script>
+</body>
+</html>
