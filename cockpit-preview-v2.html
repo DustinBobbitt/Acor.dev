@@ -18,7 +18,7 @@
   --text:#eaf1fc; --muted:#8c9fb9; --faint:#657e9d; --white:#f4f9ff;
 }
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:"Manrope",system-ui,"Segoe UI",sans-serif;overflow-x:hidden}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:"Manrope",system-ui,"Segoe UI",sans-serif;overflow-x:clip}
 body{background:radial-gradient(ellipse at 55% 0,#142037 0,#090f1a 44%,#070c15 100%),var(--bg)}
 a{color:var(--blue)}
 button{font-family:inherit;cursor:pointer}
@@ -229,6 +229,7 @@ footer{max-width:1720px;margin:0 auto;padding:25px 16px 22px;color:#68819f;font:
 .toast{display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:80;max-width:min(92vw,560px);border:1px solid var(--amber);color:var(--amber2);background:#170f02;padding:11px 15px;border-radius:10px;font-size:13px;box-shadow:0 10px 40px rgba(0,0,0,.6)}
 .toast.show{display:block}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+.wolfember{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
 </style>
 </head>
 <body>
@@ -249,7 +250,7 @@ footer{max-width:1720px;margin:0 auto;padding:25px 16px 22px;color:#68819f;font:
     <button data-nav="Tools"><span class="ic">⚒</span><span class="tx">Tools</span></button>
   </nav>
   <div class="top-right">
-    <label class="searchbox"><span aria-hidden="true">⌕</span><input id="topSearch" type="search" placeholder="Search 73 projects\u2026" aria-label="Search 73 projects"><kbd>Ctrl+K</kbd></label>
+    <label class="searchbox"><span aria-hidden="true">⌕</span><input id="topSearch" type="search" placeholder="Search 73 projects…" aria-label="Search 73 projects"><kbd>Ctrl+K</kbd></label>
     <button class="iconbtn" id="bellBtn" aria-label="Notifications">🔔<span class="dot"></span></button>
     <button class="iconbtn" id="gearBtn" aria-label="Settings">⚙</button>
     <button class="iconbtn" id="fsBtn" aria-label="Full screen" title="Full screen">⛶</button>
@@ -260,7 +261,7 @@ footer{max-width:1720px;margin:0 auto;padding:25px 16px 22px;color:#68819f;font:
 
 <div class="app">
   <aside class="sidebar">
-    <div class="wolfpanel"><svg class="wolfart" viewBox="0 0 230 260" aria-label="Stylized Dark Wolf emblem" role="img"><defs><radialGradient id="wolfglow"><stop stop-color="#f29c3c" stop-opacity=".4"/><stop offset="1" stop-color="#f29c3c" stop-opacity="0"/></radialGradient><linearGradient id="fur" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2e4258"/><stop offset=".5" stop-color="#0a1320"/><stop offset="1" stop-color="#101d30"/></linearGradient></defs><circle cx="116" cy="125" r="115" fill="url(#wolfglow)"/><path d="M26 248 L54 197 36 137 54 52 91 84 122 47 165 19 177 88 204 129 178 171 211 230 167 218 147 255 113 224 79 253Z" fill="url(#fur)" stroke="#cc7836" stroke-width="2"/><path d="M53 58 L74 103 95 89 121 67 160 28 163 112 186 131 161 155 118 169 99 208 72 183 45 134Z" fill="#121d2c" stroke="#5b6470"/><path d="M67 123 L102 132 120 119 140 126 164 113 147 142 110 152 83 143Z" fill="#273c52"/><path d="M78 126 L107 131 96 138 80 136Z" fill="#59bdff" filter="drop-shadow(0 0 8px #54c7ff)"/><path d="M125 133 L150 121 141 137 128 139Z" fill="#4c9cd4"/><path d="M101 155 L124 162 147 150 133 178 115 192 93 181Z" fill="#08101a"/><path d="M113 172 L123 169 119 180Z" fill="#e6a466"/><path d="M45 164 L28 186 66 180 44 211 83 199 64 238 M169 162 L200 181 166 182 191 209 158 198 174 240" fill="none" stroke="#f4a145" stroke-opacity=".65" stroke-width="2"/><path d="M64 89 L57 138 M76 103 L72 123 M156 57 L149 103 M170 127 L176 146" stroke="#f8b055" stroke-opacity=".55" stroke-width="2"/></svg><div class="wolfcaption">DARK WOLF // COCKPIT</div></div>
+    <div class="wolfpanel"><canvas id="wolfember" aria-hidden="true"></canvas><svg class="wolfart" viewBox="0 0 230 260" aria-label="Stylized Dark Wolf emblem" role="img"><defs><radialGradient id="wolfglow"><stop stop-color="#f29c3c" stop-opacity=".4"/><stop offset="1" stop-color="#f29c3c" stop-opacity="0"/></radialGradient><linearGradient id="fur" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2e4258"/><stop offset=".5" stop-color="#0a1320"/><stop offset="1" stop-color="#101d30"/></linearGradient></defs><circle cx="116" cy="125" r="115" fill="url(#wolfglow)"/><path d="M26 248 L54 197 36 137 54 52 91 84 122 47 165 19 177 88 204 129 178 171 211 230 167 218 147 255 113 224 79 253Z" fill="url(#fur)" stroke="#cc7836" stroke-width="2"/><path d="M53 58 L74 103 95 89 121 67 160 28 163 112 186 131 161 155 118 169 99 208 72 183 45 134Z" fill="#121d2c" stroke="#5b6470"/><path d="M67 123 L102 132 120 119 140 126 164 113 147 142 110 152 83 143Z" fill="#273c52"/><path d="M78 126 L107 131 96 138 80 136Z" fill="#59bdff" filter="drop-shadow(0 0 8px #54c7ff)"/><path d="M125 133 L150 121 141 137 128 139Z" fill="#4c9cd4"/><path d="M101 155 L124 162 147 150 133 178 115 192 93 181Z" fill="#08101a"/><path d="M113 172 L123 169 119 180Z" fill="#e6a466"/><path d="M45 164 L28 186 66 180 44 211 83 199 64 238 M169 162 L200 181 166 182 191 209 158 198 174 240" fill="none" stroke="#f4a145" stroke-opacity=".65" stroke-width="2"/><path d="M64 89 L57 138 M76 103 L72 123 M156 57 L149 103 M170 127 L176 146" stroke="#f8b055" stroke-opacity=".55" stroke-width="2"/></svg><div class="wolfcaption">DARK WOLF // COCKPIT</div></div>
     <nav class="snav" aria-label="Cockpit">
       <a href="#" class="on">⌂ Dashboard</a>
       <a href="#" data-goto="projects">▤ Projects <span class="cnt">73</span></a>
@@ -554,6 +555,21 @@ ACT.forEach(function(v,i){
   bars.appendChild(col);
 });
 apply();
+
+(()=>{const c=document.getElementById('wolfember');if(!c)return;const x=c.getContext('2d');if(!x)return;
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let W=0,H=0,embers=[],last=0;
+const R=(a,b)=>a+Math.random()*(b-a);
+function size(){const d=Math.min(2,window.devicePixelRatio||1);W=c.clientWidth;H=c.clientHeight;c.width=Math.max(1,W*d);c.height=Math.max(1,H*d);x.setTransform(d,0,0,d,0,0)}
+function spawn(){return{x:R(0,W),y:H+R(0,20),r:R(.7,2.2),vy:R(10,30),vx:R(-6,6),a:R(.35,.9),tw:R(0,6.28),hue:Math.random()<.25?'255,210,122':'255,122,42'}}
+function init(){embers=Array.from({length:26},()=>{const e=spawn();e.y=R(0,H);return e})}
+size();init();addEventListener('resize',()=>{size();init()});
+function glow(t){const g=x.createRadialGradient(W*.5,H*.42,4,W*.5,H*.42,W*.62);const p=.16+.08*Math.sin(t/900);g.addColorStop(0,'rgba(255,150,50,'+p+')');g.addColorStop(1,'rgba(255,150,50,0)');x.fillStyle=g;x.fillRect(0,0,W,H)}
+function frame(t){requestAnimationFrame(frame);const dt=Math.min(.05,(t-last)/1000||0);last=t;x.clearRect(0,0,W,H);glow(t);
+embers.forEach(e=>{e.y-=e.vy*dt;e.x+=Math.sin(t/600+e.tw)*10*dt+e.vx*dt;e.a-=.1*dt;if(e.y<-4||e.a<=0)Object.assign(e,spawn());x.globalAlpha=Math.max(0,e.a);x.fillStyle='rgb('+e.hue+')';x.beginPath();x.arc(e.x,e.y,e.r,0,7);x.fill()});x.globalAlpha=1}
+if(reduced){size();glow(0);embers.slice(0,10).forEach(e=>{x.globalAlpha=e.a;x.fillStyle='rgb('+e.hue+')';x.beginPath();x.arc(e.x,e.y,e.r,0,7);x.fill()});x.globalAlpha=1}else{document.addEventListener('visibilitychange',()=>{if(!document.hidden){last=performance.now();requestAnimationFrame(frame)}});requestAnimationFrame(frame)}
+})();
+
 </script>
 </body>
 </html>
