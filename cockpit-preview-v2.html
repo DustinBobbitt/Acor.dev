@@ -561,10 +561,10 @@ const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let W=0,H=0,embers=[],last=0;
 const R=(a,b)=>a+Math.random()*(b-a);
 function size(){const d=Math.min(2,window.devicePixelRatio||1);W=c.clientWidth;H=c.clientHeight;c.width=Math.max(1,W*d);c.height=Math.max(1,H*d);x.setTransform(d,0,0,d,0,0)}
-function spawn(){return{x:R(0,W),y:H+R(0,20),r:R(.7,2.2),vy:R(10,30),vx:R(-6,6),a:R(.35,.9),tw:R(0,6.28),hue:Math.random()<.25?'255,210,122':'255,122,42'}}
-function init(){embers=Array.from({length:26},()=>{const e=spawn();e.y=R(0,H);return e})}
+function spawn(){return{x:R(0,W),y:H+R(0,20),r:R(1.1,3.0),vy:R(16,38),vx:R(-6,6),a:R(.55,1),tw:R(0,6.28),hue:Math.random()<.25?'255,210,122':'255,122,42'}}
+function init(){embers=Array.from({length:55},()=>{const e=spawn();e.y=R(0,H);return e})}
 size();init();addEventListener('resize',()=>{size();init()});
-function glow(t){const g=x.createRadialGradient(W*.5,H*.42,4,W*.5,H*.42,W*.62);const p=.16+.08*Math.sin(t/900);g.addColorStop(0,'rgba(255,150,50,'+p+')');g.addColorStop(1,'rgba(255,150,50,0)');x.fillStyle=g;x.fillRect(0,0,W,H)}
+function glow(t){const g=x.createRadialGradient(W*.5,H*.42,4,W*.5,H*.42,W*.62);const p=.20+.12*Math.sin(t/900);g.addColorStop(0,'rgba(255,150,50,'+p+')');g.addColorStop(1,'rgba(255,150,50,0)');x.fillStyle=g;x.fillRect(0,0,W,H)}
 function frame(t){requestAnimationFrame(frame);const dt=Math.min(.05,(t-last)/1000||0);last=t;x.clearRect(0,0,W,H);glow(t);
 embers.forEach(e=>{e.y-=e.vy*dt;e.x+=Math.sin(t/600+e.tw)*10*dt+e.vx*dt;e.a-=.1*dt;if(e.y<-4||e.a<=0)Object.assign(e,spawn());x.globalAlpha=Math.max(0,e.a);x.fillStyle='rgb('+e.hue+')';x.beginPath();x.arc(e.x,e.y,e.r,0,7);x.fill()});x.globalAlpha=1}
 if(reduced){size();glow(0);embers.slice(0,10).forEach(e=>{x.globalAlpha=e.a;x.fillStyle='rgb('+e.hue+')';x.beginPath();x.arc(e.x,e.y,e.r,0,7);x.fill()});x.globalAlpha=1}else{document.addEventListener('visibilitychange',()=>{if(!document.hidden){last=performance.now();requestAnimationFrame(frame)}});requestAnimationFrame(frame)}
