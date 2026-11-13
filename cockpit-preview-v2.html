@@ -482,6 +482,23 @@ footer{max-width:1720px;margin:0 auto;padding:25px 16px 22px;color:#68819f;font:
 <footer>SNAPSHOT PREVIEW · Nov 12, 2026 · APEX design restyle of the v2 preview · Project data from Project Cockpit snapshot, scan of Jul 12, 2026 · Buttons act inside this preview only; the live app keeps its own behavior.</footer>
 <div class="toast" id="toast" role="status"></div>
 
+
+<div class="psheet" id="pushSheet" role="dialog" aria-modal="true" aria-labelledby="pushTitle" hidden>
+  <div class="psheet-backdrop" data-push-close></div>
+  <div class="psheet-panel">
+    <div class="psheet-head">
+      <div><h2 id="pushTitle">Push all branches</h2><p id="pushSub"></p></div>
+      <button type="button" class="psheet-close" data-push-close aria-label="Close">✕</button>
+    </div>
+    <p class="psheet-note">Pushes each branch below to its <b>same-named branch on origin</b> — as it stands right now. <b>Nothing is committed, nothing is merged into main, and nothing is force-pushed.</b> Uncommitted changes stay local; only commits go up.</p>
+    <div id="pushRows"></div>
+    <p class="psheet-result" id="pushResult" hidden></p>
+    <div class="psheet-foot">
+      <button type="button" class="ghost" data-push-close>Cancel</button>
+      <button type="button" class="btn-amber" id="pushConfirm">Push branches</button>
+    </div>
+  </div>
+</div>
 <script>
 var toastEl=document.getElementById('toast'),toastT=null;
 function toast(m){toastEl.textContent=m;toastEl.classList.add('show');clearTimeout(toastT);toastT=setTimeout(function(){toastEl.classList.remove('show')},3800);}
@@ -707,21 +724,5 @@ if(reduced){size();glow(0);embers.slice(0,10).forEach(e=>{x.globalAlpha=e.a;x.fi
 })();
 </script>
 
-<div class="psheet" id="pushSheet" role="dialog" aria-modal="true" aria-labelledby="pushTitle" hidden>
-  <div class="psheet-backdrop" data-push-close></div>
-  <div class="psheet-panel">
-    <div class="psheet-head">
-      <div><h2 id="pushTitle">Push all branches</h2><p id="pushSub"></p></div>
-      <button type="button" class="psheet-close" data-push-close aria-label="Close">✕</button>
-    </div>
-    <p class="psheet-note">Pushes each branch below to its <b>same-named branch on origin</b> — as it stands right now. <b>Nothing is committed, nothing is merged into main, and nothing is force-pushed.</b> Uncommitted changes stay local; only commits go up.</p>
-    <div id="pushRows"></div>
-    <p class="psheet-result" id="pushResult" hidden></p>
-    <div class="psheet-foot">
-      <button type="button" class="ghost" data-push-close>Cancel</button>
-      <button type="button" class="btn-amber" id="pushConfirm">Push branches</button>
-    </div>
-  </div>
-</div>
 </body>
 </html>
